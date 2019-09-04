@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+<title>Schultagebuch</title>
+</head>
+<body>
+	<nav class="navbar sticky-top navbar-expand-lg navbar-dark shadow-lg" style="background-color: navy; min-height: 4rem;">
+		<a class="navbar-brand" th:href="@{/home}">Schultagebuch</a>
+		<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="adminNavbar">
+    		<div class="navbar-nav mr-auto">
+	     		<a class="nav-item nav-link" th:href="@{/benutzer}">Benutzer</a>
+	      			<a class="nav-item nav-link active" th:href="@{/schuler}">Schüler</a>
+	      			<a class="nav-item nav-link" th:href="@{/lehrer}">Lehrer</a>
+	      			<a class="nav-item nav-link" th:href="@{/elternteil}">Eltern</a>
+		      		<a class="nav-item nav-link" th:href="@{/klasse}">Klassen</a>
+		      		<a class="nav-item nav-link" th:href="@{/schulstunde}">Schulstunden</a>
+		      		<a class="nav-item nav-link" th:href="@{/schulfach}">Schulfächer</a>
+			</div>
+  		</div>
+  		<div class="dropdown">
+ 			<a class="nav-link dropdown-toggle mr-md-2" href="#" id="userOptions" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  				<span sec:authentication="name"></span>
+  			</a>
+  			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userOptions">
+        		<a class="dropdown-item" th:href="@{/info}">Info</a>
+        		<div class="dropdown-divider"></div>
+        		<a class="dropdown-item" th:href="@{/logout}">Ausloggen</a>
+        	</div>
+ 		</div>
+	</nav>
+	<h1 class="text-center mt-5">Schüler</h1>
+	<div class="container text-center">
+		<a th:href="@{/schuler/add}" class="btn btn-success shadow-lg mb-5" role="button">hinzufügen</a>
+		<div th:if="${successful}" class="alert alert-success shadow-lg">
+			Erfolgreiche operation.
+    	</div>
+	</div>
+	<div th:if="${add}">
+		<div class="modal" id="addModal">
+			<div class="modal-dialog modal-dialog-centered">
+	    		<div class="modal-content">
+	    			<div class="modal-header">
+	    				<h4 class="modal-title">Schüler hinzufügen</h4>
+	    			</div>
+	    			<div class="modal-body">
+	    				<form method="post" th:action="@{/schuler/add}" th:object="${schuler}">
+		        			<label for="schuler">Schuler</label>
+		        			<input class="form-control w-50" id="schuler" type="text" th:field="*{name}" placeholder="Schuler name" required><br/>
+		        			<label for="pin">PIN</label>
+		        			<input class="form-control w-50" id="pin" type="text" th:field="*{pin}" placeholder="Schuler PIN" required><br/>
+							<label for="klasse">Klasse</label>
+		        			<select class="form-control w-50" id="klasse" th:field="*{klasse}">
+		        				<option value=>Ohne Klasse
+			        			<option th:each="klasse :${listKlasse}" th:value="${klasse.id}" th:text="${klasse.kennzeichen}">
+		        			</select><br/>		        			
+		        			&nbsp;
+		        			<input type="submit" class="btn btn-success btn-sm" value="Bestätigen">
+		    			</form>
+	    			</div>
+	    			<div class="modal-footer">
+	    				<button class="btn btn-danger" data-dismiss="modal">Verschließen</button>
+	    			</div>
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+	<div th:if="${edit}">
+    	<div class="modal" id="editModal">
+			<div class="modal-dialog modal-dialog-centered">
+	    		<div class="modal-content">
+	    			<div class="modal-header">
+	    				<h4 class="modal-title">Bearbeiten schüler mit id: <span th:text="${schuler.id}"></span></h4>
+	    			</div>
+	    			<div class="modal-body">
+	    				<form method="post" th:action="@{/schulfach/add}" th:object="${schuler}">
+	    					<input type="hidden" th:field="*{id}">
+		        			<label for="schuler">Schuler</label>
+		        			<input class="form-control w-50" id="schuler" type="text" th:field="*{name}" placeholder="Schuler name" required><br/>
+		        			<label for="pin">PIN</label>
+		        			<input class="form-control w-50" id="pin" type="text" th:field="*{pin}" placeholder="Schuler PIN" required><br/>
+		        			<label for="klasse">Klasse</label>
+		        			<select class="form-control w-50" id="klasse" th:field="*{klasse}">
+		        				<option value=>Ohne Klasse
+			        			<option th:each="klasse :${listKlasse}" th:value="${klasse.id}" th:text="${klasse.kennzeichen}">
+		        			</select><br/>
+		    			</form>
+	    			</div>
+	    			<div class="modal-footer">
+	    				<button class="btn btn-danger" data-dismiss="modal">Verschließen</button>
+	    			</div>
+	    		</div>
+	    	</div>
+		</div>
+    </div>
+	<div class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-75 shadow">
+	        <thead class="thead-dark">
+	        	<tr>
+	        		<th scope="col">ID</th>
+	            	<th scope="col">Name</th>
+	            	<th scope="col">PIN</th>
+	            	<th scope="col">Klasse</th>
+	            	<th scope="col">Eltern / Erziehungsberechtigte</th>
+	            	<th scope="col">Benutzername</th>
+	            	<th scope="col">Optionen</th>
+	        	</tr>
+	        </thead>
+	        <tr th:each="schuler: ${listSchuler}">
+	            <th scope="row" th:text="${schuler.id}" />
+	            <td th:text="${schuler.name}" />
+	            <td th:text="${schuler.pinKennzeichen}" />
+	            <td th:text="${schuler.klasseKennzeichen}" />
+	            <td style="white-space: pre;" th:text="${schuler.elternKennzeichen}" />
+	            <td th:text="${schuler.benutzernameKennzeichen}" />
+	            <td>
+	            	<a th:href="@{'schuler/edit/'+${schuler.id}}" class="btn btn-primary" role="button">bearbeiten</a>
+	            	&nbsp;
+	            	<a th:href="@{'schuler/delete/'+${schuler.id}}" class="btn btn-danger" role="button" onclick="return confirm('Bist du sicher?')">löschen</a>
+	            </td>
+	        </tr>
+	    </table>
+   	</div>
+	<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
+	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
+	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
+	<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
+</body>
+</html>
