@@ -1,4 +1,4 @@
-package com.proxiad.schultagebuch.internationalization;
+package com.proxiad.schultagebuch.localization;
 
 import java.util.Locale;
 
