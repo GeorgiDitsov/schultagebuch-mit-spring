@@ -14,8 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.entity.Schuler;
+import com.proxiad.schultagebuch.service.ElternteilService;
 import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.service.SchulerService;
 
@@ -28,12 +30,17 @@ public class SchulerController {
 	@Autowired
 	private KlasseService klasseService;
 
+	@Autowired
+	private ElternteilService elternteilService;
+
 	@RequestMapping(value = "/schuler")
 	public ModelAndView home() {
 		List<Schuler> listSchuler = schulerService.findAll();
 		ModelAndView mav = new ModelAndView("schulerForm", "listSchuler", listSchuler);
 		List<Klasse> listKlasse = klasseService.findAll();
+		List<Elternteil> listEltern = elternteilService.findAll();
 		mav.addObject("listKlasse", listKlasse);
+		mav.addObject("listEltern", listEltern);
 		return mav;
 	}
 

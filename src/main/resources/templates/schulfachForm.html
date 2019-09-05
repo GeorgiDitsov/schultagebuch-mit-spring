@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
-<title>Schultagebuch</title>
+<title th:text="#{school.diary}"></title>
 </head>
 <body>
 	<nav class="navbar sticky-top navbar-expand-lg navbar-dark shadow-lg" style="background-color: navy; min-height: 4rem;">
-		<a class="navbar-brand" th:href="@{/home}">Schultagebuch</a>
+		<a class="navbar-brand" th:href="@{/home}" th:text="#{school.diary}"></a>
 		<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="adminNavbar">
     		<div class="navbar-nav mr-auto">
-	     		<a class="nav-item nav-link" th:href="@{/benutzer}">Benutzer</a>
-      			<a class="nav-item nav-link" th:href="@{/schuler}">Schüler</a>
-      			<a class="nav-item nav-link" th:href="@{/lehrer}">Lehrer</a>
-      			<a class="nav-item nav-link" th:href="@{/elternteil}">Eltern</a>
-	      		<a class="nav-item nav-link" th:href="@{/klasse}">Klassen</a>
-	      		<a class="nav-item nav-link" th:href="@{/schulstunde}">Schulstunden</a>
-	      		<a class="nav-item nav-link active" th:href="@{/schulfach}">Schulfächer</a>
+	     		<a class="nav-item nav-link" th:href="@{/benutzer}" th:text="#{user}"></a>
+      			<a class="nav-item nav-link" th:href="@{/schuler}" th:text="#{student}"></a>
+      			<a class="nav-item nav-link" th:href="@{/lehrer}" th:text="#{teacher}"></a>
+      			<a class="nav-item nav-link" th:href="@{/elternteil}" th:text="#{parent}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/klasse}" th:text="#{class}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
+	      		<a class="nav-item nav-link active" th:href="@{/schulfach}" th:text="#{subject}"></a>
 			</div>
   		</div>
   		<div class="dropdown">
@@ -27,35 +27,33 @@
   				<span sec:authentication="name"></span>
   			</a>
   			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userOptions">
-        		<a class="dropdown-item" th:href="@{/info}">Info</a>
-        		<div class="dropdown-divider"></div>
-        		<a class="dropdown-item" th:href="@{/logout}">Ausloggen</a>
-        	</div>
+	        	<a class="dropdown-item" th:href="@{/info}" th:text="#{user.info}"></a>
+	        	<div class="dropdown-divider"></div>
+	        	<a class="dropdown-item" th:href="@{/logout}" th:text="#{application.logout}"></a>
+	        </div>
  		</div>
 	</nav>
-	<h1 class="text-center mt-5">Schulfächer</h1>
+	<h1 class="text-center mt-5" th:text="#{subjects}"></h1>
 	<div class="container text-center">
-		<a th:href="@{/schulfach/add}" class="btn btn-success shadow-lg mb-5" role="button">hinzufügen</a>
-		<div th:if="${successful}" class="alert alert-success shadow-lg">
-			Erfolgreiche operation.
-    	</div>
+		<a th:href="@{/schulfach/add}" class="btn btn-success shadow-lg mb-5" role="button" th:text="#{button.add}"></a>
+		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{message.successful}"></div>
 	</div>
 	<div th:if="${add}">
 		<div class="modal" id="addModal">
 			<div class="modal-dialog modal-dialog-centered">
 	    		<div class="modal-content">
 	    			<div class="modal-header">
-	    				<h4 class="modal-title">Schulfach hinzufügen</h4>
+	    				<h4 class="modal-title" th:text="#{modal.add.title.subject}"></h4>
 	    			</div>
 	    			<div class="modal-body">
 	    				<form method="post" th:action="@{/schulfach/add}" th:object="${schulfach}">
-		        			<input type="text" th:field="*{name}" placeholder="Schulfach name" required>
+		        			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
 		        			&nbsp;
-		        			<input type="submit" class="btn btn-success btn-sm" value="Bestätigen">
+		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
 	    			</div>
 	    			<div class="modal-footer">
-	    				<button class="btn btn-danger" data-dismiss="modal">Verschließen</button>
+	    				<button class="btn btn-danger" data-dismiss="modal" th:text="#{button.close}"></button>
 	    			</div>
 	    		</div>
 	    	</div>
@@ -66,18 +64,18 @@
 			<div class="modal-dialog modal-dialog-centered">
 	    		<div class="modal-content">
 	    			<div class="modal-header">
-	    				<h4 class="modal-title">Bearbeiten schulfach mit id: <span th:text="${schulfach.id}"></span></h4>
+	    				<h4 class="modal-title" th:text="#{modal.edit.title.subject(${schulfach.id})}"></h4>
 	    			</div>
 	    			<div class="modal-body">
 	    				<form method="post" th:action="@{/schulfach/add}" th:object="${schulfach}">
 	    					<input type="hidden" th:field="*{id}">
-		        			<input type="text" th:field="*{name}" placeholder="Schulfach name" required>
+		        			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
 		        			&nbsp;
-		        			<input type="submit" class="btn btn-success btn-sm" value="Bestätigen">
+		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
 	    			</div>
 	    			<div class="modal-footer">
-	    				<button class="btn btn-danger" data-dismiss="modal">Verschließen</button>
+	    				<button class="btn btn-danger" data-dismiss="modal" th:text="#{button.close}"></button>
 	    			</div>
 	    		</div>
 	    	</div>
@@ -87,10 +85,10 @@
 		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
 			<thead class="thead-dark">
 		        <tr>
-		            <th scope="col">ID</th>
-		            <th scope="col">Schulfach</th>
-		            <th scope="col">Lehrer</th>
-		            <th scope="col">Optionen</th>
+		            <th scope="col" th:text="#{id}">
+	            	<th scope="col" th:text="#{name}">
+		            <th scope="col" th:text="#{subject}">
+		            <th scope="col" th:text="#{options}">
 		        </tr>
 		    </thead>
 	        <tr th:each="schulfach: ${listSchulfach}">
@@ -98,9 +96,9 @@
 	            <td th:text="${schulfach.name}" />
 	            <td style="white-space: pre;" th:text="${schulfach.lehrerKennzeichen}" />
 	            <td>
-	            	<a th:href="@{'schulfach/edit/'+${schulfach.id}}" class="btn btn-primary" role="button">bearbeiten</a>
+	            	<a th:href="@{'schulfach/edit/'+${schulfach.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	&nbsp;
-	            	<a th:href="@{'schulfach/delete/'+${schulfach.id}}" class="btn btn-danger" role="button" onclick="return confirm('Bist du sicher?')">löschen</a>
+	            	<a th:href="@{'schulfach/delete/'+${schulfach.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{message.confirmation}]])"></a>
 	            </td>
 	        </tr>
 	    </table>

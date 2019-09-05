@@ -13,13 +13,13 @@
 		</button>
 		<div class="collapse navbar-collapse" id="adminNavbar">
     		<div class="navbar-nav mr-auto">
-	     		<a class="nav-item nav-link" th:href="@{/benutzer}">Benutzer</a>
-      			<a class="nav-item nav-link" th:href="@{/schuler}">Schüler</a>
-      			<a class="nav-item nav-link" th:href="@{/lehrer}">Lehrer</a>
-      			<a class="nav-item nav-link" th:href="@{/elternteil}">Eltern</a>
-	      		<a class="nav-item nav-link active" th:href="@{/klasse}">Klassen</a>
-	      		<a class="nav-item nav-link" th:href="@{/schulstunde}">Schulstunden</a>
-	      		<a class="nav-item nav-link" th:href="@{/schulfach}">Schulfächer</a>
+	     		<a class="nav-item nav-link" th:href="@{/benutzer}" th:text="#{user}"></a>
+      			<a class="nav-item nav-link" th:href="@{/schuler}" th:text="#{student}"></a>
+      			<a class="nav-item nav-link" th:href="@{/lehrer}" th:text="#{teacher}"></a>
+      			<a class="nav-item nav-link" th:href="@{/elternteil}" th:text="#{parent}"></a>
+	      		<a class="nav-item nav-link active" th:href="@{/klasse}" th:text="#{class}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/schulfach}" th:text="#{subject}"></a>
 			</div>
   		</div>
   		<div class="dropdown">
@@ -27,35 +27,33 @@
   				<span sec:authentication="name"></span>
   			</a>
   			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userOptions">
-        		<a class="dropdown-item" th:href="@{/info}">Info</a>
-        		<div class="dropdown-divider"></div>
-        		<a class="dropdown-item" th:href="@{/logout}">Ausloggen</a>
-        	</div>
+	        	<a class="dropdown-item" th:href="@{/info}" th:text="#{user.info}"></a>
+	        	<div class="dropdown-divider"></div>
+	        	<a class="dropdown-item" th:href="@{/logout}" th:text="#{application.logout}"></a>
+	        </div>
  		</div>
 	</nav>
-	<h1 class="text-center mt-5">Klassen</h1>
+	<h1 class="text-center mt-5" th:text="#{classes}"></h1>
 	<div class="container text-center">
-		<a th:href="@{/klasse/add}" class="btn btn-success shadow-lg mb-5" role="button">hinzufügen</a>
-		<div th:if="${successful}" class="alert alert-success shadow-lg">
-			Erfolgreiche operation.
-    	</div>
+		<a th:href="@{/klasse/add}" class="btn btn-success shadow-lg mb-5" role="button" th:text="#{button.add}"></a>
+		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{message.successful}"></div>
 	</div>
 	<div th:if="${add}">
 		<div class="modal" id="addModal">
 			<div class="modal-dialog modal-dialog-centered">
 	    		<div class="modal-content">
 	    			<div class="modal-header">
-	    				<h4 class="modal-title">Klasse hinzufügen</h4>
+	    				<h4 class="modal-title" th:text="#{modal.add.title.class}"></h4>
 	    			</div>
 	    			<div class="modal-body">
 	    				<form th:action="@{/klasse/add}" method="post" th:object="${klasse}">
-		        			<input type="text" name="klasseName" placeholder="Klasse name" required>
+	        				<input type="text" name="klasseName" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
 		        			&nbsp;
-		        			<input type="submit" class="btn btn-success btn-sm" value="Bestätigen">
+		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
 	    			</div>
 	    			<div class="modal-footer">
-	    				<button class="btn btn-danger" data-dismiss="modal">Verschließen</button>
+	    				<button class="btn btn-danger" data-dismiss="modal" th:text="#{button.close}"></button>
 	    			</div>
 	    		</div>
 	    	</div>
@@ -66,18 +64,18 @@
 			<div class="modal-dialog modal-dialog-centered">
     			<div class="modal-content">
     				<div class="modal-header">
-    					<h4 class="modal-title">Bearbeiten klasse mit id: <span th:text="${klasse.id}"></span></h4>
+    					<h4 class="modal-title" th:text="#{modal.edit.title.class(${klasse.id})}"></h4>
     				</div>
     				<div class="modal-body">
     					<form th:action="@{/klasse/add}" method="post" th:object="${klasse}">
     						<input type="hidden" th:field="*{id}">
-	        				<input type="text" name="klasseName" th:value="*{kennzeichen}" placeholder="Klasse name" required>
+	        				<input type="text" name="klasseName" th:value="*{kennzeichen}" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
 	        				&nbsp;
-	        				<input type="submit" class="btn btn-success btn-sm" value="Bestätigen">
+	        				<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 	    				</form>
     				</div>
     				<div class="modal-footer">
-    					<button class="btn btn-danger" data-dismiss="modal">Verschließen</button>
+    					<button class="btn btn-danger" data-dismiss="modal" th:text="#{button.close}"></button>
     				</div>
     			</div>
     		</div>
@@ -87,18 +85,18 @@
 		<table class="table table-bordered table-striped mx-auto mb-5 w-25 shadow">
 		    <thead class="thead-dark">
 		    	<tr>
-		            <th scope="col">ID</th>
-		            <th scope="col">Klasse</th>
-		            <th scope="col">Optionen</th>
+		            <th scope="col" th:text="#{id}">
+		            <th scope="col" th:text="#{class}">
+		            <th scope="col" th:text="#{options}">
 		        </tr>
 		    </thead>
 		    <tr th:each="klasse: ${listKlasse}">
 		    	<th scope="row" th:text="${klasse.id}" />
 		        <td th:text="${klasse.kennzeichen}" />
 		        <td>
-		        	<a th:href="@{'klasse/edit/'+${klasse.id}}" class="btn btn-primary" role="button">bearbeiten</a>
+		        	<a th:href="@{'klasse/edit/'+${klasse.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 		           	&nbsp;
-		           	<a th:href="@{'klasse/delete/'+${klasse.id}}" class="btn btn-danger" role="button" onclick="return confirm('Bist du sicher?')">löschen</a>
+		           	<a th:href="@{'klasse/delete/'+${klasse.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{message.confirmation}]])"></a>
 		       	</td>
 		    </tr>
 	    </table>
