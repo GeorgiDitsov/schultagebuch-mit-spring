@@ -3,7 +3,6 @@ package com.proxiad.schultagebuch.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,10 +17,9 @@ public class BenutzerController {
 	private BenutzerService benutzerService;
 
 	@RequestMapping(value = "/benutzer")
-	public ModelAndView home(Authentication authentication) {
+	public ModelAndView home() {
 		List<Benutzer> listBenutzer = benutzerService.findAll();
 		ModelAndView mav = new ModelAndView("benutzerForm", "listBenutzer", listBenutzer);
-		mav.addObject("authentication", authentication);
 		return mav;
 	}
 }

@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
-<title>Schultagebuch</title>
+<title th:text="#{school.diary}"></title>
 </head>
 <body>
 	<nav class="navbar sticky-top navbar-expand-lg navbar-dark shadow-lg" style="background-color: navy; min-height: 4rem;">
-		<a class="navbar-brand" th:href="@{/home}">Schultagebuch</a>
+		<a class="navbar-brand" th:href="@{/home}" th:text="#{school.diary}"></a>
 		<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="adminNavbar">
     		<div class="navbar-nav mr-auto">
-	     		<a class="nav-item nav-link" th:href="@{/benutzer}">Benutzer</a>
-      			<a class="nav-item nav-link" th:href="@{/schuler}">Schüler</a>
-      			<a class="nav-item nav-link active" th:href="@{/lehrer}">Lehrer</a>
-      			<a class="nav-item nav-link" th:href="@{/elternteil}">Eltern</a>
-	      		<a class="nav-item nav-link" th:href="@{/klasse}">Klassen</a>
-	      		<a class="nav-item nav-link" th:href="@{/schulstunde}">Schulstunden</a>
-	      		<a class="nav-item nav-link" th:href="@{/schulfach}">Schulfächer</a>
+	     		<a class="nav-item nav-link" th:href="@{/benutzer}" th:text="#{user}"></a>
+      			<a class="nav-item nav-link" th:href="@{/schuler}" th:text="#{student}"></a>
+      			<a class="nav-item nav-link active" th:href="@{/lehrer}" th:text="#{teacher}"></a>
+      			<a class="nav-item nav-link" th:href="@{/elternteil}" th:text="#{parent}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/klasse}" th:text="#{class}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/schulfach}" th:text="#{subject}"></a>
 			</div>
   		</div>
   		<div class="dropdown">
@@ -27,23 +27,23 @@
   				<span sec:authentication="name"></span>
   			</a>
   			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userOptions">
-        		<a class="dropdown-item" th:href="@{/info}">Info</a>
-        		<div class="dropdown-divider"></div>
-        		<a class="dropdown-item" th:href="@{/logout}">Ausloggen</a>
-        	</div>
+	        	<a class="dropdown-item" th:href="@{/info}" th:text="#{user.info}"></a>
+	        	<div class="dropdown-divider"></div>
+	        	<a class="dropdown-item" th:href="@{/logout}" th:text="#{application.logout}"></a>
+	        </div>
  		</div>
 	</nav>
-	<h1 class="text-center my-5">Lehrer</h1>
+	<h1 class="text-center my-5" th:text="#{teachers}"></h1>
 	<div class="table-responsive">
 		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
 	        <thead class="thead-dark">
 		    	<tr>
-		        	<th scope="col">ID</th>
-		            <th scope="col">Name</th>
-		            <th scope="col">PIN</th>
-		            <th scope="col">Schulfächer</th>
-		            <th scope="col">Benutzername</th>
-		            <th scope="col">Optionen</th>
+		        	<th scope="col" th:text="#{id}">
+	            	<th scope="col" th:text="#{name}">
+	            	<th scope="col" th:text="#{pin}">
+		            <th scope="col" th:text="#{subjects}">
+		            <th scope="col" th:text="#{user.name}">
+	            	<th scope="col" th:text="#{options}">
 		        </tr>
 	        </thead>
 	        <tr th:each="lehrer: ${listLehrer}">
@@ -53,9 +53,9 @@
 	            <td style="white-space: pre;" th:text="${lehrer.schulfaecherKennzeichen}" />
 	            <td th:text="${lehrer.benutzernameKennzeichen}">
 	            <td>
-	            	<a th:href="@{'lehrer/edit/'+${lehrer.id}}" class="btn btn-primary" role="button">bearbeiten</a>
+	            	<a th:href="@{'lehrer/edit/'+${lehrer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	&nbsp;
-	            	<a th:href="@{'lehrer/delete/'+${lehrer.id}}" class="btn btn-danger" role="button" onclick="return confirm('Bist du sicher?')">löschen</a>
+	            	<a th:href="@{'lehrer/delete/'+${lehrer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{message.confirmation}]])"></a>
 	            </td>
 	        </tr>
 	    </table>

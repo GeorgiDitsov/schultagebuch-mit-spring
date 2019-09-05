@@ -11,4 +11,5 @@ public class SchultagebuchApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SchultagebuchApplication.class, args);
 	}
+
 }
