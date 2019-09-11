@@ -16,11 +16,11 @@
 				<div class="navbar-nav mr-auto">
 	      			<a class="nav-item nav-link" th:href="@{/benutzer}" th:text="#{user}"></a>
 	      			<a class="nav-item nav-link" th:href="@{/schuler}" th:text="#{student}"></a>
-	      			<a class="nav-item nav-link" th:href="@{/lehrer}" th:text="#{teacher}"></a>
 	      			<a class="nav-item nav-link" th:href="@{/elternteil}" th:text="#{parent}"></a>
-		      		<a class="nav-item nav-link" th:href="@{/klasse}" th:text="#{class}"></a>
-		      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
+	      			<a class="nav-item nav-link" th:href="@{/lehrer}" th:text="#{teacher}"></a>
 		      		<a class="nav-item nav-link" th:href="@{/schulfach}" th:text="#{subject}"></a>
+		      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
+		      		<a class="nav-item nav-link" th:href="@{/klasse}" th:text="#{class}"></a>
 				</div>
 	    	</div>
 			<div sec:authorize="hasRole('SCHULER')">

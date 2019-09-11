@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.SchulfachService;
 import com.proxiad.schultagebuch.service.SchulstundeService;
+import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
 @Validated
@@ -66,7 +68,8 @@ public class SchulstundeController {
 
 	@PostMapping(value = "/schulstunde/add")
 	public RedirectView save(RedirectAttributes attributes,
-			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde) {
+			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde, final BindingResult bindingResult) {
+		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		schulstundeService.save(schulstunde);
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schulstunde");

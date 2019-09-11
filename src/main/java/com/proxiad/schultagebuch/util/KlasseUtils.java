@@ -4,17 +4,17 @@ import java.util.Objects;
 
 import com.proxiad.schultagebuch.entity.Klasse;
 
-public class KlasseBauen implements EntityBauen<String, Klasse> {
+public class KlasseUtils implements EntityUtils<String, Klasse> {
 
-	private static KlasseBauen singleInstance = null;
+	private static KlasseUtils singleInstance = null;
 
-	private KlasseBauen() {
+	private KlasseUtils() {
 		// nothing
 	}
 
-	public static KlasseBauen getInstance() {
+	public static KlasseUtils getInstance() {
 		if (Objects.isNull(singleInstance)) {
-			singleInstance = new KlasseBauen();
+			singleInstance = new KlasseUtils();
 		}
 		return singleInstance;
 	}
@@ -25,4 +25,5 @@ public class KlasseBauen implements EntityBauen<String, Klasse> {
 		klasse.setBuchstabe(klasseName.substring(klasseName.length() - 1));
 		return klasse;
 	}
+
 }

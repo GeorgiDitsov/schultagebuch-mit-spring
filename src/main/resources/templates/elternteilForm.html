@@ -8,18 +8,18 @@
 <body>
 	<nav class="navbar sticky-top navbar-expand-lg navbar-dark shadow-lg" style="background-color: navy; min-height: 4rem;">
 		<a class="navbar-brand" th:href="@{/home}" th:text="#{school.diary}"></a>
-		<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+		<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<div class="collapse navbar-collapse" id="adminNavbar">
+		<div class="collapse navbar-collapse" id="navbar">
     		<div class="navbar-nav mr-auto">
 	     		<a class="nav-item nav-link" th:href="@{/benutzer}" th:text="#{user}"></a>
       			<a class="nav-item nav-link" th:href="@{/schuler}" th:text="#{student}"></a>
-      			<a class="nav-item nav-link" th:href="@{/lehrer}" th:text="#{teacher}"></a>
       			<a class="nav-item nav-link active" th:href="@{/elternteil}" th:text="#{parent}"></a>
-	      		<a class="nav-item nav-link" th:href="@{/klasse}" th:text="#{class}"></a>
-	      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
+      			<a class="nav-item nav-link" th:href="@{/lehrer}" th:text="#{teacher}"></a>
 	      		<a class="nav-item nav-link" th:href="@{/schulfach}" th:text="#{subject}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/klasse}" th:text="#{class}"></a>
 			</div>
   		</div>
   		<div class="btn-group btn-group-sm" role="group">
@@ -38,9 +38,11 @@
  		</div>
 	</nav>
 	<h1 class="text-center my-5" th:text="#{parents}"></h1>
-	<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{successful}"></div>
+	<div class="container text-center">
+		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{successful}"></div>
+	</div>
 	<div th:if="${edit}">
-    	<div class="modal" id="editModal">
+    	<div class="modal fade" id="editModal">
 			<div class="modal-dialog modal-dialog-centered">
 	    		<div class="modal-content">
 	    			<div class="modal-header">
@@ -53,11 +55,8 @@
 		        			<input class="form-control w-50" type="text" th:field="*{name}" th:placeholder="#{student.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
 		        			<label th:text="#{pin} + '*'"></label>
 		        			<input class="form-control w-50" id="pin" type="text" th:field="*{pin}" th:placeholder="#{student.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
-		        			<label th:text="#{user} + '*'"></label>
-		        			<input class="form-control w-50" th:field="*{benutzer.benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-		        			<input class="form-control w-50" th:field="*{benutzer.passwort}" id="passwort"  type="password" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-		        			<input class="form-control w-50" id="konfirm_passwort" type="password" th:placeholder="#{user.password.confirm}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
-		        			<input type="hidden" th:field="*{benutzer.rolle}">
+		        			<input type="hidden" th:field="*{kinder}">
+		        			<input type="hidden" th:field="*{benutzer}">
 		        			&nbsp;
 		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>

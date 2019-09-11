@@ -31,7 +31,7 @@ public class Benutzer {
 	private String benutzerName;
 
 	@NotBlank
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[#$^+=!*()@%&]).{6,10}$", message = "Falsch benutzer passwort")
+	@Pattern(regexp = "^([a-z]*)([A-Z]*)([0-9]*)().{5,10}$", message = "Falsch benutzer passwort")
 	@Column(name = "benutzer_pass")
 	private String passwort;
 

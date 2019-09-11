@@ -8,18 +8,18 @@
 <body>
 	<nav class="navbar sticky-top navbar-expand-lg navbar-dark shadow-lg" style="background-color: navy; min-height: 4rem;">
 		<a class="navbar-brand" th:href="@{/home}" th:text="#{school.diary}"></a>
-		<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+		<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<div class="collapse navbar-collapse" id="adminNavbar">
+		<div class="collapse navbar-collapse" id="navbar">
     		<div class="navbar-nav mr-auto">
 	     		<a class="nav-item nav-link" th:href="@{/benutzer}" th:text="#{user}"></a>
       			<a class="nav-item nav-link" th:href="@{/schuler}" th:text="#{student}"></a>
-      			<a class="nav-item nav-link" th:href="@{/lehrer}" th:text="#{teacher}"></a>
       			<a class="nav-item nav-link" th:href="@{/elternteil}" th:text="#{parent}"></a>
-	      		<a class="nav-item nav-link" th:href="@{/klasse}" th:text="#{class}"></a>
-	      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
+      			<a class="nav-item nav-link" th:href="@{/lehrer}" th:text="#{teacher}"></a>
 	      		<a class="nav-item nav-link active" th:href="@{/schulfach}" th:text="#{subject}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
+	      		<a class="nav-item nav-link" th:href="@{/klasse}" th:text="#{class}"></a>
 			</div>
   		</div>
   		<div class="btn-group btn-group-sm" role="group">
@@ -43,7 +43,7 @@
 		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{successful}"></div>
 	</div>
 	<div th:if="${add}">
-		<div class="modal" id="addModal">
+		<div class="modal fade" id="addModal">
 			<div class="modal-dialog modal-dialog-centered">
 	    		<div class="modal-content">
 	    			<div class="modal-header">
@@ -64,7 +64,7 @@
 		</div>
 	</div>
 	<div th:if="${edit}">
-    	<div class="modal" id="editModal">
+    	<div class="modal fade" id="editModal">
 			<div class="modal-dialog modal-dialog-centered">
 	    		<div class="modal-content">
 	    			<div class="modal-header">
@@ -91,7 +91,7 @@
 		        <tr>
 		            <th scope="col" th:text="#{id}">
 	            	<th scope="col" th:text="#{name}">
-		            <th scope="col" th:text="#{subject}">
+		            <th scope="col" th:text="#{teachers}">
 		            <th scope="col" th:text="#{options}">
 		        </tr>
 		    </thead>

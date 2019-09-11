@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -49,7 +50,9 @@ public class Schuler {
 
 	@Valid
 	@Size(min = 1, max = 2)
-	@ManyToMany(mappedBy = "kinder", fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "elternteil_schuler", joinColumns = { @JoinColumn(name = "schuler_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "elternteil_id") })
 	private Set<Elternteil> eltern;
 
 	@Valid

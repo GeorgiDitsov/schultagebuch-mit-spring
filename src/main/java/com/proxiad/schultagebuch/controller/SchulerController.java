@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import com.proxiad.schultagebuch.service.ElternteilService;
 import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.service.RolleService;
 import com.proxiad.schultagebuch.service.SchulerService;
+import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
 public class SchulerController {
@@ -66,24 +68,22 @@ public class SchulerController {
 	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schuler", schulerService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.student", new Object[] { id }, Locale.GERMANY))));
+		attributes.addFlashAttribute("schuler", findSchulerById(id));
 		return new RedirectView("/schuler");
 	}
 
 	@PostMapping(value = "/schuler/add")
-	public RedirectView save(RedirectAttributes attributes, @ModelAttribute(name = "schuler") @Valid Schuler schuler) {
+	public RedirectView save(RedirectAttributes attributes, @ModelAttribute(name = "schuler") @Valid Schuler schuler,
+			final BindingResult bindingResult) {
+		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		schulerService.save(schuler);
-		schuler.getEltern().stream().forEach(elternteil -> System.err.println(elternteil.getKennzeichen() + "\n"));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schuler");
 	}
 
 	@RequestMapping(value = "/schuler/delete/{id}")
 	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
-		Schuler schuler = schulerService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.student", new Object[] { id }, Locale.GERMANY)));
-		schulerService.delete(schuler);
+		schulerService.delete(findSchulerById(id));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schuler");
 	}
@@ -105,5 +105,10 @@ public class SchulerController {
 				() -> new IllegalArgumentException(messageSource.getMessage("invalid.role", null, Locale.GERMANY))));
 		schuler.setBenutzer(benutzer);
 		return schuler;
+	}
+
+	private Schuler findSchulerById(int id) {
+		return schulerService.find(id).orElseThrow(() -> new IllegalArgumentException(
+				messageSource.getMessage("invalid.student", new Object[] { id }, Locale.GERMANY)));
 	}
 }

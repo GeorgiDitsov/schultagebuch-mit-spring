@@ -18,7 +18,7 @@ public class ExceptionController implements ErrorController {
 		Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
 		ModelAndView mav = new ModelAndView("error");
 		mav.addObject("statusCode", statusCode);
-		mav.addObject("errorMessage", Objects.isNull(exception) ? "N/A" : exception.getMessage());
+		mav.addObject("errorMessage", Objects.isNull(exception) ? "N/A" : exception.getLocalizedMessage());
 		return mav;
 	}
 
