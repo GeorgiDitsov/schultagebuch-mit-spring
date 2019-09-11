@@ -1,8 +1,10 @@
 package com.proxiad.schultagebuch.controller;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +28,9 @@ public class KlasseController {
 	@Autowired
 	private KlasseService klasseService;
 
+	@Autowired
+	private MessageSource messageSource;
+
 	@RequestMapping(value = "/klasse")
 	public ModelAndView home() {
 		List<Klasse> listKlasse = klasseService.findAll();
@@ -44,8 +49,8 @@ public class KlasseController {
 	public RedirectView findForEdit(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("klasse",
-				klasseService.find(id).orElseThrow(() -> new IllegalArgumentException("Falsch klasse id: " + id)));
+		attributes.addFlashAttribute("klasse", klasseService.find(id).orElseThrow(() -> new IllegalArgumentException(
+				messageSource.getMessage("invalid.class", new Object[] { id }, Locale.GERMANY))));
 		return new RedirectView("/klasse");
 	}
 
@@ -60,8 +65,8 @@ public class KlasseController {
 
 	@RequestMapping(value = "/klasse/delete/{id}")
 	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
-		klasseService.delete(
-				klasseService.find(id).orElseThrow(() -> new IllegalArgumentException("Falsch klasse id: " + id)));
+		klasseService.delete(klasseService.find(id).orElseThrow(() -> new IllegalArgumentException(
+				messageSource.getMessage("invalid.class", new Object[] { id }, Locale.GERMANY))));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/klasse");
 	}

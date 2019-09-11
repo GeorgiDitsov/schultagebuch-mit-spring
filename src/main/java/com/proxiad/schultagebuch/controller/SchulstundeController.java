@@ -20,7 +20,6 @@ import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.SchulfachService;
 import com.proxiad.schultagebuch.service.SchulstundeService;
-import com.proxiad.schultagebuch.validator.annotation.SchulstundeConstraint;
 
 @Controller
 @Validated
@@ -67,7 +66,7 @@ public class SchulstundeController {
 
 	@PostMapping(value = "/schulstunde/add")
 	public RedirectView save(RedirectAttributes attributes,
-			@ModelAttribute(name = "schulstunde") @Valid @SchulstundeConstraint Schulstunde schulstunde) {
+			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde) {
 		schulstundeService.save(schulstunde);
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schulstunde");

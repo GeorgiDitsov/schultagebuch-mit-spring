@@ -9,9 +9,9 @@
 	<div class="container h-100">
 		<div class="row h-100 justify-content-center align-items-center my-5">
 			<form class="form-signin" th:action="@{/login}" method="post">
-				<h1 class="text-center" th:text="#{message.login}"></h1>
-				<div th:if="${param.error}" class="alert alert-danger shadow-lg" th:text="#{message.invalid.user.credentials}"></div>
-	            <div th:if="${param.logout}" class="alert alert-success shadow-lg" th:text="#{message.logout}"></div>
+				<h1 class="text-center" th:text="#{login}"></h1>
+				<div th:if="${param.error}" class="alert alert-danger shadow-lg" th:text="#{invalid.user.credentials}"></div>
+	            <div th:if="${param.logout}" class="alert alert-success shadow-lg" th:text="#{logout}"></div>
 				<p><input type="text" id="username" name="username" class="form-control shadow-lg" th:placeholder="#{user.name}" required autofocus></p>
 				<p><input type="password" id="password" name="password" class="form-control shadow-lg" th:placeholder="#{user.password}" required autofocus></p>
 				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />

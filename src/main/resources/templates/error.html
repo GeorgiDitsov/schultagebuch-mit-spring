@@ -9,7 +9,10 @@
 	<div class="alert alert-danger alert-danger-centered">
 		<h1 class="alert-heading" th:text="#{application.error} + ': ' + ${statusCode}"></h1>
 		<hr>
-		<p><span th:text="${errorMessage}"></span></p>
+		<p>
+			<span th:if="${statusCode} == 404" th:text="#{application.page.not.found}"></span>
+			<span th:unless="${statusCode} == 404" th:text="${errorMessage}"></span>
+		</p>
 	</div>
 	<a class="mx-3" href="javascript:history.back()" th:text="#{action.back}"></a>
 </body>

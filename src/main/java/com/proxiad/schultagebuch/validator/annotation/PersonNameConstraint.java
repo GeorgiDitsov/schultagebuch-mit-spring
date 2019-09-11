@@ -19,7 +19,7 @@ import com.proxiad.schultagebuch.validator.PersonNameValidator;
 @Target({ FIELD, METHOD })
 public @interface PersonNameConstraint {
 
-	String message() default "Falsch person name";
+	String message() default "Falsch name";
 
 	Class<?>[] groups() default {};
 

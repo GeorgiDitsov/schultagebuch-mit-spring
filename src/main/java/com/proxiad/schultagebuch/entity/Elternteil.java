@@ -3,6 +3,7 @@ package com.proxiad.schultagebuch.entity;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,18 +17,19 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Size;
 
 import com.proxiad.schultagebuch.validator.annotation.PINConstraint;
 import com.proxiad.schultagebuch.validator.annotation.PersonNameConstraint;
 
 @Entity
-@Table(name = "elternteil", uniqueConstraints = { @UniqueConstraint(columnNames = "benutzer_id"),
-		@UniqueConstraint(columnNames = "elternteil_pin") })
+@Table(name = "elternteil", uniqueConstraints = { @UniqueConstraint(columnNames = { "benutzer_id" }),
+		@UniqueConstraint(columnNames = { "elternteil_pin" }) })
 public class Elternteil {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "elterteil_generator")
-	@SequenceGenerator(name = "elternteil_generator", sequenceName = "elternteil_id_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_elternteil_generator")
+	@SequenceGenerator(name = "PK_elternteil_generator", sequenceName = "elternteil_id_seq", allocationSize = 1)
 	@Column(name = "elternteil_id")
 	private int id;
 
@@ -39,13 +41,14 @@ public class Elternteil {
 	@Column(name = "elternteil_pin")
 	private String pin;
 
+	@Size(min = 1)
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "elternteil_schuler", joinColumns = {
 			@JoinColumn(name = "elternteil_id") }, inverseJoinColumns = { @JoinColumn(name = "schuler_id") })
 	private Set<Schuler> kinder;
 
-	@OneToOne(optional = true)
-	@JoinColumn(name = "benutzer_id", nullable = true)
+	@OneToOne(cascade = CascadeType.ALL, optional = true)
+	@JoinColumn(name = "benutzer_id", unique = true, nullable = true)
 	private Benutzer benutzer;
 
 	public Elternteil() {

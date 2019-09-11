@@ -2,6 +2,7 @@ package com.proxiad.schultagebuch.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,12 +32,12 @@ public class BenutzerService implements UserDetailsService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Benutzer find(int id) {
-		return repo.findById(id).get();
+	public Optional<Benutzer> find(int id) {
+		return repo.findById(id);
 	}
 
-	public Benutzer findByBenutzerName(String benutzername) {
-		return repo.findByBenutzerName(benutzername).orElseThrow(() -> new RuntimeException());
+	public Optional<Benutzer> findByBenutzerName(String benutzername) {
+		return repo.findByBenutzerName(benutzername);
 	}
 
 	public void delete(Benutzer benutzer) {
@@ -47,7 +48,7 @@ public class BenutzerService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Benutzer benutzer = repo.findByBenutzerName(username)
 				.orElseThrow(() -> new UsernameNotFoundException(username));
-		return new User(benutzer.getBenutzerName(), benutzer.getBenutzerPass(), getAuthorities(benutzer));
+		return new User(benutzer.getBenutzerName(), benutzer.getPasswort(), getAuthorities(benutzer));
 	}
 
 	private static Collection<? extends GrantedAuthority> getAuthorities(Benutzer benutzer) {

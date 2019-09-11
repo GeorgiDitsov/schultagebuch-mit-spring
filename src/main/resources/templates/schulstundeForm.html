@@ -22,6 +22,10 @@
 	      		<a class="nav-item nav-link" th:href="@{/schulfach}" th:text="#{subject}"></a>
 			</div>
   		</div>
+  		<div class="btn-group btn-group-sm" role="group">
+			<button class="btn btn-outline-primary" th:text="#{lang.de}" onclick="setDeutsch()"></button>
+			<button class="btn btn-outline-primary" th:text="#{lang.eng}" onclick="setEnglisch()"></button>
+  		</div>
   		<div class="dropdown">
  			<a class="nav-link dropdown-toggle mr-md-2" href="#" id="userOptions" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
   				<span sec:authentication="name"></span>
@@ -36,7 +40,7 @@
 	<h1 class="text-center mt-5" th:text="#{courses}"></h1>
 	<div class="container text-center">
 		<a class="btn btn-success shadow-lg mb-5" th:href="@{/schulstunde/add}" role="button" th:text="#{button.add}"></a>
-		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{message.successful}"></div>
+		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{successful}"></div>
 	</div>
 	<div th:if="${add}">
 		<div class="modal" id="addModal">
@@ -47,16 +51,16 @@
 	    			</div>
 	    			<div class="modal-body">
 	    				<form th:action="@{/schulstunde/add}" method="post" th:object="${schulstunde}">
-		        			<label for="klasse" th:text="#{class}"></label>
-		        			<select class="form-control w-25" id="klasse" th:field="*{klasse}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
+		        			<label th:text="#{class}"></label>
+		        			<select class="form-control w-25" th:field="*{klasse}">
 			        			<option th:each="klasse :${listKlasse}" th:value="${klasse.id}" th:text="${klasse.kennzeichen}">
 		        			</select><br/>
-		        			<label for="schulfach" th:text="#{subject}"></label>
-		        			<select class="form-control w-50" id="schulfach" th:field="*{schulfach}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
+		        			<label th:text="#{subject}"></label>
+		        			<select class="form-control w-50" th:field="*{schulfach}">
 		        				<option th:each="schulfach :${listSchulfach}" th:value="${schulfach.id}" th:text="${schulfach.name}">
 		        			</select><br/>
-	        				<label for="lehrer" th:text="#{teacher}"></label>
-	        				<select class="form-control w-50" id="lehrer" th:field="*{lehrer}">
+	        				<label th:text="#{teacher}"></label>
+	        				<select class="form-control w-50" th:field="*{lehrer}">
 	        					<option th:text="#{no.teacher}" value=>
 	        					<option th:each="lehrer :${listLehrer}" th:value="${lehrer.id}" th:text="${lehrer.kennzeichen}">
 	        				</select><br/>
@@ -80,16 +84,16 @@
 	    			<div class="modal-body">
 	    				<form th:action="@{/schulstunde/add}" method="post" th:object="${schulstunde}">
 	    					<input type="hidden" th:field="*{id}">
-		        			<label for="klasse" th:text="#{class}"></label>
-		        			<select class="form-control w-25" id="klasse" th:field="*{klasse}">
+		        			<label th:text="#{class}"></label>
+		        			<select class="form-control w-25" th:field="*{klasse}">
 			        			<option th:each="klasse :${listKlasse}" th:value="${klasse.id}" th:text="${klasse.kennzeichen}">
 		        			</select><br/>
-		        			<label for="schulfach" th:text="#{subject}"></label>
-		        			<select class="form-control w-50" id="schulfach" th:field="*{schulfach}">
+		        			<label th:text="#{subject}"></label>
+		        			<select class="form-control w-50" th:field="*{schulfach}">
 		        				<option th:each="schulfach :${listSchulfach}" th:value="${schulfach.id}" th:text="${schulfach.name}">
 		        			</select><br/>
-		        			<label for="lehrer" th:text="#{teacher}"></label>
-	        				<select class="form-control w-50" id="lehrer" th:field="*{lehrer}">
+		        			<label th:text="#{teacher}"></label>
+	        				<select class="form-control w-50" th:field="*{lehrer}">
 	        					<option th:text="#{no.teacher}" value=>
 	        					<option th:each="lehrer :${listLehrer}" th:value="${lehrer.id}" th:text="${lehrer.kennzeichen}">
 	        				</select><br/>
@@ -122,7 +126,7 @@
 	            <td>
 	            	<a th:href="@{'schulstunde/edit/'+${schulstunde.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	&nbsp;
-	            	<a th:href="@{'schulstunde/delete/'+${schulstunde.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{message.confirmation}]])"></a>
+	            	<a th:href="@{'schulstunde/delete/'+${schulstunde.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 	            </td>
 	        </tr>
 	    </table>
@@ -131,5 +135,6 @@
 	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
 	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
 	<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
+	<script th:src="@{/js/localization.js}" type="text/javascript"></script>
 </body>
 </html>

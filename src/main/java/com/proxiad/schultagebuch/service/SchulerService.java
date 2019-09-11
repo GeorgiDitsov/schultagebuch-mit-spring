@@ -32,4 +32,5 @@ public class SchulerService {
 	public void delete(Schuler schuler) {
 		repo.delete(schuler);
 	}
+
 }

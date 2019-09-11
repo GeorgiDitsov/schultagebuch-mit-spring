@@ -22,6 +22,10 @@
 	      		<a class="nav-item nav-link" th:href="@{/schulfach}" th:text="#{subject}"></a>
 			</div>
   		</div>
+  		<div class="btn-group btn-group-sm" role="group">
+			<button class="btn btn-outline-primary" th:text="#{lang.de}" onclick="setDeutsch()"></button>
+			<button class="btn btn-outline-primary" th:text="#{lang.eng}" onclick="setEnglisch()"></button>
+  		</div>
   		<div class="dropdown">
  			<a class="nav-link dropdown-toggle mr-md-2" href="#" id="userOptions" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
   				<span sec:authentication="name"></span>
@@ -48,12 +52,12 @@
 	        <tr th:each="benutzer: ${listBenutzer}">
 	            <th scope="row" th:text="${benutzer.id}" />
 	            <td th:text="${benutzer.benutzerName}" />
-	            <td th:text="${benutzer.benutzerPass}" />
+	            <td th:text="${benutzer.passwort}" />
 	            <td th:text="${benutzer.rolle.name}" />
 	            <td>
 	            	<a th:href="@{'benutzer/edit/'+${benutzer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	&nbsp;
-	            	<a th:href="@{'benutzer/delete/'+${benutzer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{message.confirmation}]])"></a>
+	            	<a th:href="@{'benutzer/delete/'+${benutzer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 	            </td>
 	        </tr>
 	    </table>
@@ -61,5 +65,6 @@
 	<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
 	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
 	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
+	<script th:src="@{/js/localization.js}" type="text/javascript"></script>
 </body>
 </html>

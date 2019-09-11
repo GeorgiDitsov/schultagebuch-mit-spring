@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
-<title>Schultagebuch</title>
+<title th:text="#{school.diary}"></title>
 </head>
 <body>
 	<nav class="navbar sticky-top navbar-expand-lg navbar-dark shadow-lg" style="background-color: navy; min-height: 4rem;">
-		<a class="navbar-brand" th:href="@{/home}">Schultagebuch</a>
-		<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="adminNavbar">
+		<a class="navbar-brand" th:href="@{/home}" th:text="#{school.diary}"></a>
+		<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+   			<span class="navbar-toggler-icon"></span>
+  		</button>
+		<div class="collapse navbar-collapse" id="navbar">
     		<div class="navbar-nav mr-auto">
 	     		<a class="nav-item nav-link" th:href="@{/benutzer}" th:text="#{user}"></a>
       			<a class="nav-item nav-link" th:href="@{/schuler}" th:text="#{student}"></a>
@@ -22,21 +22,25 @@
 	      		<a class="nav-item nav-link" th:href="@{/schulfach}" th:text="#{subject}"></a>
 			</div>
   		</div>
+  		<div class="btn-group btn-group-sm" role="group">
+			<button class="btn btn-outline-primary" th:text="#{lang.de}" onclick="setDeutsch()"></button>
+			<button class="btn btn-outline-primary" th:text="#{lang.eng}" onclick="setEnglisch()"></button>
+  		</div>
   		<div class="dropdown">
- 			<a class="nav-link dropdown-toggle mr-md-2" href="#" id="userOptions" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  				<span sec:authentication="name"></span>
-  			</a>
-  			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userOptions">
+  			<a class="nav-link dropdown-toggle mr-md-2" href="#" id="userOptions" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	  			<span sec:authentication="name"></span>
+	  		</a>
+	  		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userOptions">
 	        	<a class="dropdown-item" th:href="@{/info}" th:text="#{user.info}"></a>
 	        	<div class="dropdown-divider"></div>
 	        	<a class="dropdown-item" th:href="@{/logout}" th:text="#{application.logout}"></a>
 	        </div>
- 		</div>
+  		</div>
 	</nav>
 	<h1 class="text-center mt-5" th:text="#{classes}"></h1>
 	<div class="container text-center">
 		<a th:href="@{/klasse/add}" class="btn btn-success shadow-lg mb-5" role="button" th:text="#{button.add}"></a>
-		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{message.successful}"></div>
+		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{successful}"></div>
 	</div>
 	<div th:if="${add}">
 		<div class="modal" id="addModal">
@@ -47,7 +51,7 @@
 	    			</div>
 	    			<div class="modal-body">
 	    				<form th:action="@{/klasse/add}" method="post" th:object="${klasse}">
-	        				<input type="text" name="klasseName" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
+	        				<input type="text" name="klasseName" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
 		        			&nbsp;
 		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
@@ -69,7 +73,7 @@
     				<div class="modal-body">
     					<form th:action="@{/klasse/add}" method="post" th:object="${klasse}">
     						<input type="hidden" th:field="*{id}">
-	        				<input type="text" name="klasseName" th:value="*{kennzeichen}" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
+	        				<input type="text" name="klasseName" th:value="*{kennzeichen}" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
 	        				&nbsp;
 	        				<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 	    				</form>
@@ -96,7 +100,7 @@
 		        <td>
 		        	<a th:href="@{'klasse/edit/'+${klasse.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 		           	&nbsp;
-		           	<a th:href="@{'klasse/delete/'+${klasse.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{message.confirmation}]])"></a>
+		           	<a th:href="@{'klasse/delete/'+${klasse.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 		       	</td>
 		    </tr>
 	    </table>
@@ -105,5 +109,6 @@
 	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
 	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
 	<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
+	<script th:src="@{/js/localization.js}" type="text/javascript"></script>
 </body>
 </html>

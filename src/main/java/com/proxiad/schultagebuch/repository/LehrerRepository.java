@@ -9,5 +9,6 @@ import com.proxiad.schultagebuch.entity.Lehrer;
 
 @Repository
 public interface LehrerRepository extends JpaRepository<Lehrer, Integer> {
+
 	public List<Lehrer> findAllByOrderByIdAsc();
 }

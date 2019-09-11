@@ -15,7 +15,10 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.proxiad.schultagebuch.validator.annotation.SchulstundeConstraint;
+
 @Entity
+@SchulstundeConstraint
 @Table(name = "schulstunde", uniqueConstraints = { @UniqueConstraint(columnNames = { "klasse_id", "schulfach_id" }) })
 public class Schulstunde {
 

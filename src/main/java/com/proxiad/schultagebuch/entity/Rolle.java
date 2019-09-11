@@ -10,17 +10,23 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
-@Table(name = "rolle")
+@Table(name = "rolle", uniqueConstraints = { @UniqueConstraint(columnNames = "rolle_name") })
 public class Rolle {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rolle_generator")
-	@SequenceGenerator(name = "rolle_generator", sequenceName = "rolle_id_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_rolle_generator")
+	@SequenceGenerator(name = "PK_rolle_generator", sequenceName = "rolle_id_seq", allocationSize = 1)
 	@Column(name = "rolle_id")
 	private int id;
-	@Column(name = "rolle_name")
+
+	@NotBlank
+	@Pattern(regexp = "^(ROLE_[A-Z]+)$", message = "Falsch rolle name")
+	@Column(name = "rolle_name", unique = true)
 	private String name;
 
 	@OneToMany(mappedBy = "rolle")

@@ -3,6 +3,7 @@ package com.proxiad.schultagebuch.entity;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,20 +17,20 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
 import com.proxiad.schultagebuch.validator.annotation.PINConstraint;
 import com.proxiad.schultagebuch.validator.annotation.PersonNameConstraint;
 
 @Entity
-@Table(name = "schuler", uniqueConstraints = { @UniqueConstraint(columnNames = "benutzer_id"),
-		@UniqueConstraint(columnNames = "schuler_pin") })
+@Table(name = "schuler", uniqueConstraints = { @UniqueConstraint(columnNames = { "schuler_pin" }),
+		@UniqueConstraint(columnNames = { "benutzer_id" }) })
 public class Schuler {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_schuler_generator")
-	@SequenceGenerator(name = "PK_schuler_generator", sequenceName = "schuler_id_seq")
+	@SequenceGenerator(name = "PK_schuler_generator", sequenceName = "schuler_id_seq", allocationSize = 1)
 	@Column(name = "schuler_id")
 	private int id;
 
@@ -38,20 +39,22 @@ public class Schuler {
 	private String name;
 
 	@PINConstraint
-	@Column(name = "schuler_pin")
+	@Column(name = "schuler_pin", unique = true)
 	private String pin;
 
+	@Valid
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "klasse_id", nullable = true)
 	private Klasse klasse;
 
-	@NotNull
+	@Valid
 	@Size(min = 1, max = 2)
 	@ManyToMany(mappedBy = "kinder", fetch = FetchType.EAGER)
 	private Set<Elternteil> eltern;
 
-	@OneToOne(optional = true)
-	@JoinColumn(name = "benutzer_id", nullable = true)
+	@Valid
+	@OneToOne(cascade = CascadeType.ALL, optional = true)
+	@JoinColumn(name = "benutzer_id", unique = true, nullable = true)
 	private Benutzer benutzer;
 
 	public Schuler() {

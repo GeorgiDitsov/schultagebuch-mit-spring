@@ -22,6 +22,10 @@
 	      		<a class="nav-item nav-link active" th:href="@{/schulfach}" th:text="#{subject}"></a>
 			</div>
   		</div>
+  		<div class="btn-group btn-group-sm" role="group">
+			<button class="btn btn-outline-primary" th:text="#{lang.de}" onclick="setDeutsch()"></button>
+			<button class="btn btn-outline-primary" th:text="#{lang.eng}" onclick="setEnglisch()"></button>
+  		</div>
   		<div class="dropdown">
  			<a class="nav-link dropdown-toggle mr-md-2" href="#" id="userOptions" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
   				<span sec:authentication="name"></span>
@@ -36,7 +40,7 @@
 	<h1 class="text-center mt-5" th:text="#{subjects}"></h1>
 	<div class="container text-center">
 		<a th:href="@{/schulfach/add}" class="btn btn-success shadow-lg mb-5" role="button" th:text="#{button.add}"></a>
-		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{message.successful}"></div>
+		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{successful}"></div>
 	</div>
 	<div th:if="${add}">
 		<div class="modal" id="addModal">
@@ -47,7 +51,7 @@
 	    			</div>
 	    			<div class="modal-body">
 	    				<form method="post" th:action="@{/schulfach/add}" th:object="${schulfach}">
-		        			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
+		        			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
 		        			&nbsp;
 		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
@@ -69,7 +73,7 @@
 	    			<div class="modal-body">
 	    				<form method="post" th:action="@{/schulfach/add}" th:object="${schulfach}">
 	    					<input type="hidden" th:field="*{id}">
-		        			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{message.required.field}]])" required>
+		        			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
 		        			&nbsp;
 		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
@@ -98,7 +102,7 @@
 	            <td>
 	            	<a th:href="@{'schulfach/edit/'+${schulfach.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	&nbsp;
-	            	<a th:href="@{'schulfach/delete/'+${schulfach.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{message.confirmation}]])"></a>
+	            	<a th:href="@{'schulfach/delete/'+${schulfach.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 	            </td>
 	        </tr>
 	    </table>
@@ -107,5 +111,6 @@
 	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
 	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
 	<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
+	<script th:src="@{/js/localization.js}" type="text/javascript"></script>
 </body>
 </html>

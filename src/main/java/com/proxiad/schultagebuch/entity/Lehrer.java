@@ -3,6 +3,7 @@ package com.proxiad.schultagebuch.entity;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,8 +27,8 @@ import com.proxiad.schultagebuch.validator.annotation.PersonNameConstraint;
 public class Lehrer {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lehrer_generator")
-	@SequenceGenerator(name = "lehrer_generator", sequenceName = "lehrer_id_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_lehrer_generator")
+	@SequenceGenerator(name = "PK_lehrer_generator", sequenceName = "lehrer_id_seq", allocationSize = 1)
 	@Column(name = "lehrer_id")
 	private int id;
 
@@ -44,8 +45,8 @@ public class Lehrer {
 			@JoinColumn(name = "schulfach_id") })
 	private Set<Schulfach> schulfachSet;
 
-	@OneToOne(optional = true)
-	@JoinColumn(name = "benutzer_id", nullable = true)
+	@OneToOne(cascade = CascadeType.ALL, optional = true)
+	@JoinColumn(name = "benutzer_id", unique = true, nullable = true)
 	private Benutzer benutzer;
 
 	public Lehrer() {
