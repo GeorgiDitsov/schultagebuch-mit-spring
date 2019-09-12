@@ -15,6 +15,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.annotations.ColumnTransformer;
+
 @Entity
 @Table(name = "benutzer", uniqueConstraints = { @UniqueConstraint(columnNames = { "benutzer_name" }) })
 public class Benutzer {
@@ -26,13 +28,14 @@ public class Benutzer {
 	private int id;
 
 	@NotBlank
-	@Pattern(regexp = "^(([a-z0-9]*)[a-z0-9]{5,20})$", message = "{invalid.user.name}")
+	@Pattern(regexp = "^([A-Za-z0-9]{5,20})$", message = "{invalid.user.name}")
 	@Column(name = "benutzer_name", unique = true)
 	private String benutzerName;
 
 	@NotBlank
 	@Pattern(regexp = "^(?=.*[a-zA-Z])([0-9]*)[a-zA-Z0-9]{5,10}$", message = "{invalid.user.password}")
 	@Column(name = "benutzer_pass")
+	@ColumnTransformer(write = "crypt(?, gen_salt('bf'))")
 	private String passwort;
 
 	@NotNull

@@ -53,8 +53,8 @@
 	    					<input type="hidden" th:field="*{id}">
 		        			<label th:text="#{user.name} + '*'" ></label>
 		        			<input class="form-control w-50" type="text" th:field="*{benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
-		        			<label th:text="#{user.password} + '*'"></label>
-		        			<input class="form-control w-50" type="text" th:field="*{passwort}" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+		        			<label th:text="#{user.password.new} + '*'"></label>
+		        			<input class="form-control w-50" type="password" th:field="*{passwort}" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
 		        			<input type="hidden" th:field="*{rolle}">
 		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
