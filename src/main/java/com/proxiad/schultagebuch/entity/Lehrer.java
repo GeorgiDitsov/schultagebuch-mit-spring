@@ -18,8 +18,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.proxiad.schultagebuch.validator.annotation.PINConstraint;
-import com.proxiad.schultagebuch.validator.annotation.PersonNameConstraint;
+import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
+import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
 @Entity
 @Table(name = "lehrer", uniqueConstraints = { @UniqueConstraint(columnNames = "benutzer_id"),

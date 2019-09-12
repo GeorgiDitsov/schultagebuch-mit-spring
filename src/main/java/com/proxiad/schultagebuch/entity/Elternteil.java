@@ -18,8 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 
-import com.proxiad.schultagebuch.validator.annotation.PINConstraint;
-import com.proxiad.schultagebuch.validator.annotation.PersonNameConstraint;
+import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
+import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
 @Entity
 @Table(name = "elternteil", uniqueConstraints = { @UniqueConstraint(columnNames = { "benutzer_id" }),

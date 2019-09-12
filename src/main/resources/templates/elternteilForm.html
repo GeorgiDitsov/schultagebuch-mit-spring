@@ -54,10 +54,9 @@
 		        			<label th:text="#{name} + '*'" ></label>
 		        			<input class="form-control w-50" type="text" th:field="*{name}" th:placeholder="#{student.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
 		        			<label th:text="#{pin} + '*'"></label>
-		        			<input class="form-control w-50" id="pin" type="text" th:field="*{pin}" th:placeholder="#{student.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+		        			<input class="form-control w-50" type="text" th:field="*{pin}" th:placeholder="#{student.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
 		        			<input type="hidden" th:field="*{kinder}">
 		        			<input type="hidden" th:field="*{benutzer}">
-		        			&nbsp;
 		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
 	    			</div>

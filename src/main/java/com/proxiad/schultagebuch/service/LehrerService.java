@@ -25,7 +25,7 @@ public class LehrerService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Optional<Lehrer> find(Integer id) {
+	public Optional<Lehrer> find(int id) {
 		return repo.findById(id);
 	}
 

@@ -38,6 +38,34 @@
  		</div>
 	</nav>
 	<h1 class="text-center my-5" th:text="#{users}"></h1>
+	<div class="container text-center">
+		<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{successful}"></div>
+	</div>
+	<div th:if="${edit}">
+    	<div class="modal fade" id="editModal">
+			<div class="modal-dialog modal-dialog-centered">
+	    		<div class="modal-content">
+	    			<div class="modal-header">
+	    				<h4 class="modal-title" th:text="#{modal.edit.title.user(${benutzer.id}, ${benutzer.rolle.kennzeichen})}"></h4>
+	    			</div>
+	    			<div class="modal-body">
+	    				<form method="post" th:action="@{/benutzer/add}" th:object="${benutzer}">
+	    					<input type="hidden" th:field="*{id}">
+		        			<label th:text="#{user.name} + '*'" ></label>
+		        			<input class="form-control w-50" type="text" th:field="*{benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+		        			<label th:text="#{user.password} + '*'"></label>
+		        			<input class="form-control w-50" type="text" th:field="*{passwort}" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+		        			<input type="hidden" th:field="*{rolle}">
+		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		    			</form>
+	    			</div>
+	    			<div class="modal-footer">
+	    				<button class="btn btn-danger" data-dismiss="modal" th:text="#{button.close}"></button>
+	    			</div>
+	    		</div>
+	    	</div>
+		</div>
+    </div>
 	<div class="table-responsive">
 		<table class="table table-bordered table-striped mx-auto mb-5 w-75 shadow">
 	        <thead class="thead-dark">
@@ -53,7 +81,7 @@
 	            <th scope="row" th:text="${benutzer.id}" />
 	            <td th:text="${benutzer.benutzerName}" />
 	            <td th:text="${benutzer.passwort}" />
-	            <td th:text="${benutzer.rolle.name}" />
+	            <td th:text="${benutzer.rolle.kennzeichen}" />
 	            <td>
 	            	<a th:href="@{'benutzer/edit/'+${benutzer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	&nbsp;
@@ -65,6 +93,7 @@
 	<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
 	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
 	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
+	<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
 	<script th:src="@{/js/localization.js}" type="text/javascript"></script>
 </body>
 </html>

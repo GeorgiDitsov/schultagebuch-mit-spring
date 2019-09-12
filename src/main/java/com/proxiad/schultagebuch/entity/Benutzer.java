@@ -26,12 +26,12 @@ public class Benutzer {
 	private int id;
 
 	@NotBlank
-	@Pattern(regexp = "^(([a-z0-9]+){6,20})$", message = "Falsch benutzer name")
+	@Pattern(regexp = "^(([a-z0-9]*)[a-z0-9]{5,20})$", message = "{invalid.user.name}")
 	@Column(name = "benutzer_name", unique = true)
 	private String benutzerName;
 
 	@NotBlank
-	@Pattern(regexp = "^([a-z]*)([A-Z]*)([0-9]*)().{5,10}$", message = "Falsch benutzer passwort")
+	@Pattern(regexp = "^(?=.*[a-zA-Z])([0-9]*)[a-zA-Z0-9]{5,10}$", message = "{invalid.user.password}")
 	@Column(name = "benutzer_pass")
 	private String passwort;
 

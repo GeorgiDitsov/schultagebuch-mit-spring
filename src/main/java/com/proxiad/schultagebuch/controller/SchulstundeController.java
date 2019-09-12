@@ -1,10 +1,11 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.List;
+import java.util.Locale;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -39,14 +40,12 @@ public class SchulstundeController {
 	@Autowired
 	private LehrerService lehrerService;
 
+	@Autowired
+	private MessageSource messageSource;
+
 	@RequestMapping(value = "/schulstunde")
 	public ModelAndView home() {
-		List<Schulstunde> listSchulstunde = schulstundeService.findAll();
-		ModelAndView mav = new ModelAndView("schulstundeForm", "listSchulstunde", listSchulstunde);
-		mav.addObject("listKlasse", klasseService.findAll());
-		mav.addObject("listSchulfach", schulfachService.findAll());
-		mav.addObject("listLehrer", lehrerService.findAll());
-		return mav;
+		return homeMav(new ModelAndView("schulstundeForm"));
 	}
 
 	@RequestMapping(value = "/schulstunde/add")
@@ -58,11 +57,11 @@ public class SchulstundeController {
 	}
 
 	@RequestMapping(value = "/schulstunde/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
+	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schulstunde", schulstundeService.find(id)
-				.orElseThrow(() -> new IllegalArgumentException("Falsch schulstunde id " + id)));
+		attributes.addFlashAttribute("schulstunde", findSchulstundeById(id, locale));
 		return new RedirectView("/schulstunde");
 	}
 
@@ -76,10 +75,23 @@ public class SchulstundeController {
 	}
 
 	@RequestMapping(value = "/schulstunde/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
-		schulstundeService.delete(schulstundeService.find(id)
-				.orElseThrow(() -> new IllegalArgumentException("Falsch schulstunde id: " + id)));
+	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+			final Locale locale) {
+		schulstundeService.delete(findSchulstundeById(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schulstunde");
+	}
+
+	private ModelAndView homeMav(ModelAndView mav) {
+		mav.addObject("listSchulstunde", schulstundeService.findAll());
+		mav.addObject("listKlasse", klasseService.findAll());
+		mav.addObject("listSchulfach", schulfachService.findAll());
+		mav.addObject("listLehrer", lehrerService.findAll());
+		return mav;
+	}
+
+	private Schulstunde findSchulstundeById(final int id, final Locale locale) {
+		return schulstundeService.find(id).orElseThrow(() -> new IllegalArgumentException(
+				messageSource.getMessage("invalid.course", new Object[] { id }, locale)));
 	}
 }

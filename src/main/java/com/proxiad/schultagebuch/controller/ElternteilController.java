@@ -46,9 +46,10 @@ public class ElternteilController {
 	}
 
 	@RequestMapping(value = "/elternteil/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id) {
+	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+			final Locale locale) {
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("elternteil", findElternteilById(id));
+		attributes.addFlashAttribute("elternteil", findElternteilById(id, locale));
 		return new RedirectView("/elternteil");
 	}
 
@@ -62,15 +63,16 @@ public class ElternteilController {
 	}
 
 	@RequestMapping(value = "/elternteil/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id) {
-		elternteilService.delete(findElternteilById(id));
+	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+			final Locale locale) {
+		elternteilService.delete(findElternteilById(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/elternteil");
 	}
 
-	private Elternteil findElternteilById(int id) {
+	private Elternteil findElternteilById(final int id, final Locale locale) {
 		return elternteilService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.parent", new Object[] { id }, Locale.GERMANY)));
+				messageSource.getMessage("invalid.parent", new Object[] { id }, locale)));
 	}
 
 }

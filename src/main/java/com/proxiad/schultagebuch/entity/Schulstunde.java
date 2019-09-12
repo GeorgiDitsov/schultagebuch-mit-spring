@@ -15,7 +15,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.proxiad.schultagebuch.validator.annotation.SchulstundeConstraint;
+import com.proxiad.schultagebuch.validator.constraint.SchulstundeConstraint;
 
 @Entity
 @SchulstundeConstraint

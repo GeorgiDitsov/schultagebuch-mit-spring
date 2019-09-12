@@ -1,4 +1,4 @@
-package com.proxiad.schultagebuch.validator.annotation;
+package com.proxiad.schultagebuch.validator.constraint;
 
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -14,7 +14,7 @@ import javax.validation.Payload;
 @Target(PARAMETER)
 public @interface BenutzerSchulerConstraint {
 
-	String message() default "Die rolle des benutzers stimmt nicht \u00fcberein";
+	String message() default "{invalid.student.user.role}";
 
 	Class<?>[] groups() default {};
 

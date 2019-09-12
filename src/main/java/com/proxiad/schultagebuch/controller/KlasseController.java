@@ -1,6 +1,5 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.util.KlasseUtils;
 import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
-import com.proxiad.schultagebuch.validator.annotation.KlasseNameConstraint;
+import com.proxiad.schultagebuch.validator.constraint.KlasseNameConstraint;
 
 @Controller
 @Validated
@@ -35,8 +34,7 @@ public class KlasseController {
 
 	@RequestMapping(value = "/klasse")
 	public ModelAndView home() {
-		List<Klasse> listKlasse = klasseService.findAll();
-		return new ModelAndView("klasseForm", "listKlasse", listKlasse);
+		return new ModelAndView("klasseForm", "listKlasse", klasseService.findAll());
 	}
 
 	@RequestMapping(value = "/klasse/add")
@@ -48,10 +46,11 @@ public class KlasseController {
 	}
 
 	@RequestMapping(value = "/klasse/edit/{id}")
-	public RedirectView findForEdit(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
+	public RedirectView findForEdit(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("klasse", findKlasseById(id));
+		attributes.addFlashAttribute("klasse", findKlasseById(id, locale));
 		return new RedirectView("/klasse");
 	}
 
@@ -66,15 +65,16 @@ public class KlasseController {
 	}
 
 	@RequestMapping(value = "/klasse/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
-		klasseService.delete(findKlasseById(id));
+	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+			final Locale locale) {
+		klasseService.delete(findKlasseById(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/klasse");
 	}
 
-	private Klasse findKlasseById(int id) {
+	private Klasse findKlasseById(int id, Locale locale) {
 		return klasseService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.class", new Object[] { id }, Locale.GERMANY)));
+				messageSource.getMessage("invalid.class", new Object[] { id }, locale)));
 	}
 
 }

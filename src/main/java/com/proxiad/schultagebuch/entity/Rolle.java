@@ -52,4 +52,8 @@ public class Rolle {
 		this.name = name;
 	}
 
+	public String getKennzeichen() {
+		return name.substring(5, 6) + name.substring(6).toLowerCase();
+	}
+
 }

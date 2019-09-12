@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import com.proxiad.schultagebuch.entity.Schulstunde;
-import com.proxiad.schultagebuch.validator.annotation.SchulstundeConstraint;
+import com.proxiad.schultagebuch.validator.constraint.SchulstundeConstraint;
 
 public class SchulstundeValidator implements ConstraintValidator<SchulstundeConstraint, Schulstunde> {
 

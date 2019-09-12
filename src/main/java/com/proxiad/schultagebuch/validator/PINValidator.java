@@ -3,7 +3,7 @@ package com.proxiad.schultagebuch.validator;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.proxiad.schultagebuch.validator.annotation.PINConstraint;
+import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 
 public class PINValidator implements ConstraintValidator<PINConstraint, String> {
 

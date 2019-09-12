@@ -1,4 +1,4 @@
-package com.proxiad.schultagebuch.validator.annotation;
+package com.proxiad.schultagebuch.validator.constraint;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -11,15 +11,15 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import com.proxiad.schultagebuch.validator.PINValidator;
+import com.proxiad.schultagebuch.validator.PersonNameValidator;
 
 @Documented
-@Constraint(validatedBy = PINValidator.class)
+@Constraint(validatedBy = PersonNameValidator.class)
 @Retention(RUNTIME)
 @Target({ FIELD, METHOD })
-public @interface PINConstraint {
+public @interface PersonNameConstraint {
 
-	String message() default "Falsch PIN";
+	String message() default "{invalid.name}";
 
 	Class<?>[] groups() default {};
 

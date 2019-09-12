@@ -1,6 +1,5 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.List;
 import java.util.Locale;
 
 import javax.validation.Valid;
@@ -18,8 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
-import com.proxiad.schultagebuch.entity.Elternteil;
-import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.service.ElternteilService;
 import com.proxiad.schultagebuch.service.KlasseService;
@@ -47,7 +44,7 @@ public class SchulerController {
 
 	@RequestMapping(value = "/schuler")
 	public ModelAndView home() {
-		return mav(new ModelAndView("schulerForm"));
+		return homeMav(new ModelAndView("schulerForm"));
 	}
 
 	@RequestMapping(value = "/schuler/search")
@@ -57,18 +54,19 @@ public class SchulerController {
 	}
 
 	@RequestMapping(value = "/schuler/add")
-	public RedirectView newEntity(RedirectAttributes attributes) {
+	public RedirectView newEntity(RedirectAttributes attributes, final Locale locale) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
-		attributes.addFlashAttribute("schuler", getNewSchuler());
+		attributes.addFlashAttribute("schuler", getNewSchuler(locale));
 		return new RedirectView("/schuler");
 	}
 
 	@RequestMapping(value = "/schuler/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
+	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schuler", findSchulerById(id));
+		attributes.addFlashAttribute("schuler", findSchulerById(id, locale));
 		return new RedirectView("/schuler");
 	}
 
@@ -82,33 +80,31 @@ public class SchulerController {
 	}
 
 	@RequestMapping(value = "/schuler/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") int id) {
-		schulerService.delete(findSchulerById(id));
+	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+			final Locale locale) {
+		schulerService.delete(findSchulerById(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schuler");
 	}
 
-	private ModelAndView mav(ModelAndView mav) {
-		List<Schuler> listSchuler = schulerService.findAll();
-		List<Klasse> listKlasse = klasseService.findAll();
-		List<Elternteil> listEltern = elternteilService.findAll();
-		mav.addObject("listSchuler", listSchuler);
-		mav.addObject("listKlasse", listKlasse);
-		mav.addObject("listEltern", listEltern);
+	private ModelAndView homeMav(ModelAndView mav) {
+		mav.addObject("listSchuler", schulerService.findAll());
+		mav.addObject("listKlasse", klasseService.findAll());
+		mav.addObject("listEltern", elternteilService.findAll());
 		return mav;
 	}
 
-	private Schuler getNewSchuler() {
+	private Schuler getNewSchuler(final Locale locale) {
 		Schuler schuler = new Schuler();
 		Benutzer benutzer = new Benutzer();
 		benutzer.setRolle(rolleService.find("ROLE_SCHULER").orElseThrow(
-				() -> new IllegalArgumentException(messageSource.getMessage("invalid.role", null, Locale.GERMANY))));
+				() -> new IllegalArgumentException(messageSource.getMessage("invalid.role", null, locale))));
 		schuler.setBenutzer(benutzer);
 		return schuler;
 	}
 
-	private Schuler findSchulerById(int id) {
+	private Schuler findSchulerById(final int id, final Locale locale) {
 		return schulerService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.student", new Object[] { id }, Locale.GERMANY)));
+				messageSource.getMessage("invalid.student", new Object[] { id }, locale)));
 	}
 }
