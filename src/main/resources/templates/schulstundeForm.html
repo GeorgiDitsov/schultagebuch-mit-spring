@@ -125,7 +125,6 @@
 	            <td th:text="${schulstunde.lehrerKennzeichen}" />
 	            <td>
 	            	<a th:href="@{'schulstunde/edit/'+${schulstunde.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-	            	&nbsp;
 	            	<a th:href="@{'schulstunde/delete/'+${schulstunde.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 	            </td>
 	        </tr>

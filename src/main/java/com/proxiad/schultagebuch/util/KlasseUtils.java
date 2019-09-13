@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import com.proxiad.schultagebuch.entity.Klasse;
 
-public class KlasseUtils implements EntityUtils<String, Klasse> {
+public class KlasseUtils implements EntityUtils<Klasse> {
 
 	private static KlasseUtils singleInstance = null;
 
@@ -20,7 +20,7 @@ public class KlasseUtils implements EntityUtils<String, Klasse> {
 	}
 
 	@Override
-	public Klasse bauden(String klasseName, Klasse klasse) {
+	public Klasse bauenAusString(Klasse klasse, String klasseName) {
 		klasse.setJahr(Integer.parseInt(klasseName.substring(0, klasseName.length() == 2 ? 1 : 2)));
 		klasse.setBuchstabe(klasseName.substring(klasseName.length() - 1));
 		return klasse;

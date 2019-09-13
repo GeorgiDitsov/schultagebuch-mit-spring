@@ -100,16 +100,4 @@ public class Lehrer {
 		return schulfachSet.isEmpty() ? "n/a" : kennzeichen.toString();
 	}
 
-	public String getKennzeichen() {
-		return name + ", " + getPinKennzeichen();
-	}
-
-	public String getPinKennzeichen() {
-		return pin.substring(0, 6) + "****";
-	}
-
-	public String getBenutzernameKennzeichen() {
-		return Optional.ofNullable(benutzer).isPresent() ? benutzer.getBenutzerName() : "n/a";
-	}
-
 }

@@ -1,9 +1,10 @@
 package com.proxiad.schultagebuch.service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,9 @@ public class ElternteilService {
 	@Autowired
 	private ElternteilRepository repo;
 
+	@Autowired
+	private MessageSource messageSource;
+
 	public void save(Elternteil elternteil) {
 		repo.save(elternteil);
 	}
@@ -25,8 +29,9 @@ public class ElternteilService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Optional<Elternteil> find(int id) {
-		return repo.findById(id);
+	public Elternteil find(int id, final Locale locale) {
+		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
+				messageSource.getMessage("invalid.parent", new Object[] { id }, locale)));
 	}
 
 	public void delete(Elternteil elternteil) {

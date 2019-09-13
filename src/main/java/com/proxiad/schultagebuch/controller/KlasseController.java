@@ -3,7 +3,6 @@ package com.proxiad.schultagebuch.controller;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -29,9 +28,6 @@ public class KlasseController {
 	@Autowired
 	private KlasseService klasseService;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	@RequestMapping(value = "/klasse")
 	public ModelAndView home() {
 		return new ModelAndView("klasseForm", "listKlasse", klasseService.findAll());
@@ -50,7 +46,7 @@ public class KlasseController {
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("klasse", findKlasseById(id, locale));
+		attributes.addFlashAttribute("klasse", klasseService.find(id, locale));
 		return new RedirectView("/klasse");
 	}
 
@@ -59,7 +55,7 @@ public class KlasseController {
 			@RequestParam(name = "klasseName") @KlasseNameConstraint String klasseName,
 			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		klasseService.save(KlasseUtils.getInstance().bauden(klasseName, klasse));
+		klasseService.save(KlasseUtils.getInstance().bauenAusString(klasse, klasseName));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/klasse");
 	}
@@ -67,14 +63,9 @@ public class KlasseController {
 	@RequestMapping(value = "/klasse/delete/{id}")
 	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
-		klasseService.delete(findKlasseById(id, locale));
+		klasseService.delete(klasseService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/klasse");
-	}
-
-	private Klasse findKlasseById(int id, Locale locale) {
-		return klasseService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.class", new Object[] { id }, locale)));
 	}
 
 }

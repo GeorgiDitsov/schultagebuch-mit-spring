@@ -5,7 +5,6 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -40,9 +39,6 @@ public class SchulstundeController {
 	@Autowired
 	private LehrerService lehrerService;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	@RequestMapping(value = "/schulstunde")
 	public ModelAndView home() {
 		return homeMav(new ModelAndView("schulstundeForm"));
@@ -61,7 +57,7 @@ public class SchulstundeController {
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schulstunde", findSchulstundeById(id, locale));
+		attributes.addFlashAttribute("schulstunde", schulstundeService.find(id, locale));
 		return new RedirectView("/schulstunde");
 	}
 
@@ -77,7 +73,7 @@ public class SchulstundeController {
 	@RequestMapping(value = "/schulstunde/delete/{id}")
 	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
-		schulstundeService.delete(findSchulstundeById(id, locale));
+		schulstundeService.delete(schulstundeService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schulstunde");
 	}
@@ -88,10 +84,5 @@ public class SchulstundeController {
 		mav.addObject("listSchulfach", schulfachService.findAll());
 		mav.addObject("listLehrer", lehrerService.findAll());
 		return mav;
-	}
-
-	private Schulstunde findSchulstundeById(final int id, final Locale locale) {
-		return schulstundeService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.course", new Object[] { id }, locale)));
 	}
 }

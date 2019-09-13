@@ -5,7 +5,6 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
+import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.service.ElternteilService;
 import com.proxiad.schultagebuch.service.KlasseService;
@@ -39,25 +39,16 @@ public class SchulerController {
 	@Autowired
 	private RolleService rolleService;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	@RequestMapping(value = "/schuler")
-	public ModelAndView home() {
-		return homeMav(new ModelAndView("schulerForm"));
-	}
-
-	@RequestMapping(value = "/schuler/search")
-	public RedirectView search(RedirectAttributes attributes) {
-
-		return new RedirectView("/schuler");
+	public ModelAndView home(final Locale locale) {
+		return homeMav(new ModelAndView("schulerForm"), locale);
 	}
 
 	@RequestMapping(value = "/schuler/add")
 	public RedirectView newEntity(RedirectAttributes attributes, final Locale locale) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
-		attributes.addFlashAttribute("schuler", getNewSchuler(locale));
+		attributes.addFlashAttribute("schuler", getNewSchuler(new Schuler(), locale));
 		return new RedirectView("/schuler");
 	}
 
@@ -66,7 +57,7 @@ public class SchulerController {
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schuler", findSchulerById(id, locale));
+		attributes.addFlashAttribute("schuler", schulerService.find(id, locale));
 		return new RedirectView("/schuler");
 	}
 
@@ -82,29 +73,30 @@ public class SchulerController {
 	@RequestMapping(value = "/schuler/delete/{id}")
 	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
-		schulerService.delete(findSchulerById(id, locale));
+		schulerService.delete(schulerService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schuler");
 	}
 
-	private ModelAndView homeMav(ModelAndView mav) {
+	private ModelAndView homeMav(ModelAndView mav, final Locale locale) {
 		mav.addObject("listSchuler", schulerService.findAll());
 		mav.addObject("listKlasse", klasseService.findAll());
 		mav.addObject("listEltern", elternteilService.findAll());
+		mav.addObject("elternteil", getNewEltenteil(new Elternteil(), locale));
 		return mav;
 	}
 
-	private Schuler getNewSchuler(final Locale locale) {
-		Schuler schuler = new Schuler();
+	private Schuler getNewSchuler(Schuler schuler, final Locale locale) {
 		Benutzer benutzer = new Benutzer();
-		benutzer.setRolle(rolleService.find("ROLE_SCHULER").orElseThrow(
-				() -> new IllegalArgumentException(messageSource.getMessage("invalid.role", null, locale))));
+		benutzer.setRolle(rolleService.find("ROLE_SCHULER", locale));
 		schuler.setBenutzer(benutzer);
 		return schuler;
 	}
 
-	private Schuler findSchulerById(final int id, final Locale locale) {
-		return schulerService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.student", new Object[] { id }, locale)));
+	private Elternteil getNewEltenteil(Elternteil elternteil, final Locale locale) {
+		Benutzer benutzer = new Benutzer();
+		benutzer.setRolle(rolleService.find("ROLE_ELTERNTEIL", locale));
+		elternteil.setBenutzer(benutzer);
+		return elternteil;
 	}
 }

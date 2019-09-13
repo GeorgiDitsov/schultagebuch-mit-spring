@@ -16,8 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Size;
 
+import com.proxiad.schultagebuch.util.KennzeichenUtils;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
@@ -40,7 +40,7 @@ public class Elternteil {
 	@Column(name = "elternteil_pin")
 	private String pin;
 
-	@Size(min = 1)
+	// @Size(min = 1)
 	@ManyToMany(mappedBy = "eltern", fetch = FetchType.EAGER)
 	private Set<Schuler> kinder;
 
@@ -94,21 +94,9 @@ public class Elternteil {
 
 	public String getKinderKennzeichen() {
 		StringBuilder kennzeichen = new StringBuilder();
-		Optional.of(kinder).filter(set -> !set.isEmpty())
-				.ifPresent(set -> set.forEach(schuler -> kennzeichen.append(schuler.getKennzeichen()).append("\n")));
+		Optional.of(kinder).filter(set -> !set.isEmpty()).ifPresent(set -> set.forEach(schuler -> kennzeichen
+				.append(KennzeichenUtils.personKennzeichen(schuler.getName(), schuler.getPin())).append("\n")));
 		return kinder.isEmpty() ? "n/a" : kennzeichen.toString();
-	}
-
-	public String getKennzeichen() {
-		return name + ", " + getPinKennzeichen();
-	}
-
-	public String getPinKennzeichen() {
-		return pin.substring(0, 6) + "****";
-	}
-
-	public String getBenutzernameKennzeichen() {
-		return Optional.ofNullable(benutzer).isPresent() ? benutzer.getBenutzerName() : "n/a";
 	}
 
 }

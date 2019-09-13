@@ -5,7 +5,6 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,9 +34,6 @@ public class LehrerController {
 	@Autowired
 	private RolleService rolleService;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	@RequestMapping(value = "/lehrer")
 	public ModelAndView home() {
 		return homeMav(new ModelAndView("lehrerForm"));
@@ -47,7 +43,7 @@ public class LehrerController {
 	public RedirectView newEntity(RedirectAttributes attributes, final Locale locale) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
-		attributes.addFlashAttribute("lehrer", getNewLehrer(locale));
+		attributes.addFlashAttribute("lehrer", setBenutzerRolle(new Lehrer(), locale));
 		return new RedirectView("/lehrer");
 	}
 
@@ -65,14 +61,14 @@ public class LehrerController {
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("lehrer", findLehrerById(id, locale));
+		attributes.addFlashAttribute("lehrer", lehrerService.find(id, locale));
 		return new RedirectView("/lehrer");
 	}
 
 	@RequestMapping(value = "/lehrer/delete/{id}")
 	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
-		lehrerService.delete(findLehrerById(id, locale));
+		lehrerService.delete(lehrerService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/lehrer");
 	}
@@ -83,17 +79,10 @@ public class LehrerController {
 		return mav;
 	}
 
-	private Lehrer getNewLehrer(final Locale locale) {
+	private Lehrer setBenutzerRolle(Lehrer lehrer, final Locale locale) {
 		Benutzer benutzer = new Benutzer();
-		Lehrer lehrer = new Lehrer();
-		benutzer.setRolle(rolleService.find("ROLE_LEHRER").orElseThrow(
-				() -> new IllegalArgumentException(messageSource.getMessage("invalid.role", null, locale))));
+		benutzer.setRolle(rolleService.find("ROLE_LEHRER", locale));
 		lehrer.setBenutzer(benutzer);
 		return lehrer;
-	}
-
-	private Lehrer findLehrerById(final int id, final Locale locale) {
-		return lehrerService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.teacher", new Object[] { id }, locale)));
 	}
 }

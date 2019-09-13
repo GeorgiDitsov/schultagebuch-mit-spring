@@ -1,12 +1,10 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.List;
 import java.util.Locale;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,7 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Elternteil;
-import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.service.ElternteilService;
 import com.proxiad.schultagebuch.service.SchulerService;
 import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
@@ -32,16 +29,11 @@ public class ElternteilController {
 	@Autowired
 	private SchulerService schulerService;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	@RequestMapping(value = "/elternteil")
 	public ModelAndView home() {
 		ModelAndView mav = new ModelAndView("elternteilForm");
-		List<Elternteil> listElternteil = elternteilService.findAll();
-		List<Schuler> listSchuler = schulerService.findAll();
-		mav.addObject("listElternteil", listElternteil);
-		mav.addObject("listSchuler", listSchuler);
+		mav.addObject("listElternteil", elternteilService.findAll());
+		mav.addObject("listSchuler", schulerService.findAll());
 		return mav;
 	}
 
@@ -49,7 +41,7 @@ public class ElternteilController {
 	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("elternteil", findElternteilById(id, locale));
+		attributes.addFlashAttribute("elternteil", elternteilService.find(id, locale));
 		return new RedirectView("/elternteil");
 	}
 
@@ -65,14 +57,9 @@ public class ElternteilController {
 	@RequestMapping(value = "/elternteil/delete/{id}")
 	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
-		elternteilService.delete(findElternteilById(id, locale));
+		elternteilService.delete(elternteilService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/elternteil");
-	}
-
-	private Elternteil findElternteilById(final int id, final Locale locale) {
-		return elternteilService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.parent", new Object[] { id }, locale)));
 	}
 
 }

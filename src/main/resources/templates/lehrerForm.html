@@ -118,12 +118,11 @@
 	        <tr th:each="lehrer: ${listLehrer}">
 	            <th scope="row" th:text="${lehrer.id}" />
 	            <td th:text="${lehrer.name}" />
-	            <td th:text="${lehrer.pinKennzeichen}" />
+	            <td th:text="${@kennzeichenUtils.pinKennzeichen(lehrer.pin)}" />
 	            <td style="white-space: pre;" th:text="${lehrer.schulfaecherKennzeichen}" />
-	            <td th:text="${lehrer.benutzernameKennzeichen}">
+	            <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(lehrer.benutzer)}">
 	            <td>
 	            	<a th:href="@{'lehrer/edit/'+${lehrer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-	            	&nbsp;
 	            	<a th:href="@{'lehrer/delete/'+${lehrer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 	            </td>
 	        </tr>

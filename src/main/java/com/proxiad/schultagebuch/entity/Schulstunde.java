@@ -15,6 +15,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.proxiad.schultagebuch.util.KennzeichenUtils;
 import com.proxiad.schultagebuch.validator.constraint.SchulstundeConstraint;
 
 @Entity
@@ -82,7 +83,9 @@ public class Schulstunde {
 	}
 
 	public String getLehrerKennzeichen() {
-		return Optional.ofNullable(lehrer).isPresent() ? lehrer.getKennzeichen() : "n/a";
+		return Optional.ofNullable(lehrer).isPresent()
+				? KennzeichenUtils.personKennzeichen(lehrer.getName(), lehrer.getPin())
+				: "n/a";
 	}
 
 }

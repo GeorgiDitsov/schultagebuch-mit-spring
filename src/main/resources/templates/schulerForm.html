@@ -61,13 +61,13 @@
 			        			<option th:each="klasse :${listKlasse}" th:value="${klasse.id}" th:text="${klasse.kennzeichen}">
 		        			</select><br/>
 		        			<label th:text="#{parents} + '*'"></label>
+		        			<button type="button" class="btn btn-warning btn-sm" th:text="#{new}" data-toggle="modal" data-target="#addElternteilModal"></button>
 		        			<select class="form-control w-50" th:field="*{eltern}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" multiple required>
-			        			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${elternteil.kennzeichen}">
+			        			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.personKennzeichen(elternteil.name, elternteil.pin)}">
 		        			</select><br/>
 		        			<label th:text="#{user.new} + '*'"></label>
 		        			<input class="form-control w-50" th:field="*{benutzer.benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
 		        			<input class="form-control w-50" th:field="*{benutzer.passwort}" id="passwort"  type="password" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-		        			<input class="form-control w-50" id="konfirm_passwort" type="password" th:placeholder="#{user.password.confirm}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
 		        			<input type="hidden" th:field="*{benutzer.rolle}">
 	        				<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
@@ -100,13 +100,8 @@
 		        			</select><br/>
 		        			<label th:text="#{parents}"></label>
 		        			<select class="form-control w-50" th:field="*{eltern}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" multiple required>
-			        			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${elternteil.kennzeichen}">
+			        			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.personKennzeichen(elternteil.name, elternteil.pin)}">
 		        			</select><br/>
-		        			<label th:text="#{user.new} + '*'"></label>
-		        			<input class="form-control w-50" th:field="*{benutzer.benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-		        			<input class="form-control w-50" th:field="*{benutzer.passwort}" id="passwort"  type="password" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-		        			<input class="form-control w-50" id="konfirm_passwort" type="password" th:placeholder="#{user.password.confirm}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
-		        			<input type="hidden" th:field="*{benutzer.rolle}">
 		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
 	    			</div>
@@ -117,6 +112,31 @@
 	    	</div>
 		</div>
     </div>
+    <div class="modal fade" id="addElternteilModal">
+  		<div class="modal-dialog modal-sm modal-dialog-centered">
+    		<div class="modal-content">
+      			<div class="modal-header">
+        			<h4 class="modal-title" th:text="#{modal.add.title.parent}"></h4>
+      			</div>
+		      	<div class="modal-body">
+		      		<form method="post" th:action="@{/elternteil/add}" th:object="${elternteil}">
+		      			<label th:text="#{name} + '*'" ></label>
+	        			<input class="form-control w-75" type="text" th:field="*{name}" th:placeholder="#{parent.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+	        			<label th:text="#{pin} + '*'"></label>
+	        			<input class="form-control w-75" type="text" th:field="*{pin}" th:placeholder="#{parent.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+	        			<label th:text="#{user.new} + '*'"></label>
+	        			<input class="form-control w-50" th:field="*{benutzer.benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+	        			<input class="form-control w-50" th:field="*{benutzer.passwort}" id="passwort"  type="password" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+	        			<input type="hidden" th:field="*{benutzer.rolle}">
+	        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		      		</form>
+				</div>
+      			<div class="modal-footer">
+        			<button class="btn btn-danger" data-dismiss="modal" th:text="#{button.close}"></button>
+      			</div>
+    		</div>
+  		</div>
+	</div>
 	<div class="table-responsive">
 		<table class="table table-bordered table-striped mx-auto mb-5 w-75 shadow">
 	        <thead class="thead-dark">
@@ -133,13 +153,12 @@
 	        <tr th:each="schuler: ${listSchuler}">
 	            <th scope="row" th:text="${schuler.id}" />
 	            <td th:text="${schuler.name}" />
-	            <td th:text="${schuler.pinKennzeichen}" />
+	            <td th:text="${@kennzeichenUtils.pinKennzeichen(schuler.pin)}">
 	            <td th:text="${schuler.klasseKennzeichen}" />
 	            <td style="white-space: pre;" th:text="${schuler.elternKennzeichen}" />
-	            <td th:text="${schuler.benutzernameKennzeichen}" />
+	            <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(schuler.benutzer)}" />
 	            <td>
 	            	<a th:href="@{'schuler/edit/'+${schuler.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-	            	&nbsp;
 	            	<a th:href="@{'schuler/delete/'+${schuler.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 	            </td>
 	        </tr>

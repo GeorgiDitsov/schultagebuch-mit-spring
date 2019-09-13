@@ -17,6 +17,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.proxiad.schultagebuch.util.KennzeichenUtils;
+
 @Entity
 @Table(name = "schulfach", uniqueConstraints = { @UniqueConstraint(columnNames = { "schulfach_name" }) })
 public class Schulfach {
@@ -66,8 +68,8 @@ public class Schulfach {
 
 	public String getLehrerKennzeichen() {
 		StringBuilder kennzeichen = new StringBuilder();
-		Optional.of(lehrerSet).filter(set -> !set.isEmpty())
-				.ifPresent(set -> set.forEach(lehrer -> kennzeichen.append(lehrer.getKennzeichen()).append("\n")));
+		Optional.of(lehrerSet).filter(set -> !set.isEmpty()).ifPresent(set -> set.forEach(lehrer -> kennzeichen
+				.append(KennzeichenUtils.personKennzeichen(lehrer.getName(), lehrer.getPin())).append("\n")));
 		return lehrerSet.isEmpty() ? "n/a" : kennzeichen.toString();
 	}
 

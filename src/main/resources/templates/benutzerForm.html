@@ -84,7 +84,6 @@
 	            <td th:text="${benutzer.rolle.kennzeichen}" />
 	            <td>
 	            	<a th:href="@{'benutzer/edit/'+${benutzer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-	            	&nbsp;
 	            	<a th:href="@{'benutzer/delete/'+${benutzer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 	            </td>
 	        </tr>

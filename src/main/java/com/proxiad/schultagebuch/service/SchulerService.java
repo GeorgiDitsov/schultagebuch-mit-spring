@@ -1,9 +1,10 @@
 package com.proxiad.schultagebuch.service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,9 @@ public class SchulerService {
 	@Autowired
 	private SchulerRepository repo;
 
+	@Autowired
+	private MessageSource messageSource;
+
 	public void save(Schuler schuler) {
 		repo.save(schuler);
 	}
@@ -25,8 +29,9 @@ public class SchulerService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Optional<Schuler> find(int id) {
-		return repo.findById(id);
+	public Schuler find(int id, final Locale locale) {
+		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
+				messageSource.getMessage("invalid.student", new Object[] { id }, locale)));
 	}
 
 	public void delete(Schuler schuler) {

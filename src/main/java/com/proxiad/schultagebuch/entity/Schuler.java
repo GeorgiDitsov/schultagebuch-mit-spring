@@ -21,6 +21,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import com.proxiad.schultagebuch.util.KennzeichenUtils;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
@@ -116,23 +117,11 @@ public class Schuler {
 		return Optional.ofNullable(klasse).isPresent() ? klasse.getKennzeichen() : "n/a";
 	}
 
-	public String getBenutzernameKennzeichen() {
-		return Optional.ofNullable(benutzer).isPresent() ? benutzer.getBenutzerName() : "n/a";
-	}
-
 	public String getElternKennzeichen() {
 		StringBuilder kennzeichen = new StringBuilder();
-		Optional.of(eltern).filter(set -> !set.isEmpty()).ifPresent(
-				set -> set.forEach(elternteil -> kennzeichen.append(elternteil.getKennzeichen()).append("\n")));
+		Optional.of(eltern).filter(set -> !set.isEmpty()).ifPresent(set -> set.forEach(elternteil -> kennzeichen
+				.append(KennzeichenUtils.personKennzeichen(elternteil.getName(), elternteil.getPin())).append("\n")));
 		return eltern.isEmpty() ? "n/a" : kennzeichen.toString();
-	}
-
-	public String getKennzeichen() {
-		return name + ", " + getPinKennzeichen();
-	}
-
-	public String getPinKennzeichen() {
-		return pin.substring(0, 6) + "****";
 	}
 
 }

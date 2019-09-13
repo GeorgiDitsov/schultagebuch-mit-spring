@@ -6,7 +6,6 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,9 +26,6 @@ public class BenutzerController {
 	@Autowired
 	private BenutzerService benutzerService;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	@RequestMapping(value = "/benutzer")
 	public ModelAndView home() {
 		List<Benutzer> listBenutzer = benutzerService.findAll();
@@ -41,7 +37,7 @@ public class BenutzerController {
 	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("benutzer", findBenutzerById(id, locale));
+		attributes.addFlashAttribute("benutzer", benutzerService.find(id, locale));
 		return new RedirectView("/benutzer");
 	}
 
@@ -57,14 +53,9 @@ public class BenutzerController {
 	@RequestMapping(value = "/benutzer/delete/{id}")
 	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
-		benutzerService.delete(findBenutzerById(id, locale));
+		benutzerService.delete(benutzerService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/benutzer");
-	}
-
-	private Benutzer findBenutzerById(final int id, final Locale locale) {
-		return benutzerService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.user", new Object[] { id }, locale)));
 	}
 
 }

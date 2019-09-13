@@ -52,7 +52,7 @@
 	    			<div class="modal-body">
 	    				<form th:action="@{/klasse/add}" method="post" th:object="${klasse}">
 	        				<input type="text" name="klasseName" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-		        			&nbsp;
+		        			
 		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
 	    			</div>
@@ -74,7 +74,7 @@
     					<form th:action="@{/klasse/add}" method="post" th:object="${klasse}">
     						<input type="hidden" th:field="*{id}">
 	        				<input type="text" name="klasseName" th:value="*{kennzeichen}" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-	        				&nbsp;
+	        				
 	        				<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 	    				</form>
     				</div>
@@ -99,7 +99,6 @@
 		        <td th:text="${klasse.kennzeichen}" />
 		        <td>
 		        	<a th:href="@{'klasse/edit/'+${klasse.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-		           	&nbsp;
 		           	<a th:href="@{'klasse/delete/'+${klasse.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 		       	</td>
 		    </tr>

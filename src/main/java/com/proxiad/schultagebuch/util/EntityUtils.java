@@ -1,7 +1,7 @@
 package com.proxiad.schultagebuch.util;
 
-public interface EntityUtils<T, E> {
+public interface EntityUtils<E> {
 
-	public E bauden(T t, E e);
+	public E bauenAusString(E entity, String rawData);
 
 }

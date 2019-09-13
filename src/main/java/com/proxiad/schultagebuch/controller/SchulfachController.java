@@ -5,7 +5,6 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -28,9 +27,6 @@ public class SchulfachController {
 	@Autowired
 	private SchulfachService schulfachService;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	@RequestMapping(value = "/schulfach")
 	public ModelAndView home() {
 		return new ModelAndView("schulfachForm", "listSchulfach", schulfachService.findAll());
@@ -49,7 +45,7 @@ public class SchulfachController {
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schulfach", findSchulfachById(id, locale));
+		attributes.addFlashAttribute("schulfach", schulfachService.find(id, locale));
 		return new RedirectView("/schulfach");
 	}
 
@@ -65,13 +61,8 @@ public class SchulfachController {
 	@RequestMapping(value = "/schulfach/delete/{id}")
 	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
-		schulfachService.delete(findSchulfachById(id, locale));
+		schulfachService.delete(schulfachService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schulfach");
-	}
-
-	private Schulfach findSchulfachById(final int id, final Locale locale) {
-		return schulfachService.find(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.subject", new Object[] { id }, locale)));
 	}
 }

@@ -52,7 +52,6 @@
 	    			<div class="modal-body">
 	    				<form method="post" th:action="@{/schulfach/add}" th:object="${schulfach}">
 		        			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-		        			&nbsp;
 		        			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		    			</form>
 	    			</div>
@@ -101,7 +100,6 @@
 	            <td style="white-space: pre;" th:text="${schulfach.lehrerKennzeichen}" />
 	            <td>
 	            	<a th:href="@{'schulfach/edit/'+${schulfach.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-	            	&nbsp;
 	            	<a th:href="@{'schulfach/delete/'+${schulfach.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 	            </td>
 	        </tr>
