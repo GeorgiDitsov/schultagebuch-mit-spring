@@ -56,4 +56,25 @@ public class Rolle {
 		return name.substring(5, 6) + name.substring(6).toLowerCase();
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Rolle other = (Rolle) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
 }

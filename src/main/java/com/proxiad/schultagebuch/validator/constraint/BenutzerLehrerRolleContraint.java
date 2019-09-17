@@ -10,15 +10,15 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import com.proxiad.schultagebuch.validator.SchulstundeValidator;
+import com.proxiad.schultagebuch.validator.BenutzerLehrerRolleValidator;
 
 @Documented
-@Constraint(validatedBy = SchulstundeValidator.class)
+@Constraint(validatedBy = BenutzerLehrerRolleValidator.class)
 @Retention(RUNTIME)
-@Target({ ElementType.TYPE, ElementType.CONSTRUCTOR })
-public @interface SchulstundeConstraint {
+@Target({ ElementType.FIELD, ElementType.METHOD })
+public @interface BenutzerLehrerRolleContraint {
 
-	String message() default "{invalid.teacher.subject.relation}";
+	String message() default "{invalid.teacher.user.role}";
 
 	Class<?>[] groups() default {};
 

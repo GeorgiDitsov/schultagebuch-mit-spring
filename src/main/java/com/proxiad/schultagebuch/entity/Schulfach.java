@@ -1,6 +1,5 @@
 package com.proxiad.schultagebuch.entity;
 
-import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,8 +15,6 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import com.proxiad.schultagebuch.util.KennzeichenUtils;
 
 @Entity
 @Table(name = "schulfach", uniqueConstraints = { @UniqueConstraint(columnNames = { "schulfach_name" }) })
@@ -64,13 +61,6 @@ public class Schulfach {
 
 	public void setLehrerSet(Set<Lehrer> lehrerSet) {
 		this.lehrerSet = lehrerSet;
-	}
-
-	public String getLehrerKennzeichen() {
-		StringBuilder kennzeichen = new StringBuilder();
-		Optional.of(lehrerSet).filter(set -> !set.isEmpty()).ifPresent(set -> set.forEach(lehrer -> kennzeichen
-				.append(KennzeichenUtils.personKennzeichen(lehrer.getName(), lehrer.getPin())).append("\n")));
-		return lehrerSet.isEmpty() ? "n/a" : kennzeichen.toString();
 	}
 
 	@Override

@@ -19,8 +19,8 @@ import com.proxiad.schultagebuch.util.KennzeichenUtils;
 import com.proxiad.schultagebuch.validator.constraint.SchulstundeConstraint;
 
 @Entity
-@SchulstundeConstraint
 @Table(name = "schulstunde", uniqueConstraints = { @UniqueConstraint(columnNames = { "klasse_id", "schulfach_id" }) })
+@SchulstundeConstraint
 public class Schulstunde {
 
 	@Id
@@ -83,9 +83,7 @@ public class Schulstunde {
 	}
 
 	public String getLehrerKennzeichen() {
-		return Optional.ofNullable(lehrer).isPresent()
-				? KennzeichenUtils.personKennzeichen(lehrer.getName(), lehrer.getPin())
-				: "n/a";
+		return Optional.ofNullable(lehrer).isPresent() ? KennzeichenUtils.personKennzeichen(lehrer) : "n/a";
 	}
 
 }

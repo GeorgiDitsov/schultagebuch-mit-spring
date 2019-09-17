@@ -27,7 +27,7 @@
 		        <th scope="row" th:text="${elternteil.id}" />
 		        <td th:text="${elternteil.name}" />
 		        <td th:text="${@kennzeichenUtils.pinKennzeichen(elternteil.pin)}" />
-		        <td style="white-space: pre;" th:text="${elternteil.kinderKennzeichen}" />
+		        <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(elternteil.kinder)}" />
 		        <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(elternteil.benutzer)}" />
 		        <td>
 			        <a th:href="@{'elternteil/edit/'+${elternteil.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>

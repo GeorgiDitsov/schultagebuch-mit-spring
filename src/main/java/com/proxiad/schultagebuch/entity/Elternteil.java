@@ -1,6 +1,5 @@
 package com.proxiad.schultagebuch.entity;
 
-import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,7 +16,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.proxiad.schultagebuch.util.KennzeichenUtils;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
@@ -90,13 +88,6 @@ public class Elternteil {
 
 	public void setBenutzer(Benutzer benutzer) {
 		this.benutzer = benutzer;
-	}
-
-	public String getKinderKennzeichen() {
-		StringBuilder kennzeichen = new StringBuilder();
-		Optional.of(kinder).filter(set -> !set.isEmpty()).ifPresent(set -> set.forEach(schuler -> kennzeichen
-				.append(KennzeichenUtils.personKennzeichen(schuler.getName(), schuler.getPin())).append("\n")));
-		return kinder.isEmpty() ? "n/a" : kennzeichen.toString();
 	}
 
 }

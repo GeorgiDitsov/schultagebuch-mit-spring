@@ -17,7 +17,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
 
+import com.proxiad.schultagebuch.validator.constraint.BenutzerLehrerRolleContraint;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
@@ -45,6 +47,8 @@ public class Lehrer {
 			@JoinColumn(name = "schulfach_id") })
 	private Set<Schulfach> schulfachSet;
 
+	@BenutzerLehrerRolleContraint
+	@Valid
 	@OneToOne(cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "benutzer_id", unique = true, nullable = true)
 	private Benutzer benutzer;

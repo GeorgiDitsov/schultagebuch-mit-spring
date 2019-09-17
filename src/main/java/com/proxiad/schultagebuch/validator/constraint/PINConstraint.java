@@ -1,10 +1,9 @@
 package com.proxiad.schultagebuch.validator.constraint;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -16,7 +15,7 @@ import com.proxiad.schultagebuch.validator.PINValidator;
 @Documented
 @Constraint(validatedBy = PINValidator.class)
 @Retention(RUNTIME)
-@Target({ FIELD, METHOD })
+@Target({ ElementType.FIELD, ElementType.METHOD })
 public @interface PINConstraint {
 
 	String message() default "{invalid.pin}";

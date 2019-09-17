@@ -33,7 +33,7 @@
 	            <td th:text="${schuler.name}" />
 	            <td th:text="${@kennzeichenUtils.pinKennzeichen(schuler.pin)}">
 	            <td th:text="${schuler.klasseKennzeichen}" />
-	            <td style="white-space: pre;" th:text="${schuler.elternKennzeichen}" />
+	            <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(schuler.eltern)}" />
 	            <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(schuler.benutzer)}" />
 	            <td>
 	            	<a th:href="@{'schuler/edit/'+${schuler.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
