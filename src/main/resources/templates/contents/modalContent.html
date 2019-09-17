@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="newBenutzer">
+		<label th:text="#{user.new} + '*'"></label>
+		<input class="form-control w-75" th:field="*{benutzer.benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+		<input class="form-control w-75" th:field="*{benutzer.passwort}" id="passwort"  type="password" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+		<input class="form-control w-75" type="password" id="konfirm_passwort" th:placeholder="#{user.password.confirm}" required><br/>
+		<input type="hidden" th:field="*{benutzer.rolle}">
+	</div>
+	<div th:fragment="editBenutzer">
+		<form method="post" th:action="@{/benutzer/add}" th:object="${benutzer}">
+			<input type="hidden" th:field="*{id}">
+  			<label th:text="#{user.name} + '*'" ></label>
+  			<input class="form-control w-50" type="text" th:field="*{benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+  			<label th:text="#{user.password.new} + '*'"></label>
+  			<input class="form-control w-50" type="password" th:field="*{passwort}" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+  			<input type="hidden" th:field="*{rolle}">
+  			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="addSchuler">
+		<form method="post" th:action="@{/schuler/add}" th:object="${schuler}">
+   			<label th:text="#{name} + '*'" ></label>
+   			<input class="form-control w-50" type="text" th:field="*{name}" th:placeholder="#{student.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+   			<label th:text="#{pin} + '*'"></label>
+   			<input class="form-control w-50" type="text" th:field="*{pin}" th:placeholder="#{student.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<label th:text="#{class}"></label>
+   			<select class="form-control w-50" th:field="*{klasse}">
+   				<option th:text="#{no.class}" value=>
+    			<option th:each="klasse :${listKlasse}" th:value="${klasse.id}" th:text="${klasse.kennzeichen}">
+   			</select><br/>
+   			<label th:text="#{parents} + '*'"></label>
+   			<button type="button" class="btn btn-warning btn-sm" th:text="#{new}" data-toggle="modal" data-target="#addElternteilModal"></button>
+   			<select class="form-control w-50" th:field="*{eltern}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" multiple required>
+    			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.personKennzeichen(elternteil.name, elternteil.pin)}">
+   			</select><br/>
+   			<div th:replace="contents/modalContent.html :: newBenutzer"></div>
+  			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="editSchuler">
+		<form method="post" th:action="@{/schuler/add}" th:object="${schuler}">
+			<input type="hidden" th:field="*{id}">
+   			<label th:text="#{name}" ></label>
+   			<input class="form-control w-50" type="text" th:field="*{name}" th:placeholder="#{student.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+   			<label th:text="#{pin}"></label>
+   			<input class="form-control w-50" type="text" th:field="*{pin}" th:placeholder="#{student.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+   			<label th:text="#{class}"></label>
+   			<select class="form-control w-50" th:field="*{klasse}">
+   				<option th:text="#{no.class}" value=>
+    			<option th:each="klasse :${listKlasse}" th:value="${klasse.id}" th:text="${klasse.kennzeichen}">
+   			</select><br/>
+   			<label th:text="#{parents}"></label>
+   			<button type="button" class="btn btn-warning btn-sm" th:text="#{new}" data-toggle="modal" data-target="#addElternteilModal"></button>
+   			<select class="form-control w-50" th:field="*{eltern}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" multiple required>
+    			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.personKennzeichen(elternteil.name, elternteil.pin)}">
+   			</select><br/>
+   			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="addElternteil">
+		<form method="post" th:action="@{/elternteil/add}" th:object="${elternteil}">
+   			<label th:text="#{name} + '*'" ></label>
+   			<input class="form-control w-75" type="text" th:field="*{name}" th:placeholder="#{parent.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+   			<label th:text="#{pin} + '*'"></label>
+   			<input class="form-control w-75" type="text" th:field="*{pin}" th:placeholder="#{parent.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+   			<div th:replace="contents/modalContent.html :: newBenutzer"></div>
+   			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+   		</form>
+	</div>
+	<div th:fragment="editElternteil">
+		<form method="post" th:action="@{/elternteil/add}" th:object="${elternteil}">
+			<input type="hidden" th:field="*{id}">
+   			<label th:text="#{name} + '*'" ></label>
+   			<input class="form-control w-50" type="text" th:field="*{name}" th:placeholder="#{student.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+   			<label th:text="#{pin} + '*'"></label>
+   			<input class="form-control w-50" type="text" th:field="*{pin}" th:placeholder="#{student.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
+   			<input type="hidden" th:field="*{kinder}">
+   			<input type="hidden" th:field="*{benutzer}">
+   			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="addLehrer">
+		<form method="post" th:action="@{/lehrer/add}" th:object="${lehrer}">
+			<label th:text="#{name} + '*'" ></label>
+			<input class="form-control w-50" th:field="*{name}" th:placeholder="#{teacher.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<label th:text="#{pin} + '*'" ></label>
+			<input class="form-control w-50" th:field="*{pin}" th:placeholder="#{teacher.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<label th:text="#{subjects}"></label>
+			<select class="form-control w-50" th:field="*{schulfachSet}" multiple>
+				<option th:each="schulfach :${listSchulfach}" th:value="${schulfach.id}" th:text="${schulfach.name}">
+			</select><br/>
+			<div th:replace="contents/modalContent.html :: newBenutzer"></div>
+			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="editLehrer">
+		<form method="post" th:action="@{/lehrer/add}" th:object="${lehrer}">
+			<input type="hidden" th:field="*{id}">
+   			<label th:text="#{name} + '*'" ></label>
+   			<input class="form-control w-50" th:field="*{name}" th:placeholder="#{teacher.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+   			<label th:text="#{pin} + '*'" ></label>
+   			<input class="form-control w-50" th:field="*{pin}" th:placeholder="#{teacher.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+   			<label th:text="#{subjects}"></label>
+   			<select class="form-control w-50" th:field="*{schulfachSet}" multiple>
+    			<option th:each="schulfach :${listSchulfach}" th:value="${schulfach.id}" th:text="${schulfach.name}">
+   			</select><br/>
+   			<input type="hidden" th:field="*{benutzer}">
+  			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="addSchulfach">
+		<form method="post" th:action="@{/schulfach/add}" th:object="${schulfach}">
+   			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+   			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="editSchulfach">
+		<form method="post" th:action="@{/schulfach/add}" th:object="${schulfach}">
+			<input type="hidden" th:field="*{id}">
+			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="addSchulstunde">
+		<form th:action="@{/schulstunde/add}" method="post" th:object="${schulstunde}">
+ 			<label th:text="#{class}"></label>
+ 			<select class="form-control w-25" th:field="*{klasse}">
+  				<option th:each="klasse :${listKlasse}" th:value="${klasse.id}" th:text="${klasse.kennzeichen}">
+ 			</select><br/>
+ 			<label th:text="#{subject}"></label>
+ 			<select class="form-control w-50" th:field="*{schulfach}">
+ 				<option th:each="schulfach :${listSchulfach}" th:value="${schulfach.id}" th:text="${schulfach.name}">
+ 			</select><br/>
+			<label th:text="#{teacher}"></label>
+			<select class="form-control w-50" th:field="*{lehrer}">
+				<option th:text="#{no.teacher}" value=>
+				<option th:each="lehrer :${listLehrer}" th:value="${lehrer.id}" th:text="${@kennzeichenUtils.personKennzeichen(lehrer.name, lehrer.pin)}">
+			</select><br/>
+ 			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="editSchulstunde">
+		<form th:action="@{/schulstunde/add}" method="post" th:object="${schulstunde}">
+			<input type="hidden" th:field="*{id}">
+			<label th:text="#{class}"></label>
+			<select class="form-control w-25" th:field="*{klasse}">
+				<option th:each="klasse :${listKlasse}" th:value="${klasse.id}" th:text="${klasse.kennzeichen}">
+			</select><br/>
+			<label th:text="#{subject}"></label>
+			<select class="form-control w-50" th:field="*{schulfach}">
+				<option th:each="schulfach :${listSchulfach}" th:value="${schulfach.id}" th:text="${schulfach.name}">
+			</select><br/>
+			<label th:text="#{teacher}"></label>
+			<select class="form-control w-75" th:field="*{lehrer}">
+				<option th:text="#{no.teacher}" value=>
+				<option th:each="lehrer :${listLehrer}" th:value="${lehrer.id}" th:text="${@kennzeichenUtils.personKennzeichen(lehrer.name, lehrer.pin)}">
+			</select><br/>
+			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="addKlasse">
+		<form th:action="@{/klasse/add}" method="post" th:object="${klasse}">
+			<input type="text" name="klasseName" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+  			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="editKlasse">
+		<form th:action="@{/klasse/add}" method="post" th:object="${klasse}">
+			<input type="hidden" th:field="*{id}">
+			<input type="text" name="klasseName" th:value="*{kennzeichen}" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+</body>
+</html>

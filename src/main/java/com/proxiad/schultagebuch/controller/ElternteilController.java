@@ -51,7 +51,7 @@ public class ElternteilController {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		elternteilService.save(elternteil);
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/elternteil");
+		return new RedirectView("/schuler/add");
 	}
 
 	@RequestMapping(value = "/elternteil/delete/{id}")

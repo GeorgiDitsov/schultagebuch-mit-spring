@@ -3,11 +3,11 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" charset="UTF-8">
 <link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
-<title th:text="#{application.error} +'!'"></title>
+<title th:text="#{application.error(${statusCode})}"></title>
 </head>
 <body>
 	<div class="alert alert-danger alert-danger-centered">
-		<h1 class="alert-heading" th:text="#{application.error} + ': ' + ${statusCode}"></h1>
+		<h1 class="alert-heading" th:text="#{application.error(${statusCode})}"></h1>
 		<hr>
 		<p>
 			<span th:if="${statusCode} == 404" th:text="#{application.page.not.found}"></span>

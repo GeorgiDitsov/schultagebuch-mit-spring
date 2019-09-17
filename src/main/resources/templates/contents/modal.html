@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="modal (id, title, content)">
+		<div class="modal fade" th:id="${id}">
+			<div class="modal-dialog modal-dialog-centered">
+	    		<div class="modal-content">
+	    			<div class="modal-header">
+	    				<h4 class="modal-title" th:text="${title}"></h4>
+	    			</div>
+	    			<div class="modal-body">
+	    				<div th:replace="contents/modalContent.html :: ${content}"></div>
+	    			</div>
+	    			<div class="modal-footer">
+	    				<button class="btn btn-danger" data-dismiss="modal" th:text="#{button.close}"></button>
+	    			</div>
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+</body>
+</html>
