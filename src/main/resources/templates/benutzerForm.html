@@ -9,10 +9,10 @@
 	<div th:replace="contents/navbar.html :: navbar"></div>
 	<div th:replace="contents/heading.html :: formHeading(title=#{users}, buttonLink=${null})"></div>
 	<div th:if="${edit}">
-		<div th:replace="contents/modal.html :: modal(id='editModal', title=#{modal.edit.title.user(${benutzer.id}, ${benutzer.rolle.kennzeichen})}, content='editBenutzer')"></div>
+		<div th:replace="contents/modal.html :: modal(id='editModal', title=#{modal.edit.title.user(${benutzer.id}, ${benutzer.rolle.name.kennzeichen})}, content='editBenutzer')"></div>
 	</div>
 	<div class="table-responsive">
-		<table class="table table-bordered table-striped mx-auto mb-5 w-75 shadow">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
 	        <thead class="thead-dark">
 		        <tr>
 		        	<th scope="col" th:text="#{id}">
@@ -26,10 +26,10 @@
 	            <th scope="row" th:text="${benutzer.id}" />
 	            <td th:text="${benutzer.benutzerName}" />
 	            <td th:text="${benutzer.passwort}" />
-	            <td th:text="${benutzer.rolle.kennzeichen}" />
+	            <td th:text="${benutzer.rolle.name.kennzeichen}" />
 	            <td>
 	            	<a th:href="@{'benutzer/edit/'+${benutzer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-	            	<a th:href="@{'benutzer/delete/'+${benutzer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+	            	<!-- <a th:href="@{'benutzer/delete/'+${benutzer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a> -->
 	            </td>
 	        </tr>
 	    </table>

@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-public class EinloggenController {
+public class BaseController {
 
 	@RequestMapping(value = "/login")
 	public ModelAndView logIn() {
@@ -28,4 +28,5 @@ public class EinloggenController {
 	public ModelAndView userInfo() {
 		return new ModelAndView("info");
 	}
+
 }

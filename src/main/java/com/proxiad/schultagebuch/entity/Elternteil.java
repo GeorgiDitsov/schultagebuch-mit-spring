@@ -15,7 +15,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
+import com.proxiad.schultagebuch.validator.constraint.BenutzerElternteilRolleContraint;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
@@ -27,7 +30,7 @@ public class Elternteil {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_elternteil_generator")
 	@SequenceGenerator(name = "PK_elternteil_generator", sequenceName = "elternteil_id_seq", allocationSize = 1)
-	@Column(name = "elternteil_id")
+	@Column(name = "elternteil_id", updatable = false)
 	private int id;
 
 	@PersonNameConstraint
@@ -35,15 +38,17 @@ public class Elternteil {
 	private String name;
 
 	@PINConstraint
-	@Column(name = "elternteil_pin")
+	@Column(name = "elternteil_pin", unique = true)
 	private String pin;
 
-	// @Size(min = 1)
+	@Size(min = 1)
 	@ManyToMany(mappedBy = "eltern", fetch = FetchType.EAGER)
 	private Set<Schuler> kinder;
 
-	@OneToOne(cascade = CascadeType.ALL, optional = true)
-	@JoinColumn(name = "benutzer_id", unique = true, nullable = true)
+	@BenutzerElternteilRolleContraint
+	@Valid
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "benutzer_id", unique = true)
 	private Benutzer benutzer;
 
 	public Elternteil() {
@@ -88,6 +93,39 @@ public class Elternteil {
 
 	public void setBenutzer(Benutzer benutzer) {
 		this.benutzer = benutzer;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((pin == null) ? 0 : pin.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Elternteil other = (Elternteil) obj;
+		if (id != other.id)
+			return false;
+		if (pin == null) {
+			if (other.pin != null)
+				return false;
+		} else if (!pin.equals(other.pin))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Elternteil [id=" + id + ", name=" + name + ", pin=" + pin + ", " + ", benutzer=" + benutzer + "]";
 	}
 
 }

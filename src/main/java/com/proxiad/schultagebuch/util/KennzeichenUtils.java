@@ -32,7 +32,7 @@ public class KennzeichenUtils {
 		return pin.substring(0, 6) + "****";
 	}
 
-	public String menschenKennzeichen(Collection<Object> menschen) {
+	public static String menschenKennzeichen(Collection<Object> menschen) {
 		StringBuilder kennzeichen = new StringBuilder();
 		Optional.of(menschen).filter(collection -> !collection.isEmpty()).ifPresent(collection -> collection
 				.forEach(person -> kennzeichen.append(KennzeichenUtils.personKennzeichen(person)).append("\n")));

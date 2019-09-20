@@ -4,6 +4,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,23 +13,24 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
+
+import com.proxiad.schultagebuch.util.RolleTyp;
 
 @Entity
-@Table(name = "rolle", uniqueConstraints = { @UniqueConstraint(columnNames = "rolle_name") })
+@Table(name = "rolle", uniqueConstraints = @UniqueConstraint(columnNames = "rolle_name"))
 public class Rolle {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_rolle_generator")
 	@SequenceGenerator(name = "PK_rolle_generator", sequenceName = "rolle_id_seq", allocationSize = 1)
-	@Column(name = "rolle_id")
+	@Column(name = "rolle_id", updatable = false)
 	private int id;
 
-	@NotBlank
-	@Pattern(regexp = "^(ROLE_[A-Z]+)$", message = "Falsch rolle name")
+	@NotNull
+	@Enumerated(EnumType.STRING)
 	@Column(name = "rolle_name", unique = true)
-	private String name;
+	private RolleTyp name;
 
 	@OneToMany(mappedBy = "rolle")
 	private Set<Benutzer> benutzerSet;
@@ -44,16 +47,20 @@ public class Rolle {
 		this.id = id;
 	}
 
-	public String getName() {
+	public RolleTyp getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(RolleTyp name) {
 		this.name = name;
 	}
 
-	public String getKennzeichen() {
-		return name.substring(5, 6) + name.substring(6).toLowerCase();
+	public Set<Benutzer> getBenutzerSet() {
+		return benutzerSet;
+	}
+
+	public void setBenutzerSet(Set<Benutzer> benutzerSet) {
+		this.benutzerSet = benutzerSet;
 	}
 
 	@Override
@@ -77,4 +84,10 @@ public class Rolle {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Rolle [id=" + id + ", name=" + name + "]";
+	}
+
 }

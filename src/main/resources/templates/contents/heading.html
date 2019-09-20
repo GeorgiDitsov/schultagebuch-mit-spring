@@ -7,6 +7,8 @@
 			<div th:if="${buttonLink != null}">
 				<a th:href="@{'/'+${buttonLink}+'/add'}" class="btn btn-success shadow-lg" role="button" th:text="#{button.add}"></a>
 			</div>
+		</div>
+		<div class="container text-center">
 			<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{successful}"></div>
 		</div>
 	</div>

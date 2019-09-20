@@ -26,7 +26,7 @@ public class Schulstunde {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_schulstunde_generator")
 	@SequenceGenerator(name = "PK_schulstunde_generator", sequenceName = "schulstunde_id_seq", allocationSize = 1)
-	@Column(name = "schulstunde_id")
+	@Column(name = "schulstunde_id", updatable = false)
 	private int id;
 
 	@NotNull
@@ -86,4 +86,30 @@ public class Schulstunde {
 		return Optional.ofNullable(lehrer).isPresent() ? KennzeichenUtils.personKennzeichen(lehrer) : "n/a";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Schulstunde other = (Schulstunde) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Schulstunde [id=" + id + ", klasse=" + klasse + ", schulfach=" + schulfach + ", lehrer=" + lehrer + "]";
+	}
 }

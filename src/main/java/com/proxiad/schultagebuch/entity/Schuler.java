@@ -33,7 +33,7 @@ public class Schuler {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_schuler_generator")
 	@SequenceGenerator(name = "PK_schuler_generator", sequenceName = "schuler_id_seq", allocationSize = 1)
-	@Column(name = "schuler_id")
+	@Column(name = "schuler_id", updatable = false)
 	private int id;
 
 	@PersonNameConstraint
@@ -58,8 +58,8 @@ public class Schuler {
 
 	@BenutzerSchulerRolleConstraint
 	@Valid
-	@OneToOne(cascade = CascadeType.ALL, optional = true)
-	@JoinColumn(name = "benutzer_id", unique = true, nullable = true)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "benutzer_id", unique = true)
 	private Benutzer benutzer;
 
 	public Schuler() {
@@ -116,6 +116,40 @@ public class Schuler {
 
 	public String getKlasseKennzeichen() {
 		return Optional.ofNullable(klasse).isPresent() ? klasse.getKennzeichen() : "n/a";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((pin == null) ? 0 : pin.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Schuler other = (Schuler) obj;
+		if (id != other.id)
+			return false;
+		if (pin == null) {
+			if (other.pin != null)
+				return false;
+		} else if (!pin.equals(other.pin))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Schuler [id=" + id + ", name=" + name + ", pin=" + pin + ", klasse=" + klasse + ", " + ", benutzer="
+				+ benutzer + "]";
 	}
 
 }

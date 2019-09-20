@@ -12,7 +12,7 @@ public class ValidierungsfehlerUtils {
 
 	public static void fehlerPruefen(final BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			throw new ValidationException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+			throw new ValidationException(bindingResult.getFieldError().getDefaultMessage());
 		}
 	}
 

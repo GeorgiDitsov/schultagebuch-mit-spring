@@ -41,7 +41,7 @@ public class SchulstundeController {
 
 	@RequestMapping(value = "/schulstunde")
 	public ModelAndView home() {
-		return homeMav(new ModelAndView("schulstundeForm"));
+		return schulstundeMav(new ModelAndView("schulstundeForm"));
 	}
 
 	@RequestMapping(value = "/schulstunde/add")
@@ -78,7 +78,7 @@ public class SchulstundeController {
 		return new RedirectView("/schulstunde");
 	}
 
-	private ModelAndView homeMav(ModelAndView mav) {
+	private ModelAndView schulstundeMav(ModelAndView mav) {
 		mav.addObject("listSchulstunde", schulstundeService.findAll());
 		mav.addObject("listKlasse", klasseService.findAll());
 		mav.addObject("listSchulfach", schulfachService.findAll());

@@ -42,7 +42,7 @@ public class KlasseController {
 	}
 
 	@RequestMapping(value = "/klasse/edit/{id}")
-	public RedirectView findForEdit(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
@@ -55,7 +55,7 @@ public class KlasseController {
 			@RequestParam(name = "klasseName") @KlasseNameConstraint String klasseName,
 			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		klasseService.save(KlasseUtils.getInstance().bauenAusString(klasse, klasseName));
+		klasseService.save(KlasseUtils.erstellenAusString(klasse, klasseName));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/klasse");
 	}

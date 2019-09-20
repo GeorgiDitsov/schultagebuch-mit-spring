@@ -3,9 +3,8 @@
 <body>
 	<div th:fragment="newBenutzer">
 		<label th:text="#{user.new} + '*'"></label>
-		<input class="form-control w-75" th:field="*{benutzer.benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-		<input class="form-control w-75" th:field="*{benutzer.passwort}" id="passwort"  type="password" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-		<input class="form-control w-75" type="password" id="konfirm_passwort" th:placeholder="#{user.password.confirm}" required><br/>
+		<input class="form-control w-50" th:field="*{benutzer.benutzerName}" th:placeholder="#{user.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+		<input class="form-control w-50" type="password" th:field="*{benutzer.passwort}" th:placeholder="#{user.password}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
 		<input type="hidden" th:field="*{benutzer.rolle}">
 	</div>
 	<div th:fragment="editBenutzer">
@@ -35,7 +34,7 @@
    			<select class="form-control w-50" th:field="*{eltern}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" multiple required>
     			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.personKennzeichen(elternteil)}">
    			</select><br/>
-   			<div th:replace="contents/modalContent.html :: newBenutzer"></div>
+   			<div th:replace="contents/modalContent.html :: newBenutzer"></div><br/>
   			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		</form>
 	</div>
@@ -53,9 +52,10 @@
    			</select><br/>
    			<label th:text="#{parents}"></label>
    			<button type="button" class="btn btn-warning btn-sm" th:text="#{new}" data-toggle="modal" data-target="#addElternteilModal"></button>
-   			<select class="form-control w-50" th:field="*{eltern}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" multiple required>
+   			<select class="form-control w-50" th:field="*{eltern}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" multiple required>
     			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.personKennzeichen(elternteil)}">
    			</select><br/>
+   			<input type="hidden" th:field="*{benutzer}">
    			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		</form>
 	</div>
@@ -65,7 +65,7 @@
    			<input class="form-control w-75" type="text" th:field="*{name}" th:placeholder="#{parent.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
    			<label th:text="#{pin} + '*'"></label>
    			<input class="form-control w-75" type="text" th:field="*{pin}" th:placeholder="#{parent.pin}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required><br/>
-   			<div th:replace="contents/modalContent.html :: newBenutzer"></div>
+   			<div th:replace="contents/modalContent.html :: newBenutzer"></div><br/>
    			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
    		</form>
 	</div>
@@ -91,7 +91,7 @@
 			<select class="form-control w-50" th:field="*{schulfachSet}" multiple>
 				<option th:each="schulfach :${listSchulfach}" th:value="${schulfach.id}" th:text="${schulfach.name}">
 			</select><br/>
-			<div th:replace="contents/modalContent.html :: newBenutzer"></div>
+			<div th:replace="contents/modalContent.html :: newBenutzer"></div><br/>
 			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		</form>
 	</div>

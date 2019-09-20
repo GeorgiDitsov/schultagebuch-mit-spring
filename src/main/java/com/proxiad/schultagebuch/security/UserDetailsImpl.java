@@ -28,6 +28,6 @@ public class UserDetailsImpl implements UserDetailsService {
 	}
 
 	private static Collection<? extends GrantedAuthority> getAuthorities(Benutzer benutzer) {
-		return AuthorityUtils.createAuthorityList(benutzer.getRolle().getName());
+		return AuthorityUtils.createAuthorityList(benutzer.getRolle().getName().toString());
 	}
 }

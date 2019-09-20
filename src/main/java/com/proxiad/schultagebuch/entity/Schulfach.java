@@ -23,7 +23,7 @@ public class Schulfach {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_schulfach_generator")
 	@SequenceGenerator(name = "PK_schulfach_generator", sequenceName = "schulfach_id_seq", allocationSize = 1)
-	@Column(name = "schulfach_id")
+	@Column(name = "schulfach_id", updatable = false)
 	private int id;
 
 	@NotBlank(message = "Der name ist obligatorisch.")
@@ -83,5 +83,10 @@ public class Schulfach {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Schulfach [id=" + id + ", name=" + name + ", lehrerSet=" + lehrerSet + "]";
 	}
 }

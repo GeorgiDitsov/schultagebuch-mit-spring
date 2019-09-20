@@ -24,7 +24,7 @@ public class Benutzer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_benutzer_generator")
 	@SequenceGenerator(name = "PK_benutzer_generator", sequenceName = "benutzer_id_seq", allocationSize = 1)
-	@Column(name = "benutzer_id")
+	@Column(name = "benutzer_id", updatable = false)
 	private int id;
 
 	@NotBlank
@@ -33,7 +33,7 @@ public class Benutzer {
 	private String benutzerName;
 
 	@NotBlank
-	@Pattern(regexp = "^(?=.*[a-zA-Z])([0-9]*)[a-zA-Z0-9]{5,10}$", message = "{invalid.user.password}")
+	@Pattern(regexp = "^(?=.*[a-zA-Z0-9])[a-zA-Z0-9]{5,10}$", message = "{invalid.user.password}")
 	@Column(name = "benutzer_pass")
 	@ColumnTransformer(write = "crypt(?, gen_salt('bf'))")
 	private String passwort;
@@ -78,6 +78,34 @@ public class Benutzer {
 
 	public void setRolle(Rolle rolle) {
 		this.rolle = rolle;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Benutzer other = (Benutzer) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Benutzer [id=" + id + ", benutzerName=" + benutzerName + ", passwort=" + passwort + ", rolle=" + rolle
+				+ "]";
 	}
 
 }

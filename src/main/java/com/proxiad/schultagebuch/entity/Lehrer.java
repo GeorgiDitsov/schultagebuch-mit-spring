@@ -31,7 +31,7 @@ public class Lehrer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_lehrer_generator")
 	@SequenceGenerator(name = "PK_lehrer_generator", sequenceName = "lehrer_id_seq", allocationSize = 1)
-	@Column(name = "lehrer_id")
+	@Column(name = "lehrer_id", updatable = false)
 	private int id;
 
 	@PersonNameConstraint
@@ -39,7 +39,7 @@ public class Lehrer {
 	private String name;
 
 	@PINConstraint
-	@Column(name = "lehrer_pin")
+	@Column(name = "lehrer_pin", unique = true)
 	private String pin;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -49,8 +49,8 @@ public class Lehrer {
 
 	@BenutzerLehrerRolleContraint
 	@Valid
-	@OneToOne(cascade = CascadeType.ALL, optional = true)
-	@JoinColumn(name = "benutzer_id", unique = true, nullable = true)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "benutzer_id", unique = true)
 	private Benutzer benutzer;
 
 	public Lehrer() {
@@ -102,6 +102,39 @@ public class Lehrer {
 		Optional.of(schulfachSet).filter(set -> !set.isEmpty())
 				.ifPresent(set -> set.forEach(schulfach -> kennzeichen.append(schulfach.getName()).append("\n")));
 		return schulfachSet.isEmpty() ? "n/a" : kennzeichen.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((pin == null) ? 0 : pin.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Lehrer other = (Lehrer) obj;
+		if (id != other.id)
+			return false;
+		if (pin == null) {
+			if (other.pin != null)
+				return false;
+		} else if (!pin.equals(other.pin))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Lehrer [id=" + id + ", name=" + name + ", pin=" + pin + ", " + ", benutzer=" + benutzer + "]";
 	}
 
 }

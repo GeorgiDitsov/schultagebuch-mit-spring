@@ -25,16 +25,16 @@ public class Klasse {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_klasse_generator")
 	@SequenceGenerator(name = "PK_klasse_generator", sequenceName = "klasse_id_seq", allocationSize = 1)
-	@Column(name = "klasse_id")
+	@Column(name = "klasse_id", updatable = false)
 	private int id;
 
-	@NotNull(message = "Das jahr ist obligatorisch!")
+	@NotNull
 	@Min(1)
 	@Max(12)
 	@Column(name = "klasse_jahr")
 	private int jahr;
 
-	@NotBlank(message = "Der buchstabe ist obligatorisch!")
+	@NotBlank
 	@Pattern(regexp = "^([a-z])$")
 	@Column(name = "klasse_buchstabe")
 	private String buchstabe;
@@ -82,4 +82,32 @@ public class Klasse {
 	public String getKennzeichen() {
 		return jahr + buchstabe;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Klasse other = (Klasse) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Klasse [id=" + id + ", jahr=" + jahr + ", buchstabe=" + buchstabe + "]";
+	}
+
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Rolle;
 import com.proxiad.schultagebuch.repository.RolleRepository;
+import com.proxiad.schultagebuch.util.RolleTyp;
 
 @Service
 @Transactional
@@ -25,7 +26,7 @@ public class RolleService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Rolle find(String rolleName, final Locale locale) {
+	public Rolle find(RolleTyp rolleName, final Locale locale) {
 		return repo.findByName(rolleName).orElseThrow(
 				() -> new IllegalArgumentException(messageSource.getMessage("invalid.role", null, locale)));
 	}

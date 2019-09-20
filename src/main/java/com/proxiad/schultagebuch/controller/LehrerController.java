@@ -20,6 +20,7 @@ import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.RolleService;
 import com.proxiad.schultagebuch.service.SchulfachService;
+import com.proxiad.schultagebuch.util.RolleTyp;
 import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
@@ -36,7 +37,7 @@ public class LehrerController {
 
 	@RequestMapping(value = "/lehrer")
 	public ModelAndView home() {
-		return homeMav(new ModelAndView("lehrerForm"));
+		return lehrerMav(new ModelAndView("lehrerForm"));
 	}
 
 	@RequestMapping(value = "/lehrer/add")
@@ -73,7 +74,7 @@ public class LehrerController {
 		return new RedirectView("/lehrer");
 	}
 
-	private ModelAndView homeMav(ModelAndView mav) {
+	private ModelAndView lehrerMav(ModelAndView mav) {
 		mav.addObject("listLehrer", lehrerService.findAll());
 		mav.addObject("listSchulfach", schulfachService.findAll());
 		return mav;
@@ -81,7 +82,7 @@ public class LehrerController {
 
 	private Lehrer setBenutzerRolle(Lehrer lehrer, final Locale locale) {
 		Benutzer benutzer = new Benutzer();
-		benutzer.setRolle(rolleService.find("ROLE_LEHRER", locale));
+		benutzer.setRolle(rolleService.find(RolleTyp.ROLLE_LEHRER, locale));
 		lehrer.setBenutzer(benutzer);
 		return lehrer;
 	}

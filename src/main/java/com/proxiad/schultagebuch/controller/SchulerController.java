@@ -22,6 +22,7 @@ import com.proxiad.schultagebuch.service.ElternteilService;
 import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.service.RolleService;
 import com.proxiad.schultagebuch.service.SchulerService;
+import com.proxiad.schultagebuch.util.RolleTyp;
 import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
@@ -41,7 +42,7 @@ public class SchulerController {
 
 	@RequestMapping(value = "/schuler")
 	public ModelAndView home(final Locale locale) {
-		return homeMav(new ModelAndView("schulerForm"), locale);
+		return schulerMav(new ModelAndView("schulerForm"), locale);
 	}
 
 	@RequestMapping(value = "/schuler/add")
@@ -78,7 +79,7 @@ public class SchulerController {
 		return new RedirectView("/schuler");
 	}
 
-	private ModelAndView homeMav(ModelAndView mav, final Locale locale) {
+	private ModelAndView schulerMav(ModelAndView mav, final Locale locale) {
 		mav.addObject("listSchuler", schulerService.findAll());
 		mav.addObject("listKlasse", klasseService.findAll());
 		mav.addObject("listEltern", elternteilService.findAll());
@@ -88,14 +89,14 @@ public class SchulerController {
 
 	private Schuler getNewSchuler(Schuler schuler, final Locale locale) {
 		Benutzer benutzer = new Benutzer();
-		benutzer.setRolle(rolleService.find("ROLE_SCHULER", locale));
+		benutzer.setRolle(rolleService.find(RolleTyp.ROLLE_SCHULER, locale));
 		schuler.setBenutzer(benutzer);
 		return schuler;
 	}
 
 	private Elternteil getNewEltenteil(Elternteil elternteil, final Locale locale) {
 		Benutzer benutzer = new Benutzer();
-		benutzer.setRolle(rolleService.find("ROLE_ELTERNTEIL", locale));
+		benutzer.setRolle(rolleService.find(RolleTyp.ROLLE_ELTERNTEIL, locale));
 		elternteil.setBenutzer(benutzer);
 		return elternteil;
 	}
