@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,17 +16,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.service.ElternteilService;
 import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.service.RolleService;
 import com.proxiad.schultagebuch.service.SchulerService;
-import com.proxiad.schultagebuch.util.RolleTyp;
+import com.proxiad.schultagebuch.util.PersonUtils;
 import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
+@Validated
 public class SchulerController {
 
 	@Autowired
@@ -49,7 +50,7 @@ public class SchulerController {
 	public RedirectView newEntity(RedirectAttributes attributes, final Locale locale) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
-		attributes.addFlashAttribute("schuler", getNewSchuler(new Schuler(), locale));
+		attributes.addFlashAttribute("schuler", PersonUtils.getNeuePerson(new Schuler(), () -> rolleService, locale));
 		return new RedirectView("/schuler");
 	}
 
@@ -62,7 +63,7 @@ public class SchulerController {
 		return new RedirectView("/schuler");
 	}
 
-	@PostMapping(value = "/schuler/add")
+	@PostMapping(value = "/schuler/save")
 	public RedirectView save(RedirectAttributes attributes, @ModelAttribute(name = "schuler") @Valid Schuler schuler,
 			final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
@@ -83,21 +84,8 @@ public class SchulerController {
 		mav.addObject("listSchuler", schulerService.findAll());
 		mav.addObject("listKlasse", klasseService.findAll());
 		mav.addObject("listEltern", elternteilService.findAll());
-		mav.addObject("elternteil", getNewEltenteil(new Elternteil(), locale));
+		mav.addObject("elternteil", PersonUtils.getNeuePerson(new Elternteil(), () -> rolleService, locale));
 		return mav;
 	}
 
-	private Schuler getNewSchuler(Schuler schuler, final Locale locale) {
-		Benutzer benutzer = new Benutzer();
-		benutzer.setRolle(rolleService.find(RolleTyp.ROLLE_SCHULER, locale));
-		schuler.setBenutzer(benutzer);
-		return schuler;
-	}
-
-	private Elternteil getNewEltenteil(Elternteil elternteil, final Locale locale) {
-		Benutzer benutzer = new Benutzer();
-		benutzer.setRolle(rolleService.find(RolleTyp.ROLLE_ELTERNTEIL, locale));
-		elternteil.setBenutzer(benutzer);
-		return elternteil;
-	}
 }

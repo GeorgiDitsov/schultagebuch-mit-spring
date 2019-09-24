@@ -49,7 +49,7 @@ public class SchulfachController {
 		return new RedirectView("/schulfach");
 	}
 
-	@PostMapping(value = "/schulfach/add")
+	@PostMapping(value = "/schulfach/save")
 	public RedirectView save(RedirectAttributes attributes,
 			@ModelAttribute(name = "schulfach") @Valid Schulfach schulfach, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);

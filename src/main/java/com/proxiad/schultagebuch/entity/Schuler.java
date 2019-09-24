@@ -26,8 +26,8 @@ import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
 @Entity
-@Table(name = "schuler", uniqueConstraints = { @UniqueConstraint(columnNames = { "schuler_pin" }),
-		@UniqueConstraint(columnNames = { "benutzer_id" }) })
+@Table(name = "schuler", uniqueConstraints = { @UniqueConstraint(columnNames = "schuler_pin"),
+		@UniqueConstraint(columnNames = "benutzer_id") })
 public class Schuler {
 
 	@Id
@@ -49,15 +49,12 @@ public class Schuler {
 	@JoinColumn(name = "klasse_id", nullable = true)
 	private Klasse klasse;
 
-	@Valid
 	@Size(min = 1, max = 2)
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "elternteil_schuler", joinColumns = { @JoinColumn(name = "schuler_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "elternteil_id") })
+	@JoinTable(name = "elternteil_schuler", joinColumns = @JoinColumn(name = "schuler_id"), inverseJoinColumns = @JoinColumn(name = "elternteil_id"))
 	private Set<Elternteil> eltern;
 
 	@BenutzerSchulerRolleConstraint
-	@Valid
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "benutzer_id", unique = true)
 	private Benutzer benutzer;
@@ -112,6 +109,16 @@ public class Schuler {
 
 	public void setEltern(Set<Elternteil> eltern) {
 		this.eltern = eltern;
+	}
+
+	public void addElternteil(Elternteil elternteil) {
+		getEltern().add(elternteil);
+		elternteil.getKinder().add(this);
+	}
+
+	public void removeElternteil(Elternteil elternteil) {
+		getEltern().remove(elternteil);
+		elternteil.getKinder().remove(this);
 	}
 
 	public String getKlasseKennzeichen() {

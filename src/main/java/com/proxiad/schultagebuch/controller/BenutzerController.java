@@ -3,14 +3,16 @@ package com.proxiad.schultagebuch.controller;
 import java.util.List;
 import java.util.Locale;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -18,9 +20,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.service.BenutzerService;
 import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
-import com.proxiad.schultagebuch.validator.constraint.BenutzerPasswortConstraint;
 
 @Controller
+@Validated
 public class BenutzerController {
 
 	@Autowired
@@ -41,10 +43,9 @@ public class BenutzerController {
 		return new RedirectView("/benutzer");
 	}
 
-	@PostMapping(value = "/benutzer/add")
-	public RedirectView save(RedirectAttributes attributes,
-			@RequestParam(name = "passwort") @BenutzerPasswortConstraint String passwort,
-			@ModelAttribute(name = "benutzer") Benutzer benutzer, final BindingResult bindingResult) {
+	@PostMapping(value = "/benutzer/save")
+	public RedirectView save(RedirectAttributes attributes, @ModelAttribute(name = "benutzer") @Valid Benutzer benutzer,
+			final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		benutzerService.save(benutzer);
 		attributes.addFlashAttribute("successful", true);

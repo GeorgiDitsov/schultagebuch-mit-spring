@@ -23,8 +23,8 @@ import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
 @Entity
-@Table(name = "elternteil", uniqueConstraints = { @UniqueConstraint(columnNames = { "benutzer_id" }),
-		@UniqueConstraint(columnNames = { "elternteil_pin" }) })
+@Table(name = "elternteil", uniqueConstraints = { @UniqueConstraint(columnNames = "benutzer_id"),
+		@UniqueConstraint(columnNames = "elternteil_pin") })
 public class Elternteil {
 
 	@Id
@@ -41,12 +41,12 @@ public class Elternteil {
 	@Column(name = "elternteil_pin", unique = true)
 	private String pin;
 
+	@Valid
 	@Size(min = 1)
-	@ManyToMany(mappedBy = "eltern", fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "eltern", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Schuler> kinder;
 
 	@BenutzerElternteilRolleContraint
-	@Valid
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "benutzer_id", unique = true)
 	private Benutzer benutzer;

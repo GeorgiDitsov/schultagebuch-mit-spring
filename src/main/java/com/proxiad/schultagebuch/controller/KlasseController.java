@@ -50,7 +50,7 @@ public class KlasseController {
 		return new RedirectView("/klasse");
 	}
 
-	@PostMapping(value = "/klasse/add")
+	@PostMapping(value = "/klasse/save")
 	public RedirectView save(RedirectAttributes attributes,
 			@RequestParam(name = "klasseName") @KlasseNameConstraint String klasseName,
 			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult) {

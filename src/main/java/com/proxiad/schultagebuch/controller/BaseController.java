@@ -1,12 +1,14 @@
 package com.proxiad.schultagebuch.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
+@Validated
 public class BaseController {
 
 	@RequestMapping(value = "/login")
@@ -19,9 +21,9 @@ public class BaseController {
 		return new ModelAndView("index");
 	}
 
-	@RequestMapping(value = "/{currentPage}/{locale:en|de}")
-	public RedirectView locate(@PathVariable(value = "currentPage") String currentPage) {
-		return new RedirectView("/" + currentPage);
+	@RequestMapping(value = "/*/{locale:en|de}")
+	public RedirectView locate(@RequestHeader String referer) {
+		return new RedirectView(referer);
 	}
 
 	@RequestMapping(value = "/info")

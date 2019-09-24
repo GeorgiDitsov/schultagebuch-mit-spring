@@ -17,7 +17,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "schulfach", uniqueConstraints = { @UniqueConstraint(columnNames = { "schulfach_name" }) })
+@Table(name = "schulfach", uniqueConstraints = @UniqueConstraint(columnNames = "schulfach_name"))
 public class Schulfach {
 
 	@Id

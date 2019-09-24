@@ -61,7 +61,7 @@ public class SchulstundeController {
 		return new RedirectView("/schulstunde");
 	}
 
-	@PostMapping(value = "/schulstunde/add")
+	@PostMapping(value = "/schulstunde/save")
 	public RedirectView save(RedirectAttributes attributes,
 			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);

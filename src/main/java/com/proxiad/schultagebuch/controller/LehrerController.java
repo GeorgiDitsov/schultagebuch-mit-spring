@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,15 +16,15 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.RolleService;
 import com.proxiad.schultagebuch.service.SchulfachService;
-import com.proxiad.schultagebuch.util.RolleTyp;
+import com.proxiad.schultagebuch.util.PersonUtils;
 import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
+@Validated
 public class LehrerController {
 
 	@Autowired
@@ -44,11 +45,11 @@ public class LehrerController {
 	public RedirectView newEntity(RedirectAttributes attributes, final Locale locale) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
-		attributes.addFlashAttribute("lehrer", setBenutzerRolle(new Lehrer(), locale));
+		attributes.addFlashAttribute("lehrer", PersonUtils.getNeuePerson(new Lehrer(), () -> rolleService, locale));
 		return new RedirectView("/lehrer");
 	}
 
-	@PostMapping(value = "/lehrer/add")
+	@PostMapping(value = "/lehrer/save")
 	public RedirectView save(RedirectAttributes attributes, @ModelAttribute(name = "lehrer") @Valid Lehrer lehrer,
 			final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
@@ -80,10 +81,4 @@ public class LehrerController {
 		return mav;
 	}
 
-	private Lehrer setBenutzerRolle(Lehrer lehrer, final Locale locale) {
-		Benutzer benutzer = new Benutzer();
-		benutzer.setRolle(rolleService.find(RolleTyp.ROLLE_LEHRER, locale));
-		lehrer.setBenutzer(benutzer);
-		return lehrer;
-	}
 }

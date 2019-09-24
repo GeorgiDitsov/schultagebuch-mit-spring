@@ -7,9 +7,11 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,6 +23,7 @@ import com.proxiad.schultagebuch.service.SchulerService;
 import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
+@Validated
 public class ElternteilController {
 
 	@Autowired
@@ -45,13 +48,13 @@ public class ElternteilController {
 		return new RedirectView("/elternteil");
 	}
 
-	@PostMapping(value = "/elternteil/add")
-	public RedirectView save(RedirectAttributes attributes,
+	@PostMapping(value = "/elternteil/save")
+	public RedirectView save(RedirectAttributes attributes, @RequestHeader String referer,
 			@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		elternteilService.save(elternteil);
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/schuler/add");
+		return new RedirectView(referer);
 	}
 
 	@RequestMapping(value = "/elternteil/delete/{id}")

@@ -19,7 +19,7 @@ import com.proxiad.schultagebuch.util.KennzeichenUtils;
 import com.proxiad.schultagebuch.validator.constraint.SchulstundeConstraint;
 
 @Entity
-@Table(name = "schulstunde", uniqueConstraints = { @UniqueConstraint(columnNames = { "klasse_id", "schulfach_id" }) })
+@Table(name = "schulstunde", uniqueConstraints = @UniqueConstraint(columnNames = { "klasse_id", "schulfach_id" }))
 @SchulstundeConstraint
 public class Schulstunde {
 

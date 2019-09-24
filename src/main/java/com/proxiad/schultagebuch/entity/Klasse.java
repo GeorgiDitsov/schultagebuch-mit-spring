@@ -19,7 +19,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "klasse", uniqueConstraints = { @UniqueConstraint(columnNames = { "klasse_jahr", "klasse_buchstabe" }) })
+@Table(name = "klasse", uniqueConstraints = @UniqueConstraint(columnNames = { "klasse_jahr", "klasse_buchstabe" }))
 public class Klasse {
 
 	@Id

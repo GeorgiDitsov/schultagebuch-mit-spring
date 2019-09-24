@@ -18,7 +18,7 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.annotations.ColumnTransformer;
 
 @Entity
-@Table(name = "benutzer", uniqueConstraints = { @UniqueConstraint(columnNames = { "benutzer_name" }) })
+@Table(name = "benutzer", uniqueConstraints = @UniqueConstraint(columnNames = "benutzer_name"))
 public class Benutzer {
 
 	@Id
