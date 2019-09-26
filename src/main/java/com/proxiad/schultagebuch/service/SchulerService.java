@@ -34,6 +34,11 @@ public class SchulerService {
 				messageSource.getMessage("invalid.student", new Object[] { id }, locale)));
 	}
 
+	public Schuler findByBenutzerName(final String benutzerName, final Locale locale) {
+		return repo.findByBenutzerBenutzerName(benutzerName)
+				.orElseThrow(() -> new IllegalArgumentException(messageSource.getMessage("error", null, locale)));
+	}
+
 	public void delete(Schuler schuler) {
 		repo.delete(schuler);
 	}

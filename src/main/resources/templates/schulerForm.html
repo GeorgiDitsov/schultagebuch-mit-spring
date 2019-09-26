@@ -29,12 +29,12 @@
 	        	</tr>
 	        </thead>
 	        <tr th:each="schuler: ${listSchuler}">
-	            <th scope="row" th:text="${schuler.id}" />
-	            <td th:text="${schuler.name}" />
+	            <th scope="row" th:text="${schuler.id}">
+	            <td th:text="${schuler.name}">
 	            <td th:text="${@kennzeichenUtils.pinKennzeichen(schuler.pin)}">
-	            <td th:text="${schuler.klasseKennzeichen}" />
-	            <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(schuler.eltern)}" />
-	            <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(schuler.benutzer)}" />
+	            <td th:text="${schuler.klasseKennzeichen}">
+	            <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(schuler.eltern)}">
+	            <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(schuler.benutzer)}">
 	            <td>
 	            	<a th:href="@{'schuler/edit/'+${schuler.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	<a th:href="@{'schuler/delete/'+${schuler.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
@@ -42,10 +42,10 @@
 	        </tr>
 	    </table>
    	</div>
-	<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
-	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
-	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
-	<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
-	<script th:src="@{/js/localization.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
+<script th:src="@{/js/localization.js}" type="text/javascript"></script>
 </body>
 </html>

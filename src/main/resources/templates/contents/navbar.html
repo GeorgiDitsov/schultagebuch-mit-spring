@@ -21,7 +21,8 @@
 				</div>
 				<div sec:authorize="hasRole('SCHULER')">
 					<div class="navbar-nav mr-auto">
-					</div>	
+						<a class="nav-item nav-link" th:href="@{/my-grades}" th:text="#{grades}"></a>
+					</div>
 				</div>
 				<div sec:authorize="hasRole('LEHRER')">
 					<div class="navbar-nav mr-auto">

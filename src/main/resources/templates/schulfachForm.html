@@ -25,9 +25,9 @@
 		        </tr>
 		    </thead>
 	        <tr th:each="schulfach: ${listSchulfach}">
-	            <th scope="row" th:text="${schulfach.id}" />
-	            <td th:text="${schulfach.name}" />
-	            <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(schulfach.lehrerSet)}" />
+	            <th scope="row" th:text="${schulfach.id}">
+	            <td th:text="${schulfach.name}">
+	            <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(schulfach.lehrerSet)}">
 	            <td>
 	            	<a th:href="@{'schulfach/edit/'+${schulfach.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	<a th:href="@{'schulfach/delete/'+${schulfach.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
@@ -35,10 +35,10 @@
 	        </tr>
 	    </table>
     </div>
-	<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
-	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
-	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
-	<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
-	<script th:src="@{/js/localization.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
+<script th:src="@{/js/localization.js}" type="text/javascript"></script>
 </body>
 </html>

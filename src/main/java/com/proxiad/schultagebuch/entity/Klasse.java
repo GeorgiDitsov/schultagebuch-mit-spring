@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,6 +40,10 @@ public class Klasse {
 	@Column(name = "klasse_buchstabe")
 	private String buchstabe;
 
+	@Size(max = 12)
+	@OneToMany(mappedBy = "klasse", fetch = FetchType.EAGER)
+	private Set<Schulstunde> schulstundeSet;
+
 	@Size(max = 30)
 	@OneToMany(mappedBy = "klasse")
 	private Set<Schuler> schulerSet;
@@ -69,6 +74,14 @@ public class Klasse {
 
 	public void setBuchstabe(String buchstabe) {
 		this.buchstabe = buchstabe;
+	}
+
+	public Set<Schulstunde> getSchulstundeSet() {
+		return schulstundeSet;
+	}
+
+	public void setSchulstundeSet(Set<Schulstunde> schulstundeSet) {
+		this.schulstundeSet = schulstundeSet;
 	}
 
 	public Set<Schuler> getSchulerSet() {

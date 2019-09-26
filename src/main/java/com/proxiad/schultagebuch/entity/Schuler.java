@@ -95,14 +95,6 @@ public class Schuler {
 		this.klasse = klasse;
 	}
 
-	public Benutzer getBenutzer() {
-		return benutzer;
-	}
-
-	public void setBenutzer(Benutzer benutzer) {
-		this.benutzer = benutzer;
-	}
-
 	public Set<Elternteil> getEltern() {
 		return eltern;
 	}
@@ -111,14 +103,16 @@ public class Schuler {
 		this.eltern = eltern;
 	}
 
-	public void addElternteil(Elternteil elternteil) {
-		getEltern().add(elternteil);
-		elternteil.getKinder().add(this);
+	public Benutzer getBenutzer() {
+		return benutzer;
 	}
 
-	public void removeElternteil(Elternteil elternteil) {
-		getEltern().remove(elternteil);
-		elternteil.getKinder().remove(this);
+	public void setBenutzer(Benutzer benutzer) {
+		this.benutzer = benutzer;
+	}
+
+	public String getKennzeichen() {
+		return name + ", " + pin + ", " + getKlasseKennzeichen();
 	}
 
 	public String getKlasseKennzeichen() {

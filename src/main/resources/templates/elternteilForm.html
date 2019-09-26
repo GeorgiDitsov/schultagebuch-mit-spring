@@ -24,11 +24,11 @@
 		       	</tr>
 		   	</thead>
 		    <tr th:each="elternteil: ${listElternteil}">
-		        <th scope="row" th:text="${elternteil.id}" />
-		        <td th:text="${elternteil.name}" />
-		        <td th:text="${@kennzeichenUtils.pinKennzeichen(elternteil.pin)}" />
-		        <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(elternteil.kinder)}" />
-		        <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(elternteil.benutzer)}" />
+		        <th scope="row" th:text="${elternteil.id}">
+		        <td th:text="${elternteil.name}">
+		        <td th:text="${@kennzeichenUtils.pinKennzeichen(elternteil.pin)}">
+		        <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(elternteil.kinder)}">
+		        <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(elternteil.benutzer)}">
 		        <td>
 			        <a th:href="@{'elternteil/edit/'+${elternteil.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 			       	<a th:href="@{'elternteil/delete/'+${elternteil.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>

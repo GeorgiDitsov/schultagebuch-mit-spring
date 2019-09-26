@@ -13,7 +13,7 @@ public class BaseController {
 
 	@RequestMapping(value = "/login")
 	public ModelAndView logIn() {
-		return new ModelAndView("logInForm");
+		return new ModelAndView("anmeldungForm");
 	}
 
 	@RequestMapping(value = "/home")

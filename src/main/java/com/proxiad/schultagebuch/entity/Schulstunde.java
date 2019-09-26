@@ -32,13 +32,13 @@ public class Schulstunde {
 	@NotNull
 	@Valid
 	@ManyToOne
-	@JoinColumn(name = "klasse_id")
+	@JoinColumn(name = "klasse_id", nullable = false)
 	private Klasse klasse;
 
 	@NotNull
 	@Valid
 	@ManyToOne
-	@JoinColumn(name = "schulfach_id")
+	@JoinColumn(name = "schulfach_id", nullable = false)
 	private Schulfach schulfach;
 
 	@Valid
