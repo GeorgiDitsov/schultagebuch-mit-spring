@@ -26,8 +26,8 @@ public class Schulfach {
 	@Column(name = "schulfach_id", updatable = false)
 	private int id;
 
-	@NotBlank(message = "Der name ist obligatorisch.")
-	@Pattern(regexp = "^([A-Z][a-z]+)$")
+	@NotBlank
+	@Pattern(regexp = "^([A-Z][a-z]+)$", message = "{invalid.subject.name}")
 	@Column(name = "schulfach_name")
 	private String name;
 

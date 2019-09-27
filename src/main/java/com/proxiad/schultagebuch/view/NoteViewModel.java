@@ -2,18 +2,18 @@ package com.proxiad.schultagebuch.view;
 
 import java.time.LocalDateTime;
 
-public class NoteView {
+public class NoteViewModel {
 
 	private String schulfachName;
 	private String lehrerName;
 	private byte note;
 	private LocalDateTime noteDatum;
 
-	public NoteView() {
+	public NoteViewModel() {
 		// nothing
 	}
 
-	public NoteView(String schulfachName, String lehrerName, byte note, LocalDateTime noteDatum) {
+	public NoteViewModel(String schulfachName, String lehrerName, byte note, LocalDateTime noteDatum) {
 		this.schulfachName = schulfachName;
 		this.lehrerName = lehrerName;
 		this.note = note;
@@ -54,7 +54,7 @@ public class NoteView {
 
 	@Override
 	public String toString() {
-		return "NoteView [schulfachName=" + schulfachName + ", lehrerName=" + lehrerName + ", note=" + note
+		return "NoteViewModel [schulfachName=" + schulfachName + ", lehrerName=" + lehrerName + ", note=" + note
 				+ ", noteDatum=" + noteDatum + "]";
 	}
 

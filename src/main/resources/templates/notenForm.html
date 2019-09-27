@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
@@ -7,24 +7,13 @@
 </head>
 <body>
 	<div th:replace="contents/navbar.html :: navbar"></div>
-	<div th:replace="contents/heading.html :: formHeading(title=${schuler.kennzeichen}, buttonLink=${null})"></div>
-	<div class="table-responsive mt-5">
-		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
-			<thead class="thead-dark">
-	       		<tr>
-	            	<th scope="col" th:text="#{subject}">
-	            	<th scope="col" th:text="#{teacher}">
-	            	<th scope="col" th:text="#{grades}">
-	            	<th scope="col" th:text="#{date}">
-		       	</tr>
-		   	</thead>
-	   		<tr th:each="noteView: ${listNoten}">
-	   			<td th:text="${noteView.schulfachName}">
-	   			<td th:text="${noteView.lehrerName}">
-	   			<td th:text="${noteView.note}">
-	   			<td th:text="${#temporals.format(noteView.noteDatum, 'dd-MMM-yyyy HH:mm:ss')}">
-	   		</tr>
-		</table>
+	<div sec:authorize="hasRole('SCHULER')">
+		<div th:replace="contents/heading.html :: formHeading(title=${schuler.kennzeichen}, buttonLink=${null})"></div>
+		<div th:replace="contents/tabelle.html :: schulerNotenTabelle"></div>
+	</div>
+	<div sec:authorize="hasRole('ELTERNTEIL')">
+		<div th:replace="contents/heading.html :: formHeading(title=${elternteil}, buttonLink=${null})"></div>
+		<div th:replace="contents/tabelle.html :: elternteilKinderTabelle"></div>
 	</div>
 <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
 <script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>

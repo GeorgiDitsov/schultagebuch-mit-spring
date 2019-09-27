@@ -2,7 +2,7 @@ package com.proxiad.schultagebuch.util;
 
 import com.proxiad.schultagebuch.entity.Klasse;
 
-public class KlasseUtils {
+public final class KlasseUtils {
 
 	private KlasseUtils() {
 		// nothing

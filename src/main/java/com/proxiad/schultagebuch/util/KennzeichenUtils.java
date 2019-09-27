@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.proxiad.schultagebuch.entity.Benutzer;
 
 @Component
-public class KennzeichenUtils {
+public final class KennzeichenUtils {
 
 	private KennzeichenUtils() {
 		// nothing

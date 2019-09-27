@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.repository.NoteRepository;
-import com.proxiad.schultagebuch.view.NoteView;
+import com.proxiad.schultagebuch.view.NoteViewModel;
 
 @Service
 @Transactional
@@ -23,10 +23,10 @@ public class NoteService {
 		repo.save(note);
 	}
 
-	public List<NoteView> findBySchulerAndSchulstunde(Schuler schuler) {
-		List<NoteView> notenView = new ArrayList<>();
+	public List<NoteViewModel> findBySchuler(Schuler schuler) {
+		List<NoteViewModel> notenView = new ArrayList<>();
 		repo.findBySchulerOrderByDatumDesc(schuler).stream().forEach(note -> {
-			notenView.add(new NoteView(note.getSchulstunde().getSchulfach().getName(),
+			notenView.add(new NoteViewModel(note.getSchulstunde().getSchulfach().getName(),
 					note.getSchulstunde().getLehrer().getName(), note.getWert(), note.getDatum()));
 		});
 		return notenView;

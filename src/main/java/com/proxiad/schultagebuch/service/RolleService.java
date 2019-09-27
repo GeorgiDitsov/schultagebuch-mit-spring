@@ -26,8 +26,8 @@ public class RolleService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Rolle find(RolleTyp rolleName, final Locale locale) {
-		return repo.findByName(rolleName).orElseThrow(
+	public Rolle find(RolleTyp rolleTyp, final Locale locale) {
+		return repo.findByName(rolleTyp).orElseThrow(
 				() -> new IllegalArgumentException(messageSource.getMessage("invalid.role", null, locale)));
 	}
 

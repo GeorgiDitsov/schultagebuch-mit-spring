@@ -2,10 +2,10 @@ package com.proxiad.schultagebuch.service;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +30,7 @@ public class BenutzerService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Benutzer find(int id, final Locale locale) {
+	public Benutzer find(final int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.user", new Object[] { id }, locale)));
 	}
@@ -39,7 +39,7 @@ public class BenutzerService {
 		repo.delete(benutzer);
 	}
 
-	public Optional<Benutzer> findByBenutzerName(String benutzername) {
-		return repo.findByBenutzerName(benutzername);
+	public Benutzer findByBenutzerName(final String benutzername) {
+		return repo.findByBenutzerName(benutzername).orElseThrow(() -> new UsernameNotFoundException(benutzername));
 	}
 }

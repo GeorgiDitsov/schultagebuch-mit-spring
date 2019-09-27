@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="schulerNotenTabelle" class="table-responsive mt-5">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
+			<thead class="thead-dark">
+		   		<tr>
+		        	<th scope="col" th:text="#{subject}">
+		        	<th scope="col" th:text="#{teacher}">
+		        	<th scope="col" th:text="#{grade}">
+		        	<th scope="col" th:text="#{date}">
+		    	</tr>
+		   	</thead>
+	  		<tr th:each="noteViewModel: ${listNoten}">
+	  			<td th:text="${noteViewModel.schulfachName}">
+	  			<td th:text="${noteViewModel.lehrerName}">
+	  			<td th:text="${noteViewModel.note}">
+	  			<td th:text="${#temporals.format(noteViewModel.noteDatum, 'dd-MMM-yyyy HH:mm:ss')}">
+	  		</tr>
+		</table>
+	</div>
+	<div th:fragment="elternteilKinderTabelle" class="table-responsive mt-5">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col" th:text="#{children}">
+					<th scope="col" th:text="#{last.grade}">
+					<th scope="col" th:text="#{options}">
+				</tr>
+			</thead>
+			<tr th:each="kind: ${elternteil.kinder}">
+				<td th:text="${kind.kennzeichen}">
+				<td>
+				<td><a th:href="@{'elternteil/edit/'+${elternteil.id}}" class="btn btn-primary" role="button" th:text="#{button.show.grades}"></a></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

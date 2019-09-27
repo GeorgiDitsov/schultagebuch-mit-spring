@@ -30,6 +30,7 @@
 				</div>
 				<div sec:authorize="hasRole('ELTERNTEIL')">
 					<div class="navbar-nav mr-auto">
+						<a class="nav-item nav-link" th:href="@{/my-children}" th:text="#{children}"></a>
 					</div>
 				</div>
 	 		</div>

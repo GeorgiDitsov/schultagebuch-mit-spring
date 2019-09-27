@@ -5,6 +5,7 @@ import javax.validation.ValidationException;
 import org.postgresql.util.PSQLException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +26,11 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class })
 	protected ModelAndView schlechteAnfrage(final RuntimeException exception) {
 		return getDefaultErrorView(exception, HttpStatus.BAD_REQUEST.value());
+	}
+
+	@ExceptionHandler(value = { AuthenticationException.class })
+	protected ModelAndView nichtAutorisiert(final AuthenticationException exception) {
+		return getDefaultErrorView(exception, HttpStatus.UNAUTHORIZED.value());
 	}
 
 	private ModelAndView getDefaultErrorView(final Exception exception, final int statusCode) {

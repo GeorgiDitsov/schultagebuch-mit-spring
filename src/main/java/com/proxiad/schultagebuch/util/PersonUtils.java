@@ -5,14 +5,10 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
-import com.proxiad.schultagebuch.entity.Elternteil;
-import com.proxiad.schultagebuch.entity.Lehrer;
-import com.proxiad.schultagebuch.entity.Schuler;
+import com.proxiad.schultagebuch.entity.Rolle;
 import com.proxiad.schultagebuch.service.RolleService;
 
-public class PersonUtils {
-
-	private static final RolleTyp FALSCH_ROLLE = null;
+public final class PersonUtils {
 
 	private PersonUtils() {
 		// nothing
@@ -20,20 +16,20 @@ public class PersonUtils {
 
 	public static Object getNeuePerson(Object person, Supplier<RolleService> rolleServiceSupplier,
 			final Locale locale) {
-		Benutzer benutzer = new Benutzer();
-		benutzer.setRolle(
-				rolleServiceSupplier.get().find(
-						person instanceof Schuler ? RolleTyp.ROLLE_SCHULER
-								: person instanceof Lehrer ? RolleTyp.ROLLE_LEHRER
-										: person instanceof Elternteil ? RolleTyp.ROLLE_ELTERNTEIL : FALSCH_ROLLE,
-						locale));
 		try {
-			person.getClass().getMethod("setBenutzer", Benutzer.class).invoke(person, benutzer);
+			person.getClass().getMethod("setBenutzer", Benutzer.class).invoke(person,
+					getBenutzer(RolleUtils.getValidRole(person, rolleServiceSupplier, locale)));
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
 			e.printStackTrace();
 		}
 		return person;
+	}
+
+	private static Benutzer getBenutzer(Rolle validRolle) {
+		Benutzer benutzer = new Benutzer();
+		benutzer.setRolle(validRolle);
+		return benutzer;
 	}
 
 }
