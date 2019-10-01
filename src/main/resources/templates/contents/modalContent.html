@@ -173,5 +173,23 @@
 			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		</form>
 	</div>
+	<div th:fragment="kindSchulerErfolg">
+		<div class="table-sm">
+			<table class="table table-borderless">
+				<tr>
+		        	<th scope="col" th:text="#{subject}">
+		        	<th scope="col" th:text="#{teacher}">
+		        	<th scope="col" th:text="#{grade}">
+		        	<th scope="col" th:text="#{date}">
+		    	</tr>
+				<tr th:each="noteViewModel: ${listNoten}">
+		  			<td th:text="${noteViewModel.schulfachName}">
+		  			<td th:text="${noteViewModel.lehrerName}">
+		  			<td th:text="${noteViewModel.note}">
+		  			<td th:text="${#temporals.format(noteViewModel.noteDatum, 'dd-MMM-yyyy HH:mm:ss')}">
+		  		</tr>
+	  		</table>
+		</div>
+	</div>
 </body>
 </html>

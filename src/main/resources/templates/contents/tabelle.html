@@ -14,7 +14,7 @@
 	  		<tr th:each="noteViewModel: ${listNoten}">
 	  			<td th:text="${noteViewModel.schulfachName}">
 	  			<td th:text="${noteViewModel.lehrerName}">
-	  			<td th:text="${noteViewModel.note}">
+	  			<th th:text="${noteViewModel.note}">
 	  			<td th:text="${#temporals.format(noteViewModel.noteDatum, 'dd-MMM-yyyy HH:mm:ss')}">
 	  		</tr>
 		</table>
@@ -23,15 +23,15 @@
 		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
 			<thead class="thead-dark">
 				<tr>
-					<th scope="col" th:text="#{children}">
+					<th scope="col" th:text="#{child}">
 					<th scope="col" th:text="#{last.grade}">
 					<th scope="col" th:text="#{options}">
 				</tr>
 			</thead>
-			<tr th:each="kind: ${elternteil.kinder}">
-				<td th:text="${kind.kennzeichen}">
-				<td>
-				<td><a th:href="@{'elternteil/edit/'+${elternteil.id}}" class="btn btn-primary" role="button" th:text="#{button.show.grades}"></a></td>
+			<tr th:each="kindViewModel: ${listKinder}">
+				<th th:text="${kindViewModel.kindKennzeichen}">
+				<th th:text="${kindViewModel.letzteNoteKennzeichen}">
+				<td><a th:href="@{'meine-kinder/noten/'+${kindViewModel.kindId}}" class="btn btn-primary" role="button" th:text="#{grades}"></a></td>
 			</tr>
 		</table>
 	</div>

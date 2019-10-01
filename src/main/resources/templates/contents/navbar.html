@@ -21,7 +21,7 @@
 				</div>
 				<div sec:authorize="hasRole('SCHULER')">
 					<div class="navbar-nav mr-auto">
-						<a class="nav-item nav-link" th:href="@{/my-grades}" th:text="#{grades}"></a>
+						<a class="nav-item nav-link" th:href="@{/meine-noten}" th:text="#{grades}"></a>
 					</div>
 				</div>
 				<div sec:authorize="hasRole('LEHRER')">
@@ -30,7 +30,7 @@
 				</div>
 				<div sec:authorize="hasRole('ELTERNTEIL')">
 					<div class="navbar-nav mr-auto">
-						<a class="nav-item nav-link" th:href="@{/my-children}" th:text="#{children}"></a>
+						<a class="nav-item nav-link" th:href="@{/meine-kinder}" th:text="#{children}"></a>
 					</div>
 				</div>
 	 		</div>

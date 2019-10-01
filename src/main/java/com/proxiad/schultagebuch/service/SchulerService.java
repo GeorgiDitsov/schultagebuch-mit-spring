@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.repository.SchulerRepository;
 
@@ -30,9 +31,15 @@ public class SchulerService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Schuler find(int id, final Locale locale) {
+	public Schuler find(final int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.student", new Object[] { id }, locale)));
+	}
+
+	public Schuler findElternteilKind(final int schulerId, final Elternteil elternteil, final Locale locale) {
+		return repo.findById(schulerId).filter(kind -> elternteil.getKinder().contains(kind))
+				.orElseThrow(() -> new IllegalArgumentException(
+						messageSource.getMessage("invalid.parent.student.relation", null, locale)));
 	}
 
 	public Schuler findByBenutzerName(final String benutzerName, final Locale locale) {
@@ -40,7 +47,7 @@ public class SchulerService {
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}
 
-	public void delete(Schuler schuler) {
+	public void delete(final Schuler schuler) {
 		repo.delete(schuler);
 	}
 

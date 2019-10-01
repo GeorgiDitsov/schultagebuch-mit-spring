@@ -6,6 +6,7 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -29,14 +30,16 @@ public class BenutzerController {
 	private BenutzerService benutzerService;
 
 	@RequestMapping(value = "/benutzer")
-	public ModelAndView home() {
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView showAllBenutzer() {
 		List<Benutzer> listBenutzer = benutzerService.findAll();
 		ModelAndView mav = new ModelAndView("benutzerForm", "listBenutzer", listBenutzer);
 		return mav;
 	}
 
 	@RequestMapping(value = "/benutzer/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView editBenutzer(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("benutzer", benutzerService.find(id, locale));
@@ -44,8 +47,9 @@ public class BenutzerController {
 	}
 
 	@PostMapping(value = "/benutzer/save")
-	public RedirectView save(RedirectAttributes attributes, @ModelAttribute(name = "benutzer") @Valid Benutzer benutzer,
-			final BindingResult bindingResult) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView saveBenutzer(RedirectAttributes attributes,
+			@ModelAttribute(name = "benutzer") @Valid Benutzer benutzer, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		benutzerService.save(benutzer);
 		attributes.addFlashAttribute("successful", true);
@@ -53,7 +57,8 @@ public class BenutzerController {
 	}
 
 	@RequestMapping(value = "/benutzer/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView deleteBenitzer(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		benutzerService.delete(benutzerService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);

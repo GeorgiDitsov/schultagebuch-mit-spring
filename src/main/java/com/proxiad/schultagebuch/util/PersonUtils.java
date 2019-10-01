@@ -14,6 +14,19 @@ public final class PersonUtils {
 		// nothing
 	}
 
+	public static Object getPersonNachBenutzername(final String benutzername, final Object personService,
+			final Locale locale) {
+		Object person = null;
+		try {
+			person = personService.getClass().getMethod("findByBenutzerName", String.class, Locale.class)
+					.invoke(personService, benutzername, locale);
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return person;
+	}
+
 	public static Object getNeuePerson(Object person, Supplier<RolleService> rolleServiceSupplier,
 			final Locale locale) {
 		try {

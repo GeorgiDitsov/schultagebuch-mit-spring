@@ -95,6 +95,10 @@ public class Elternteil {
 		this.benutzer = benutzer;
 	}
 
+	public String getKennzeichen() {
+		return name + ", " + pin;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

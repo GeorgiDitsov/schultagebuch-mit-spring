@@ -3,6 +3,7 @@ package com.proxiad.schultagebuch.controller;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -29,12 +30,14 @@ public class KlasseController {
 	private KlasseService klasseService;
 
 	@RequestMapping(value = "/klasse")
-	public ModelAndView home() {
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView showAllKlassen() {
 		return new ModelAndView("klasseForm", "listKlasse", klasseService.findAll());
 	}
 
 	@RequestMapping(value = "/klasse/add")
-	public RedirectView emptyEntity(RedirectAttributes attributes) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView addKlasse(RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
 		attributes.addFlashAttribute("klasse", new Klasse());
@@ -42,7 +45,8 @@ public class KlasseController {
 	}
 
 	@RequestMapping(value = "/klasse/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView editKlasse(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
@@ -51,7 +55,8 @@ public class KlasseController {
 	}
 
 	@PostMapping(value = "/klasse/save")
-	public RedirectView save(RedirectAttributes attributes,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView saveKlasse(RedirectAttributes attributes,
 			@RequestParam(name = "klasseName") @KlasseNameConstraint String klasseName,
 			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
@@ -61,7 +66,8 @@ public class KlasseController {
 	}
 
 	@RequestMapping(value = "/klasse/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView deleteKlasse(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		klasseService.delete(klasseService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);

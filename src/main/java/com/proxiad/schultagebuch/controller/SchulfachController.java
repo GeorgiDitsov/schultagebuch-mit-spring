@@ -5,6 +5,7 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -28,12 +29,14 @@ public class SchulfachController {
 	private SchulfachService schulfachService;
 
 	@RequestMapping(value = "/schulfach")
-	public ModelAndView home() {
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView showAllSchulfaecher() {
 		return new ModelAndView("schulfachForm", "listSchulfach", schulfachService.findAll());
 	}
 
 	@RequestMapping(value = "/schulfach/add")
-	public RedirectView newEntity(RedirectAttributes attributes) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView addSchulfach(RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
 		attributes.addFlashAttribute("schulfach", new Schulfach());
@@ -41,7 +44,8 @@ public class SchulfachController {
 	}
 
 	@RequestMapping(value = "/schulfach/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView editSchulfach(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
@@ -50,7 +54,8 @@ public class SchulfachController {
 	}
 
 	@PostMapping(value = "/schulfach/save")
-	public RedirectView save(RedirectAttributes attributes,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView saveSchulfach(RedirectAttributes attributes,
 			@ModelAttribute(name = "schulfach") @Valid Schulfach schulfach, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		schulfachService.save(schulfach);
@@ -59,7 +64,8 @@ public class SchulfachController {
 	}
 
 	@RequestMapping(value = "/schulfach/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView deleteSchulfach(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		schulfachService.delete(schulfachService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);

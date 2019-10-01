@@ -5,6 +5,7 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -37,29 +38,23 @@ public class LehrerController {
 	private RolleService rolleService;
 
 	@RequestMapping(value = "/lehrer")
-	public ModelAndView home() {
-		return lehrerMav(new ModelAndView("lehrerForm"));
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView showAllLehrer() {
+		return allLehrerView(new ModelAndView("lehrerForm"));
 	}
 
 	@RequestMapping(value = "/lehrer/add")
-	public RedirectView newEntity(RedirectAttributes attributes, final Locale locale) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView addLehrer(RedirectAttributes attributes, final Locale locale) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
 		attributes.addFlashAttribute("lehrer", PersonUtils.getNeuePerson(new Lehrer(), () -> rolleService, locale));
 		return new RedirectView("/lehrer");
 	}
 
-	@PostMapping(value = "/lehrer/save")
-	public RedirectView save(RedirectAttributes attributes, @ModelAttribute(name = "lehrer") @Valid Lehrer lehrer,
-			final BindingResult bindingResult) {
-		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		lehrerService.save(lehrer);
-		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/lehrer");
-	}
-
 	@RequestMapping(value = "/lehrer/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView editLehrer(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
@@ -67,18 +62,29 @@ public class LehrerController {
 		return new RedirectView("/lehrer");
 	}
 
+	@PostMapping(value = "/lehrer/save")
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView saveLehrer(RedirectAttributes attributes, @ModelAttribute(name = "lehrer") @Valid Lehrer lehrer,
+			final BindingResult bindingResult) {
+		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
+		lehrerService.save(lehrer);
+		attributes.addFlashAttribute("successful", true);
+		return new RedirectView("/lehrer");
+	}
+
 	@RequestMapping(value = "/lehrer/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView deleteLehrer(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		lehrerService.delete(lehrerService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/lehrer");
 	}
 
-	private ModelAndView lehrerMav(ModelAndView mav) {
-		mav.addObject("listLehrer", lehrerService.findAll());
-		mav.addObject("listSchulfach", schulfachService.findAll());
-		return mav;
+	private ModelAndView allLehrerView(ModelAndView view) {
+		view.addObject("listLehrer", lehrerService.findAll());
+		view.addObject("listSchulfach", schulfachService.findAll());
+		return view;
 	}
 
 }

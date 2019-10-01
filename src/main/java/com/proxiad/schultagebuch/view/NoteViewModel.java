@@ -52,10 +52,4 @@ public class NoteViewModel {
 		this.noteDatum = noteDatum;
 	}
 
-	@Override
-	public String toString() {
-		return "NoteViewModel [schulfachName=" + schulfachName + ", lehrerName=" + lehrerName + ", note=" + note
-				+ ", noteDatum=" + noteDatum + "]";
-	}
-
 }

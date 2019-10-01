@@ -5,6 +5,7 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -42,12 +43,14 @@ public class SchulerController {
 	private RolleService rolleService;
 
 	@RequestMapping(value = "/schuler")
-	public ModelAndView home(final Locale locale) {
-		return schulerMav(new ModelAndView("schulerForm"), locale);
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView showAllSchuler(final Locale locale) {
+		return allSchulerView(new ModelAndView("schulerForm"), locale);
 	}
 
 	@RequestMapping(value = "/schuler/add")
-	public RedirectView newEntity(RedirectAttributes attributes, final Locale locale) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView addSchuler(RedirectAttributes attributes, final Locale locale) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
 		attributes.addFlashAttribute("schuler", PersonUtils.getNeuePerson(new Schuler(), () -> rolleService, locale));
@@ -55,7 +58,8 @@ public class SchulerController {
 	}
 
 	@RequestMapping(value = "/schuler/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView editSchuler(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
@@ -64,8 +68,9 @@ public class SchulerController {
 	}
 
 	@PostMapping(value = "/schuler/save")
-	public RedirectView save(RedirectAttributes attributes, @ModelAttribute(name = "schuler") @Valid Schuler schuler,
-			final BindingResult bindingResult) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView saveSchuler(RedirectAttributes attributes,
+			@ModelAttribute(name = "schuler") @Valid Schuler schuler, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		schulerService.save(schuler);
 		attributes.addFlashAttribute("successful", true);
@@ -73,19 +78,20 @@ public class SchulerController {
 	}
 
 	@RequestMapping(value = "/schuler/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView deleteSchuler(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		schulerService.delete(schulerService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/schuler");
 	}
 
-	private ModelAndView schulerMav(ModelAndView mav, final Locale locale) {
-		mav.addObject("listSchuler", schulerService.findAll());
-		mav.addObject("listKlasse", klasseService.findAll());
-		mav.addObject("listEltern", elternteilService.findAll());
-		mav.addObject("elternteil", PersonUtils.getNeuePerson(new Elternteil(), () -> rolleService, locale));
-		return mav;
+	private ModelAndView allSchulerView(ModelAndView view, final Locale locale) {
+		view.addObject("listSchuler", schulerService.findAll());
+		view.addObject("listKlasse", klasseService.findAll());
+		view.addObject("listEltern", elternteilService.findAll());
+		view.addObject("elternteil", PersonUtils.getNeuePerson(new Elternteil(), () -> rolleService, locale));
+		return view;
 	}
 
 }

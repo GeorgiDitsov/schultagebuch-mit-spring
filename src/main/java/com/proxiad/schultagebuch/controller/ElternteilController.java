@@ -5,6 +5,7 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,15 +34,14 @@ public class ElternteilController {
 	private SchulerService schulerService;
 
 	@RequestMapping(value = "/elternteil")
-	public ModelAndView home() {
-		ModelAndView mav = new ModelAndView("elternteilForm");
-		mav.addObject("listElternteil", elternteilService.findAll());
-		mav.addObject("listSchuler", schulerService.findAll());
-		return mav;
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView showAllEltern() {
+		return allElternView(new ModelAndView("elternteilForm"));
 	}
 
 	@RequestMapping(value = "/elternteil/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView editElternteil(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("elternteil", elternteilService.find(id, locale));
@@ -49,7 +49,8 @@ public class ElternteilController {
 	}
 
 	@PostMapping(value = "/elternteil/save")
-	public RedirectView save(RedirectAttributes attributes, @RequestHeader String referer,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView saveElternteil(RedirectAttributes attributes, @RequestHeader final String referer,
 			@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		elternteilService.save(elternteil);
@@ -58,11 +59,18 @@ public class ElternteilController {
 	}
 
 	@RequestMapping(value = "/elternteil/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView deleteElternteil(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
 			final Locale locale) {
 		elternteilService.delete(elternteilService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return new RedirectView("/elternteil");
+	}
+
+	private ModelAndView allElternView(ModelAndView view) {
+		view.addObject("listElternteil", elternteilService.findAll());
+		view.addObject("listSchuler", schulerService.findAll());
+		return view;
 	}
 
 }
