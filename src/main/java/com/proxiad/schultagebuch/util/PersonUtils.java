@@ -14,7 +14,7 @@ public final class PersonUtils {
 		// nothing
 	}
 
-	public static Object getPersonNachBenutzername(final String benutzername, final Object personService,
+	public static Object getPersonAusBenutzerName(final String benutzername, final Object personService,
 			final Locale locale) {
 		Object person = null;
 		try {

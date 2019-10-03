@@ -10,35 +10,40 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @Validated
-public class BaseController {
+public class BaseController extends AbstraktController {
+
+	private static final String LOG_IN_VIEW = "anmeldungForm";
+	private static final String HOME_VIEW = "index";
+	private static final String INFO_VIEW = "info";
+	private static final String UNAUTHORIZED_VIEW = "error/401";
 
 	@RequestMapping(value = "/login")
 	@PreAuthorize("isAnonymous()")
-	public ModelAndView logIn() {
-		return new ModelAndView("anmeldungForm");
+	public ModelAndView anmeldung() {
+		return super.ansicht(LOG_IN_VIEW);
 	}
 
 	@RequestMapping(value = "/home")
 	@PreAuthorize("!isAnonymous()")
 	public ModelAndView home() {
-		return new ModelAndView("index");
+		return super.ansicht(HOME_VIEW);
 	}
 
-	@RequestMapping(value = "/*/{locale:en|de}")
+	@RequestMapping(value = { "/*/{locale:en|de}", "/*/*/*/{locale:en|de}" })
 	@PreAuthorize("!isAnonymous()")
-	public RedirectView locate(@RequestHeader String referer) {
-		return new RedirectView(referer);
+	public RedirectView lokalisieren(@RequestHeader String referer) {
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/info")
 	@PreAuthorize("!isAnonymous()")
-	public ModelAndView userInfo() {
-		return new ModelAndView("info");
+	public ModelAndView info() {
+		return super.ansicht(INFO_VIEW);
 	}
 
 	@RequestMapping(value = "/unauthorized")
 	public ModelAndView unauthorized() {
-		return new ModelAndView("error/401");
+		return super.ansicht(UNAUTHORIZED_VIEW);
 	}
 
 }

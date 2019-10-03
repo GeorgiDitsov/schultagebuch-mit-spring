@@ -95,6 +95,10 @@ public class Lehrer {
 		this.benutzer = benutzer;
 	}
 
+	public String getKennzeichen() {
+		return name + ", " + pin;
+	}
+
 	public String getSchulfaecherKennzeichen() {
 		StringBuilder kennzeichen = new StringBuilder();
 		Optional.of(schulfachSet).filter(set -> !set.isEmpty())

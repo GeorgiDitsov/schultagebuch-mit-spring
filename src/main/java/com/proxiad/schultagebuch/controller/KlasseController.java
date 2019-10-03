@@ -24,54 +24,54 @@ import com.proxiad.schultagebuch.validator.constraint.KlasseNameConstraint;
 
 @Controller
 @Validated
-public class KlasseController {
+public class KlasseController extends AbstraktController {
 
 	@Autowired
 	private KlasseService klasseService;
 
 	@RequestMapping(value = "/klasse")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView showAllKlassen() {
-		return new ModelAndView("klasseForm", "listKlasse", klasseService.findAll());
+	public ModelAndView alleKlassenZeigen() {
+		return super.ansicht("klasseForm", "listKlasse", klasseService.findAll());
 	}
 
 	@RequestMapping(value = "/klasse/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView addKlasse(RedirectAttributes attributes) {
+	public RedirectView neueKlasse(RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
 		attributes.addFlashAttribute("klasse", new Klasse());
-		return new RedirectView("/klasse");
+		return super.umleiten("/klasse");
 	}
 
 	@RequestMapping(value = "/klasse/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView editKlasse(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
+	public RedirectView bestehendeKlasse(@PathVariable(value = "id") final int id, final Locale locale,
+			RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("klasse", klasseService.find(id, locale));
-		return new RedirectView("/klasse");
+		return super.umleiten("/klasse");
 	}
 
 	@PostMapping(value = "/klasse/save")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView saveKlasse(RedirectAttributes attributes,
-			@RequestParam(name = "klasseName") @KlasseNameConstraint String klasseName,
-			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult) {
+	public RedirectView klasseSpeichern(@RequestParam(name = "klasseName") @KlasseNameConstraint String klasseName,
+			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult,
+			RedirectAttributes attributes) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		klasseService.save(KlasseUtils.erstellenAusString(klasse, klasseName));
+		klasseService.save(KlasseUtils.getKlasseAusString(klasse, klasseName));
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/klasse");
+		return super.umleiten("/klasse");
 	}
 
 	@RequestMapping(value = "/klasse/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView deleteKlasse(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
+	public RedirectView klasseLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
+			RedirectAttributes attributes) {
 		klasseService.delete(klasseService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/klasse");
+		return super.umleiten("/klasse");
 	}
 
 }

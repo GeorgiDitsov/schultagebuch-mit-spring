@@ -21,6 +21,8 @@ import com.proxiad.schultagebuch.view.NoteViewModel;
 @Transactional
 public class NoteService {
 
+	private static final String DATE_TIME_PATTERN = "dd-MMM-yyyy HH:mm:ss";
+
 	@Autowired
 	private NoteRepository repo;
 
@@ -28,7 +30,7 @@ public class NoteService {
 		repo.save(note);
 	}
 
-	public List<NoteViewModel> findBySchuler(final Schuler schuler) {
+	public List<NoteViewModel> findNoteViewModelBySchuler(final Schuler schuler) {
 		List<NoteViewModel> notenView = new ArrayList<>();
 		repo.findBySchulerOrderByDatumDesc(schuler).stream().forEach(note -> {
 			notenView.add(getNoteViewModel(note));
@@ -40,20 +42,20 @@ public class NoteService {
 		repo.delete(note);
 	}
 
-	public List<KindViewModel> getKinder(final Elternteil elternteil, final Locale locale) {
+	public List<KindViewModel> getKinderViewModel(final Elternteil elternteil, final Locale locale) {
 		List<KindViewModel> kinderList = new ArrayList<>();
 		elternteil.getKinder().stream().forEach(kind -> kinderList
-				.add(new KindViewModel(kind.getId(), kind.getKennzeichen(), getLetzteNote(kind, locale))));
+				.add(new KindViewModel(kind.getId(), kind.getKennzeichen(), getSchulerLetzteNote(kind, locale))));
 		return kinderList;
 	}
 
-	private String getLetzteNote(final Schuler schuler, final Locale locale) {
+	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
 		Optional<Note> optionalNote = repo.findFirstBySchulerOrderByDatumDesc(schuler);
 		if (optionalNote.isPresent()) {
 			Note note = optionalNote.get();
 			return note.getSchulstunde().getSchulfach().getName() + ", " + note.getSchulstunde().getLehrer().getName()
 					+ ", " + note.getWert() + ", "
-					+ note.getDatum().format(DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss", locale));
+					+ note.getDatum().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, locale));
 		}
 		return "n/a";
 	}

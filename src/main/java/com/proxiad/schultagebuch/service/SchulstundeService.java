@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.repository.SchulstundeRepository;
 
@@ -32,6 +33,10 @@ public class SchulstundeService {
 	public Schulstunde find(int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.course", new Object[] { id }, locale)));
+	}
+
+	public List<Schulstunde> findByLehrer(final Lehrer lehrer) {
+		return repo.findByLehrerOrderByKlasseIdAscIdAsc(lehrer);
 	}
 
 	public void delete(Schulstunde schulstunde) {

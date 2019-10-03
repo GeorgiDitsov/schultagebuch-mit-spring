@@ -45,7 +45,7 @@ public class Klasse {
 	private Set<Schulstunde> schulstundeSet;
 
 	@Size(max = 30)
-	@OneToMany(mappedBy = "klasse")
+	@OneToMany(mappedBy = "klasse", fetch = FetchType.EAGER)
 	private Set<Schuler> schulerSet;
 
 	public Klasse() {

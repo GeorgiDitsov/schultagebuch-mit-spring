@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,11 @@ public class LehrerService {
 	public Lehrer find(int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.teacher", new Object[] { id }, locale)));
+	}
+
+	public Lehrer findByBenutzerName(final String benutzerName, final Locale locale) {
+		return repo.findByBenutzerBenutzerName(benutzerName)
+				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}
 
 	public void delete(Lehrer lehrer) {

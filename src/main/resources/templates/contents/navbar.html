@@ -26,6 +26,7 @@
 				</div>
 				<div sec:authorize="hasRole('LEHRER')">
 					<div class="navbar-nav mr-auto">
+						<a class="nav-item nav-link" th:href="@{/meine-schulstunden}" th:text="#{courses}"></a>
 					</div>
 				</div>
 				<div sec:authorize="hasRole('ELTERNTEIL')">

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Elternteil;
+import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.repository.SchulerRepository;
 
@@ -29,6 +30,10 @@ public class SchulerService {
 
 	public List<Schuler> findAll() {
 		return repo.findAllByOrderByIdAsc();
+	}
+
+	public List<Schuler> findSchulernViewModel(Klasse klasse) {
+		return repo.findByKlasseOrderByIdAsc(klasse);
 	}
 
 	public Schuler find(final int id, final Locale locale) {

@@ -1,6 +1,8 @@
 package com.proxiad.schultagebuch.controller;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -26,7 +28,7 @@ import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
 @Validated
-public class SchulstundeController {
+public class SchulstundeController extends AbstraktController {
 
 	@Autowired
 	private SchulstundeService schulstundeService;
@@ -42,53 +44,51 @@ public class SchulstundeController {
 
 	@RequestMapping(value = "/schulstunde")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView showAllSchulstunden() {
-		return allSchulstundenView(new ModelAndView("schulstundeForm"));
+	public ModelAndView alleSchulstundenZeigen() {
+		Map<String, Object> attributes = new HashMap<>();
+		attributes.put("listSchulstunde", schulstundeService.findAll());
+		attributes.put("listKlasse", klasseService.findAll());
+		attributes.put("listSchulfach", schulfachService.findAll());
+		attributes.put("listLehrer", lehrerService.findAll());
+		return super.ansicht("schulstundeForm", attributes);
 	}
 
 	@RequestMapping(value = "/schulstunde/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView addSchulstunde(RedirectAttributes attributes) {
+	public RedirectView neueSchulstunde(RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
 		attributes.addFlashAttribute("schulstunde", new Schulstunde());
-		return new RedirectView("/schulstunde");
+		return super.umleiten("/schulstunde");
 	}
 
 	@RequestMapping(value = "/schulstunde/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView editSchulstunde(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
+	public RedirectView bestehendeSchulstunde(@PathVariable(value = "id") final int id, final Locale locale,
+			RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("schulstunde", schulstundeService.find(id, locale));
-		return new RedirectView("/schulstunde");
+		return super.umleiten("/schulstunde");
 	}
 
 	@PostMapping(value = "/schulstunde/save")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView saveSchulstunde(RedirectAttributes attributes,
-			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde, final BindingResult bindingResult) {
+	public RedirectView schulstundeSpeichern(@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde,
+			final BindingResult bindingResult, RedirectAttributes attributes) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		schulstundeService.save(schulstunde);
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/schulstunde");
+		return super.umleiten("/schulstunde");
 	}
 
 	@RequestMapping(value = "/schulstunde/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView deleteSchulstunde(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
+	public RedirectView schulstundeLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
+			RedirectAttributes attributes) {
 		schulstundeService.delete(schulstundeService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/schulstunde");
+		return super.umleiten("/schulstunde");
 	}
 
-	private ModelAndView allSchulstundenView(ModelAndView view) {
-		view.addObject("listSchulstunde", schulstundeService.findAll());
-		view.addObject("listKlasse", klasseService.findAll());
-		view.addObject("listSchulfach", schulfachService.findAll());
-		view.addObject("listLehrer", lehrerService.findAll());
-		return view;
-	}
 }

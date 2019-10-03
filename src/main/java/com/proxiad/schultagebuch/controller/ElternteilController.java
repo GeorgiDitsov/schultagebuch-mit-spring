@@ -1,6 +1,8 @@
 package com.proxiad.schultagebuch.controller;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -25,7 +27,7 @@ import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
 @Validated
-public class ElternteilController {
+public class ElternteilController extends AbstraktController {
 
 	@Autowired
 	private ElternteilService elternteilService;
@@ -35,42 +37,39 @@ public class ElternteilController {
 
 	@RequestMapping(value = "/elternteil")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView showAllEltern() {
-		return allElternView(new ModelAndView("elternteilForm"));
+	public ModelAndView alleElternZeigen() {
+		Map<String, Object> attributes = new HashMap<>();
+		attributes.put("listElternteil", elternteilService.findAll());
+		attributes.put("listSchuler", schulerService.findAll());
+		return super.ansicht("elternteilForm", attributes);
 	}
 
 	@RequestMapping(value = "/elternteil/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView editElternteil(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
+	public RedirectView bestehendesElternteil(@PathVariable(value = "id") final int id, final Locale locale,
+			RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("elternteil", elternteilService.find(id, locale));
-		return new RedirectView("/elternteil");
+		return super.umleiten("/elternteil");
 	}
 
 	@PostMapping(value = "/elternteil/save")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView saveElternteil(RedirectAttributes attributes, @RequestHeader final String referer,
+	public RedirectView elternteilSpeichern(RedirectAttributes attributes, @RequestHeader final String referer,
 			@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil, final BindingResult bindingResult) {
 		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
 		elternteilService.save(elternteil);
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView(referer);
+		return super.umleiten("/elternteil");
 	}
 
 	@RequestMapping(value = "/elternteil/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView deleteElternteil(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
+	public RedirectView elternteilLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
+			RedirectAttributes attributes) {
 		elternteilService.delete(elternteilService.find(id, locale));
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/elternteil");
-	}
-
-	private ModelAndView allElternView(ModelAndView view) {
-		view.addObject("listElternteil", elternteilService.findAll());
-		view.addObject("listSchuler", schulerService.findAll());
-		return view;
+		return super.umleiten("/elternteil");
 	}
 
 }
