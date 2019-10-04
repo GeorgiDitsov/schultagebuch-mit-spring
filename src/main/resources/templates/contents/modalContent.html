@@ -186,10 +186,18 @@
 		  			<td th:text="${noteViewModel.schulfachName}">
 		  			<td th:text="${noteViewModel.lehrerName}">
 		  			<td th:text="${noteViewModel.note}">
-		  			<td th:text="${#temporals.format(noteViewModel.noteDatum, 'dd-MMM-yyyy HH:mm:ss')}">
+		  			<td th:text="${noteViewModel.noteDatum}">
 		  		</tr>
 	  		</table>
 		</div>
+	</div>
+	<div th:fragment="addNote">
+		<form th:action="@{/note/save}" method="post" th:object="${note}">
+			<input type="text" class="form-control w-50" th:field="*{wert}" th:value="#{grade}" th:placeholder="#{grade}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<input type="hidden"th:field="*{schuler}">
+			<input type="hidden"th:field="*{schulstunde}">
+			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
 	</div>
 </body>
 </html>

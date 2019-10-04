@@ -1,7 +1,6 @@
 package com.proxiad.schultagebuch.util;
 
 import java.util.Locale;
-import java.util.function.Supplier;
 
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Lehrer;
@@ -17,13 +16,10 @@ public final class RolleUtils {
 		// nothing
 	}
 
-	public static Rolle getValidRole(final Object person, Supplier<RolleService> rolleServiceSupplier,
-			final Locale locale) {
-		return rolleServiceSupplier
-				.get().find(
-						person instanceof Schuler ? RolleTyp.ROLLE_SCHULER
-								: person instanceof Lehrer ? RolleTyp.ROLLE_LEHRER
-										: person instanceof Elternteil ? RolleTyp.ROLLE_ELTERNTEIL : FALSCH_ROLLE,
-						locale);
+	public static Rolle getValidRole(final Object person, RolleService rolleServiceSupplier, final Locale locale) {
+		return rolleServiceSupplier.find(person instanceof Schuler ? RolleTyp.ROLLE_SCHULER
+				: person instanceof Lehrer ? RolleTyp.ROLLE_LEHRER
+						: person instanceof Elternteil ? RolleTyp.ROLLE_ELTERNTEIL : FALSCH_ROLLE,
+				locale);
 	}
 }

@@ -53,7 +53,7 @@ public class LehrerController extends AbstraktController {
 	public RedirectView neuerLehrer(final Locale locale, RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
-		attributes.addFlashAttribute("lehrer", PersonUtils.getNeuePerson(new Lehrer(), () -> rolleService, locale));
+		attributes.addFlashAttribute("lehrer", PersonUtils.getNeuePerson(new Lehrer(), rolleService, locale));
 		return super.umleiten("/lehrer");
 	}
 

@@ -51,7 +51,7 @@ public class SchulerController extends AbstraktController {
 		attributes.put("listSchuler", schulerService.findAll());
 		attributes.put("listKlasse", klasseService.findAll());
 		attributes.put("listEltern", elternteilService.findAll());
-		attributes.put("elternteil", PersonUtils.getNeuePerson(new Elternteil(), () -> rolleService, locale));
+		attributes.put("elternteil", PersonUtils.getNeuePerson(new Elternteil(), rolleService, locale));
 		return super.ansicht("schulerForm", attributes);
 	}
 
@@ -60,7 +60,7 @@ public class SchulerController extends AbstraktController {
 	public RedirectView neuerSchuler(final Locale locale, RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", true);
 		attributes.addFlashAttribute("edit", false);
-		attributes.addFlashAttribute("schuler", PersonUtils.getNeuePerson(new Schuler(), () -> rolleService, locale));
+		attributes.addFlashAttribute("schuler", PersonUtils.getNeuePerson(new Schuler(), rolleService, locale));
 		return super.umleiten("/schuler");
 	}
 

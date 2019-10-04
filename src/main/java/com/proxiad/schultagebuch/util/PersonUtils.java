@@ -2,7 +2,6 @@ package com.proxiad.schultagebuch.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
-import java.util.function.Supplier;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Rolle;
@@ -27,8 +26,7 @@ public final class PersonUtils {
 		return person;
 	}
 
-	public static Object getNeuePerson(Object person, Supplier<RolleService> rolleServiceSupplier,
-			final Locale locale) {
+	public static Object getNeuePerson(Object person, RolleService rolleServiceSupplier, final Locale locale) {
 		try {
 			person.getClass().getMethod("setBenutzer", Benutzer.class).invoke(person,
 					getBenutzer(RolleUtils.getValidRole(person, rolleServiceSupplier, locale)));

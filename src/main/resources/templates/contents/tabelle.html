@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
 	<div th:fragment="schulerNotenTabelle" class="table-responsive mt-5">
 		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
@@ -9,13 +9,18 @@
 		        	<th scope="col" th:text="#{teacher}">
 		        	<th scope="col" th:text="#{grade}">
 		        	<th scope="col" th:text="#{date}">
+		        	<th sec:authorize="hasRole('LEHRER')" scope="col" th:text=#{options}>
 		    	</tr>
 		   	</thead>
 	  		<tr th:each="noteViewModel: ${listNoten}">
 	  			<td th:text="${noteViewModel.schulfachName}">
 	  			<td th:text="${noteViewModel.lehrerName}">
 	  			<th th:text="${noteViewModel.note}">
-	  			<td th:text="${#temporals.format(noteViewModel.noteDatum, 'dd-MMM-yyyy HH:mm:ss')}">
+	  			<td th:text="${noteViewModel.noteDatum}">
+	  			<td sec:authorize="hasRole('LEHRER')">
+	  				<a th:href="@{'/note/edit/'+${}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+	  				<a th:href="@{'/note/delete/'+${}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+	  			</td>
 	  		</tr>
 		</table>
 	</div>
@@ -42,27 +47,16 @@
 					<th scope="col" th:text="#{subject}">
 					<th scope="col" th:text="#{class}">
 					<th scope="col" th:text="#{students}">
-					<th scope="col" th:text="#{options}">
 				</tr>
 			</thead>
 			<tr th:each="schulstunde: ${listSchulstunden}">
 				<td th:text="${schulstunde.schulfach.name}">
 				<td th:text="${schulstunde.klasse.kennzeichen}">
-				<td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(schulstunde.klasse.schulerSet)}">
-				<td><a th:href="@{'/schuler-noten/schulstunde/'+${schulstunde.id}}" class="btn btn-primary" role="button" th:text="#{grades}"></a></td>
-			</tr>
-		</table>
-	</div>
-	<div th:fragment="schulerImKlasseTabelle" class="table-responsive mt-5">
-		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
-			<thead class="thead-dark">
-				<tr>
-					<th scope="col" th:text="#{student}">
-					<th scope="col" th:text="#{grades}">
-				</tr>
-			</thead>
-			<tr th:each="schuler: ${listSchulern}">
-				<td th:text="${@kennzeichenUtils.personKennzeichen(schuler)}">
+				<td>
+					<th:block th:each="schuler: ${schulstunde.klasse.schulerSet}">
+						<a th:href="${'/meine-schulstunden/schulstunde/'+{schulstunde.id}+'/schuler/'+{schuler.id}}" th:text="${@kennzeichenUtils.personKennzeichen(schuler)}"></a><br/>
+					</th:block>
+				</td>
 			</tr>
 		</table>
 	</div>

@@ -13,10 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
 
 import com.proxiad.schultagebuch.validator.constraint.BenutzerLehrerRolleContraint;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
@@ -41,10 +43,15 @@ public class Lehrer {
 	@Column(name = "lehrer_pin", unique = true)
 	private String pin;
 
+	@Valid
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "lehrer_schulfach", joinColumns = { @JoinColumn(name = "lehrer_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "schulfach_id") })
 	private Set<Schulfach> schulfachSet;
+
+	@Valid
+	@OneToMany(mappedBy = "lehrer", fetch = FetchType.EAGER)
+	private Set<Schulstunde> schulstundeSet;
 
 	@BenutzerLehrerRolleContraint
 	@OneToOne(cascade = CascadeType.ALL)
@@ -85,6 +92,14 @@ public class Lehrer {
 
 	public void setSchulfachSet(Set<Schulfach> schulfachSet) {
 		this.schulfachSet = schulfachSet;
+	}
+
+	public Set<Schulstunde> getSchulstundeSet() {
+		return schulstundeSet;
+	}
+
+	public void setSchulstundeSet(Set<Schulstunde> schulstundeSet) {
+		this.schulstundeSet = schulstundeSet;
 	}
 
 	public Benutzer getBenutzer() {

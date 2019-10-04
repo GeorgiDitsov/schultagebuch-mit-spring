@@ -19,13 +19,20 @@
 		</div>
 	</div>
 	<div sec:authorize="hasRole('LEHRER')">
-		<div th:replace="contents/heading.html :: formHeading(title=#{title.teacher(${lehrer.kennzeichen})}, buttonLink=${null})"></div>
-		<div th:replace="contents/tabelle.html :: lehrerSchulstundeTabelle"></div>
+		<div th:replace="contents/heading.html :: formHeading(title=#{title.course(${schulstunde.klasse.kennzeichen}, ${schulstunde.schulfach.name})}+', '+#{title.student(${@kennzeichenUtils.personKennzeichen(schuler)})}, buttonLink='schulstunde/'+${schulstunde.id}+'/schuler/'+${schuler.id}+'/note')"></div>
+		<div th:replace="contents/tabelle.html :: schulerNotenTabelle"></div>
+		<div th:if="${add}">
+			<div th:replace="contents/modal.html :: modal(id='addModal', title=#{modal.add.title.grade}, content='addNote')"></div>
+		</div>
+		<div th:if="${edit}">
+			
+		</div>
 	</div>
 <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
 <script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
 <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
 <script th:src="@{/js/localization.js}" type="text/javascript"></script>
 <script th:src="@{/js/userContent.js}" type="text/javascript"></script>
+<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
 </body>
 </html>

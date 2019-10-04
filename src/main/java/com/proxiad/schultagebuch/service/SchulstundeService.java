@@ -30,7 +30,7 @@ public class SchulstundeService {
 		return repo.findAllByOrderByKlasseIdAscIdAsc();
 	}
 
-	public Schulstunde find(int id, final Locale locale) {
+	public Schulstunde find(final int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.course", new Object[] { id }, locale)));
 	}

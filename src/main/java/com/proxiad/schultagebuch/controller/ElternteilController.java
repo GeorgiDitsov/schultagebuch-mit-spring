@@ -40,7 +40,6 @@ public class ElternteilController extends AbstraktController {
 	public ModelAndView alleElternZeigen() {
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("listElternteil", elternteilService.findAll());
-		attributes.put("listSchuler", schulerService.findAll());
 		return super.ansicht("elternteilForm", attributes);
 	}
 
@@ -49,6 +48,7 @@ public class ElternteilController extends AbstraktController {
 	public RedirectView bestehendesElternteil(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
+		attributes.addFlashAttribute("listSchuler", schulerService.findAll());
 		attributes.addFlashAttribute("elternteil", elternteilService.find(id, locale));
 		return super.umleiten("/elternteil");
 	}

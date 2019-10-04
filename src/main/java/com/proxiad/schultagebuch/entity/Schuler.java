@@ -14,7 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -48,6 +50,11 @@ public class Schuler {
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "klasse_id", nullable = true)
 	private Klasse klasse;
+
+	@Valid
+	@OneToMany(mappedBy = "schuler", fetch = FetchType.EAGER)
+	@OrderBy("note_datum DESC")
+	private Set<Note> notenSet;
 
 	@Size(min = 1, max = 2)
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -93,6 +100,14 @@ public class Schuler {
 
 	public void setKlasse(Klasse klasse) {
 		this.klasse = klasse;
+	}
+
+	public Set<Note> getNotenSet() {
+		return notenSet;
+	}
+
+	public void setNotenSet(Set<Note> notenSet) {
+		this.notenSet = notenSet;
 	}
 
 	public Set<Elternteil> getEltern() {

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
+import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.repository.NoteRepository;
 import com.proxiad.schultagebuch.view.KindViewModel;
 import com.proxiad.schultagebuch.view.NoteViewModel;
@@ -30,12 +31,21 @@ public class NoteService {
 		repo.save(note);
 	}
 
-	public List<NoteViewModel> findNoteViewModelBySchuler(final Schuler schuler) {
-		List<NoteViewModel> notenView = new ArrayList<>();
-		repo.findBySchulerOrderByDatumDesc(schuler).stream().forEach(note -> {
-			notenView.add(getNoteViewModel(note));
+	public List<NoteViewModel> getListNoteViewModelBySchuler(final Schuler schuler, final Locale locale) {
+		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
+		schuler.getNotenSet().stream().forEach(note -> {
+			noteViewModelsList.add(getNoteViewModel(note, locale));
 		});
-		return notenView;
+		return noteViewModelsList;
+	}
+
+	public List<NoteViewModel> getListNoteViewModelBySchulerUndSchulstunde(final Schuler schuler,
+			final Schulstunde schulstunde, final Locale locale) {
+		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
+		schuler.getNotenSet().stream().filter(note -> note.getSchulstunde().equals(schulstunde)).forEach(note -> {
+			noteViewModelsList.add(getNoteViewModel(note, locale));
+		});
+		return noteViewModelsList;
 	}
 
 	public void delete(final Note note) {
@@ -53,15 +63,14 @@ public class NoteService {
 		Optional<Note> optionalNote = repo.findFirstBySchulerOrderByDatumDesc(schuler);
 		if (optionalNote.isPresent()) {
 			Note note = optionalNote.get();
-			return note.getSchulstunde().getSchulfach().getName() + ", " + note.getSchulstunde().getLehrer().getName()
-					+ ", " + note.getWert() + ", "
-					+ note.getDatum().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, locale));
+			return getNoteViewModel(note, locale).toString();
 		}
 		return "n/a";
 	}
 
-	private NoteViewModel getNoteViewModel(final Note note) {
+	private NoteViewModel getNoteViewModel(final Note note, final Locale locale) {
 		return new NoteViewModel(note.getSchulstunde().getSchulfach().getName(),
-				note.getSchulstunde().getLehrer().getName(), note.getWert(), note.getDatum());
+				note.getSchulstunde().getLehrer().getName(), note.getWert(),
+				note.getDatum().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, locale)));
 	}
 }
