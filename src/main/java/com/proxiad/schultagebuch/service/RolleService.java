@@ -22,11 +22,11 @@ public class RolleService {
 	@Autowired
 	private MessageSource messageSource;
 
-	public List<Rolle> findAll() {
+	public List<Rolle> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Rolle find(RolleTyp rolleTyp, final Locale locale) {
+	public Rolle finden(final RolleTyp rolleTyp, final Locale locale) {
 		return repo.findByName(rolleTyp).orElseThrow(
 				() -> new IllegalArgumentException(messageSource.getMessage("invalid.role", null, locale)));
 	}

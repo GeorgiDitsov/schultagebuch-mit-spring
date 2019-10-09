@@ -22,25 +22,29 @@ public class LehrerService {
 	@Autowired
 	private MessageSource messageSource;
 
-	public void save(Lehrer lehrer) {
+	public List<Lehrer> suche(final String lehrerName) {
+		return repo.findByNameIgnoreCaseLikeOrderByIdAsc("%" + lehrerName + "%");
+	}
+
+	public void speichern(final Lehrer lehrer) {
 		repo.save(lehrer);
 	}
 
-	public List<Lehrer> findAll() {
+	public List<Lehrer> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Lehrer find(int id, final Locale locale) {
+	public Lehrer finden(final int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.teacher", new Object[] { id }, locale)));
 	}
 
-	public Lehrer findByBenutzerName(final String benutzerName, final Locale locale) {
+	public Lehrer findeNachBenutzerName(final String benutzerName, final Locale locale) {
 		return repo.findByBenutzerBenutzerName(benutzerName)
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}
 
-	public void delete(Lehrer lehrer) {
+	public void loeschen(final Lehrer lehrer) {
 		repo.delete(lehrer);
 	}
 }

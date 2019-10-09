@@ -1,6 +1,169 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
+	<div th:fragment="alleBenutzerTabelle" class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
+	        <thead class="thead-dark">
+		        <tr>
+		        	<th scope="col" th:text="#{id}">
+		           	<th scope="col" th:text="#{user.name}">
+		            <th scope="col" th:text="#{user.password}">
+		            <th scope="col" th:text="#{user.role}">
+	            	<th scope="col" th:text="#{options}">
+		        </tr>
+	        </thead>
+	        <tr th:each="benutzer: ${listBenutzer}">
+	            <th scope="row" th:text="${benutzer.id}">
+	            <td th:text="${benutzer.benutzerName}">
+	            <td th:text="${benutzer.passwort}">
+	            <td th:text="${benutzer.rolle.name.kennzeichen}">
+	            <td>
+	            	<a th:href="@{'/benutzer/edit/'+${benutzer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+	            	<!-- <a th:href="@{'benutzer/delete/'+${benutzer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a> -->
+	            </td>
+	        </tr>
+	    </table>
+	</div>
+	<div th:fragment="alleSchulernTabelle" class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-75 shadow">
+	        <thead class="thead-dark">
+	        	<tr>
+	        		<th scope="col" th:text="#{id}">
+	            	<th scope="col" th:text="#{name}">
+	            	<th scope="col" th:text="#{pin}">
+	            	<th scope="col" th:text="#{class}">
+	            	<th scope="col" th:text="#{parents}">
+	            	<th scope="col" th:text="#{user.name}">
+	            	<th scope="col" th:text="#{options}">
+	        	</tr>
+	        </thead>
+	        <tr th:each="schuler: ${listSchuler}">
+	            <th scope="row" th:text="${schuler.id}">
+	            <td th:text="${schuler.name}">
+	            <td th:text="${@kennzeichenUtils.pinKennzeichen(schuler.pin)}">
+	            <td th:text="${schuler.klasseKennzeichen}">
+	            <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(schuler.eltern)}">
+	            <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(schuler.benutzer)}">
+	            <td>
+	            	<a th:href="@{'/schuler/edit/'+${schuler.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+	            	<a th:href="@{'/schuler/delete/'+${schuler.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+	            </td>
+	        </tr>
+	    </table>
+   	</div>
+   	<div th:fragment="alleElternTabelle" class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
+	    	<thead class="thead-dark">
+	       		<tr>
+	       			<th scope="col" th:text="#{id}">
+	            	<th scope="col" th:text="#{name}">
+	            	<th scope="col" th:text="#{pin}">
+	           		<th scope="col" th:text="#{children}">
+	           		<th scope="col" th:text="#{user.name}">
+	       			<th scope="col" th:text="#{options}">
+		       	</tr>
+		   	</thead>
+		    <tr th:each="elternteil: ${listElternteil}">
+		        <th scope="row" th:text="${elternteil.id}">
+		        <td th:text="${elternteil.name}">
+		        <td th:text="${@kennzeichenUtils.pinKennzeichen(elternteil.pin)}">
+		        <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(elternteil.kinder)}">
+		        <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(elternteil.benutzer)}">
+		        <td>
+			        <a th:href="@{'/elternteil/edit/'+${elternteil.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+			       	<a th:href="@{'/elternteil/delete/'+${elternteil.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+		        </td>
+		    </tr>
+	    </table>
+	</div>
+	<div th:fragment="alleLehrernTabelle" class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
+	        <thead class="thead-dark">
+		    	<tr>
+		        	<th scope="col" th:text="#{id}">
+	            	<th scope="col" th:text="#{name}">
+	            	<th scope="col" th:text="#{pin}">
+		            <th scope="col" th:text="#{subjects}">
+		            <th scope="col" th:text="#{user.name}">
+	            	<th scope="col" th:text="#{options}">
+		        </tr>
+	        </thead>
+	        <tr th:each="lehrer: ${listLehrer}">
+	            <th scope="row" th:text="${lehrer.id}">
+	            <td th:text="${lehrer.name}">
+	            <td th:text="${@kennzeichenUtils.pinKennzeichen(lehrer.pin)}">
+	            <td style="white-space: pre;" th:text="${lehrer.schulfaecherKennzeichen}">
+	            <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(lehrer.benutzer)}">
+	            <td>
+	            	<a th:href="@{'/lehrer/edit/'+${lehrer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+	            	<a th:href="@{'/lehrer/delete/'+${lehrer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+	            </td>
+	        </tr>
+	    </table>
+	</div>
+	<div th:fragment="alleSchulfaecherTabelle" class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
+			<thead class="thead-dark">
+		        <tr>
+		            <th scope="col" th:text="#{id}">
+	            	<th scope="col" th:text="#{name}">
+		            <th scope="col" th:text="#{teachers}">
+		            <th scope="col" th:text="#{options}">
+		        </tr>
+		    </thead>
+	        <tr th:each="schulfach: ${listSchulfach}">
+	            <th scope="row" th:text="${schulfach.id}">
+	            <td th:text="${schulfach.name}">
+	            <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(schulfach.lehrerSet)}">
+	            <td>
+	            	<a th:href="@{'/schulfach/edit/'+${schulfach.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+	            	<a th:href="@{'/schulfach/delete/'+${schulfach.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+	            </td>
+	        </tr>
+	    </table>
+    </div>
+    <div th:fragment="alleSchulstundenTabelle" class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
+			<thead class="thead-dark">
+		        <tr>
+		            <th scope="col" th:text="#{id}">
+		            <th scope="col" th:text="#{class}">
+		            <th scope="col" th:text="#{subject}">
+		            <th scope="col" th:text="#{teacher}">
+		            <th scope="col" th:text="#{options}">
+		        </tr>
+		    </thead> 
+	        <tr th:each="schulstunde: ${listSchulstunde}">
+	            <th scope="row" th:text="${schulstunde.id}">
+	            <td th:text="${schulstunde.klasse.kennzeichen}">
+	            <td th:text="${schulstunde.schulfach.name}">
+	            <td th:text="${schulstunde.lehrerKennzeichen}">
+	            <td>
+	            	<a th:href="@{'/schulstunde/edit/'+${schulstunde.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+	            	<a th:href="@{'/schulstunde/delete/'+${schulstunde.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+	            </td>
+	        </tr>
+	    </table>
+	 </div>
+	 <div th:fragment="alleKlassenTabelle" class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
+		    <thead class="thead-dark">
+		    	<tr>
+		            <th scope="col" th:text="#{id}">
+		            <th scope="col" th:text="#{class}">
+		            <th scope="col" th:text="#{options}">
+		        </tr>
+		    </thead>
+		    <tr th:each="klasse: ${listKlasse}">
+		    	<th scope="row" th:text="${klasse.id}">
+		        <td th:text="${klasse.kennzeichen}">
+		        <td>
+		        	<a th:href="@{'/klasse/edit/'+${klasse.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+		           	<a th:href="@{'/klasse/delete/'+${klasse.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+		       	</td>
+		    </tr>
+	    </table>
+	</div>
 	<div th:fragment="schulerNotenTabelle" class="table-responsive mt-5">
 		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
 			<thead class="thead-dark">
@@ -18,8 +181,8 @@
 	  			<th th:text="${noteViewModel.note}">
 	  			<td th:text="${noteViewModel.noteDatum}">
 	  			<td sec:authorize="hasRole('LEHRER')">
-	  				<a th:href="@{'/note/edit/'+${}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-	  				<a th:href="@{'/note/delete/'+${}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+	  				<a th:href="@{'/note/edit/'+${noteViewModel.noteId}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+	  				<a th:href="@{'/note/delete/'+${noteViewModel.noteId}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 	  			</td>
 	  		</tr>
 		</table>
@@ -30,13 +193,17 @@
 				<tr>
 					<th scope="col" th:text="#{child}">
 					<th scope="col" th:text="#{last.grade}">
+					<th scope="col" th:text="#{half.year.success}">
 					<th scope="col" th:text="#{options}">
 				</tr>
 			</thead>
 			<tr th:each="kindViewModel: ${listKinder}">
 				<td th:text="${kindViewModel.kindKennzeichen}">
 				<td th:text="${kindViewModel.letzteNoteKennzeichen}">
-				<td><a th:href="@{'/meine-kinder/noten/'+${kindViewModel.kindId}}" class="btn btn-primary" role="button" th:text="#{grades}"></a></td>
+				<td th:text="${kindViewModel.halbjaehrigeErfolg}">
+				<td>
+					<a th:href="@{'/meine-kinder/noten/'+${kindViewModel.kindId}}" class="btn btn-primary" role="button" th:text="#{grades}"></a>
+				</td>
 			</tr>
 		</table>
 	</div>

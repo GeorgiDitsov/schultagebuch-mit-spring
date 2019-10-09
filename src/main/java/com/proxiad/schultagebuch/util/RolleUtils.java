@@ -16,8 +16,8 @@ public final class RolleUtils {
 		// nothing
 	}
 
-	public static Rolle getValidRole(final Object person, RolleService rolleServiceSupplier, final Locale locale) {
-		return rolleServiceSupplier.find(person instanceof Schuler ? RolleTyp.ROLLE_SCHULER
+	public static Rolle getValidRolle(final Object person, RolleService rolleServiceSupplier, final Locale locale) {
+		return rolleServiceSupplier.finden(person instanceof Schuler ? RolleTyp.ROLLE_SCHULER
 				: person instanceof Lehrer ? RolleTyp.ROLLE_LEHRER
 						: person instanceof Elternteil ? RolleTyp.ROLLE_ELTERNTEIL : FALSCH_ROLLE,
 				locale);

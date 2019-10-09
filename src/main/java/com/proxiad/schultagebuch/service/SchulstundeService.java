@@ -22,24 +22,30 @@ public class SchulstundeService {
 	@Autowired
 	private MessageSource messageSource;
 
-	public void save(Schulstunde schulstunde) {
+	public void speichern(final Schulstunde schulstunde) {
 		repo.save(schulstunde);
 	}
 
-	public List<Schulstunde> findAll() {
+	public List<Schulstunde> findeAlle() {
 		return repo.findAllByOrderByKlasseIdAscIdAsc();
 	}
 
-	public Schulstunde find(final int id, final Locale locale) {
+	public Schulstunde finden(final int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.course", new Object[] { id }, locale)));
 	}
 
-	public List<Schulstunde> findByLehrer(final Lehrer lehrer) {
+	public Schulstunde lehrerSchulstundeFinden(final int id, final Lehrer lehrer, final Locale locale) {
+		return repo.findById(id).filter(schulstunde -> schulstunde.getLehrer().equals(lehrer))
+				.orElseThrow(() -> new IllegalArgumentException(
+						messageSource.getMessage("invalid.teacher.subject.relation", null, locale)));
+	}
+
+	public List<Schulstunde> findeNachLehrer(final Lehrer lehrer) {
 		return repo.findByLehrerOrderByKlasseIdAscIdAsc(lehrer);
 	}
 
-	public void delete(Schulstunde schulstunde) {
+	public void loeschen(final Schulstunde schulstunde) {
 		repo.delete(schulstunde);
 	}
 }

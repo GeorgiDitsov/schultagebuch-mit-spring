@@ -22,25 +22,29 @@ public class ElternteilService {
 	@Autowired
 	private MessageSource messageSource;
 
-	public void save(Elternteil elternteil) {
+	public List<Elternteil> suche(final String elternteilName) {
+		return repo.findByNameIgnoreCaseLikeOrderByIdAsc("%" + elternteilName + "%");
+	}
+
+	public void speichern(final Elternteil elternteil) {
 		repo.save(elternteil);
 	}
 
-	public List<Elternteil> findAll() {
+	public List<Elternteil> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Elternteil find(int id, final Locale locale) {
+	public Elternteil elternteilFinde(final int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.parent", new Object[] { id }, locale)));
 	}
 
-	public Elternteil findByBenutzerName(final String benutzerName, final Locale locale) {
+	public Elternteil findeNachBenutzerName(final String benutzerName, final Locale locale) {
 		return repo.findByBenutzerBenutzerName(benutzerName)
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}
 
-	public void delete(Elternteil elternteil) {
+	public void loeschen(final Elternteil elternteil) {
 		repo.delete(elternteil);
 	}
 

@@ -15,4 +15,5 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
 	public List<Note> findBySchulerOrderByDatumDesc(Schuler schuler);
 
 	public Optional<Note> findFirstBySchulerOrderByDatumDesc(Schuler schuler);
+
 }

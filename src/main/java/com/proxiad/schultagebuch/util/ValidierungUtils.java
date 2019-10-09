@@ -4,9 +4,9 @@ import javax.validation.ValidationException;
 
 import org.springframework.validation.BindingResult;
 
-public final class ValidierungsfehlerUtils {
+public final class ValidierungUtils {
 
-	private ValidierungsfehlerUtils() {
+	private ValidierungUtils() {
 		// nothing
 	}
 

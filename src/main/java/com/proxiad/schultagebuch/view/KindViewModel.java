@@ -5,15 +5,17 @@ public class KindViewModel {
 	private int kindId;
 	private String kindKennzeichen;
 	private String letzteNoteKennzeichen;
+	private double halbjaehrigeErfolg;
 
 	public KindViewModel() {
 		// nothing
 	}
 
-	public KindViewModel(int kindId, String kindKennzeichen, String letzteNoteKennzeichen) {
+	public KindViewModel(int kindId, String kindKennzeichen, String letzteNoteKennzeichen, double halbjaehrigeErfolg) {
 		this.kindId = kindId;
 		this.kindKennzeichen = kindKennzeichen;
 		this.letzteNoteKennzeichen = letzteNoteKennzeichen;
+		this.halbjaehrigeErfolg = halbjaehrigeErfolg;
 	}
 
 	public int getKindId() {
@@ -38,6 +40,18 @@ public class KindViewModel {
 
 	public void setLetzteNoteKennzeichen(String letzteNoteKennzeichen) {
 		this.letzteNoteKennzeichen = letzteNoteKennzeichen;
+	}
+
+	public double getHalbjaehrigeErfolg() {
+		return halbjaehrigeErfolg;
+	}
+
+	public void setHalbjaehrigeErfolg(double halbjaehrigeErfolg) {
+		this.halbjaehrigeErfolg = halbjaehrigeErfolg;
+	}
+
+	public String getKennzeichen() {
+		return kindKennzeichen + ", " + halbjaehrigeErfolg;
 	}
 
 }

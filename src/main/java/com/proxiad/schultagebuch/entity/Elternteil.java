@@ -43,7 +43,7 @@ public class Elternteil {
 
 	@Valid
 	@Size(min = 1)
-	@ManyToMany(mappedBy = "eltern", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "eltern", fetch = FetchType.EAGER)
 	private Set<Schuler> kinder;
 
 	@BenutzerElternteilRolleContraint

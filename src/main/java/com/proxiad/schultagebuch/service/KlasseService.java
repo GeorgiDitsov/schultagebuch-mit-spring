@@ -21,20 +21,20 @@ public class KlasseService {
 	@Autowired
 	private MessageSource messageSource;
 
-	public void save(Klasse klasse) {
+	public void speichern(final Klasse klasse) {
 		repo.save(klasse);
 	}
 
-	public List<Klasse> findAll() {
+	public List<Klasse> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Klasse find(int id, final Locale locale) {
+	public Klasse finden(final int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.class", new Object[] { id }, locale)));
 	}
 
-	public void delete(Klasse klasse) {
+	public void loeschen(final Klasse klasse) {
 		repo.delete(klasse);
 	}
 

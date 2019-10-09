@@ -19,7 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.service.BenutzerService;
-import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
+import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -30,8 +30,15 @@ public class BenutzerController extends AbstraktController {
 
 	@RequestMapping(value = "/benutzer")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView alleBenutzerZeigen() {
-		return super.ansicht("benutzerForm", "listBenutzer", benutzerService.findAll());
+	public ModelAndView alleBenutzerAnzeigen() {
+		return super.ansicht("benutzerForm", "listBenutzer", benutzerService.findeAlle());
+	}
+
+	@RequestMapping(value = "/benutzer/search")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView gefundenBenutzerAnzeigen(@ModelAttribute(name = "string") final String benutzerName,
+			RedirectAttributes attributes) {
+		return super.ansicht("benutzerForm", "listBenutzer", benutzerService.suchen(benutzerName));
 	}
 
 	@RequestMapping(value = "/benutzer/edit/{id}")
@@ -39,7 +46,7 @@ public class BenutzerController extends AbstraktController {
 	public RedirectView bestehendBenutzer(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("benutzer", benutzerService.find(id, locale));
+		attributes.addFlashAttribute("benutzer", benutzerService.finden(id, locale));
 		return super.umleiten("/benutzer");
 	}
 
@@ -47,8 +54,8 @@ public class BenutzerController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView benutzerSpeichern(@ModelAttribute(name = "benutzer") @Valid final Benutzer benutzer,
 			final BindingResult bindingResult, RedirectAttributes attributes) {
-		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		benutzerService.save(benutzer);
+		ValidierungUtils.fehlerPruefen(bindingResult);
+		benutzerService.speichern(benutzer);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/benutzer");
 	}
@@ -57,7 +64,7 @@ public class BenutzerController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView benutzerLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		benutzerService.delete(benutzerService.find(id, locale));
+		benutzerService.loeschen(benutzerService.finden(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/benutzer");
 	}

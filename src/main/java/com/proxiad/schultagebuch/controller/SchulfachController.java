@@ -19,7 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Schulfach;
 import com.proxiad.schultagebuch.service.SchulfachService;
-import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
+import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -30,15 +30,14 @@ public class SchulfachController extends AbstraktController {
 
 	@RequestMapping(value = "/schulfach")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView alleSchulfaecherZeigen() {
-		return super.ansicht("schulfachForm", "listSchulfach", schulfachService.findAll());
+	public ModelAndView alleSchulfaecherAnzeigen() {
+		return super.ansicht("schulfachForm", "listSchulfach", schulfachService.findeAlle());
 	}
 
 	@RequestMapping(value = "/schulfach/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neuesSchulfach(RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", true);
-		attributes.addFlashAttribute("edit", false);
 		attributes.addFlashAttribute("schulfach", new Schulfach());
 		return super.umleiten("/schulfach");
 	}
@@ -47,9 +46,8 @@ public class SchulfachController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendesSchulfach(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schulfach", schulfachService.find(id, locale));
+		attributes.addFlashAttribute("schulfach", schulfachService.finden(id, locale));
 		return super.umleiten("/schulfach");
 	}
 
@@ -57,8 +55,8 @@ public class SchulfachController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulfachSpeichern(@ModelAttribute(name = "schulfach") @Valid Schulfach schulfach,
 			final BindingResult bindingResult, RedirectAttributes attributes) {
-		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		schulfachService.save(schulfach);
+		ValidierungUtils.fehlerPruefen(bindingResult);
+		schulfachService.speichern(schulfach);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/schulfach");
 	}
@@ -67,7 +65,7 @@ public class SchulfachController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulfachLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		schulfachService.delete(schulfachService.find(id, locale));
+		schulfachService.loeschen(schulfachService.finden(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/schulfach");
 	}

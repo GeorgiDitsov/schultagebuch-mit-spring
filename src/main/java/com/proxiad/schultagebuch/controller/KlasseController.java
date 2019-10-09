@@ -19,7 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.util.KlasseUtils;
-import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
+import com.proxiad.schultagebuch.util.ValidierungUtils;
 import com.proxiad.schultagebuch.validator.constraint.KlasseNameConstraint;
 
 @Controller
@@ -31,15 +31,14 @@ public class KlasseController extends AbstraktController {
 
 	@RequestMapping(value = "/klasse")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView alleKlassenZeigen() {
-		return super.ansicht("klasseForm", "listKlasse", klasseService.findAll());
+	public ModelAndView alleKlassenAnzeigen() {
+		return super.ansicht("klasseForm", "listKlasse", klasseService.findeAlle());
 	}
 
 	@RequestMapping(value = "/klasse/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neueKlasse(RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", true);
-		attributes.addFlashAttribute("edit", false);
 		attributes.addFlashAttribute("klasse", new Klasse());
 		return super.umleiten("/klasse");
 	}
@@ -48,9 +47,8 @@ public class KlasseController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendeKlasse(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("klasse", klasseService.find(id, locale));
+		attributes.addFlashAttribute("klasse", klasseService.finden(id, locale));
 		return super.umleiten("/klasse");
 	}
 
@@ -59,8 +57,8 @@ public class KlasseController extends AbstraktController {
 	public RedirectView klasseSpeichern(@RequestParam(name = "klasseName") @KlasseNameConstraint String klasseName,
 			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
-		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		klasseService.save(KlasseUtils.getKlasseAusString(klasse, klasseName));
+		ValidierungUtils.fehlerPruefen(bindingResult);
+		klasseService.speichern(KlasseUtils.getKlasseAusString(klasse, klasseName));
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/klasse");
 	}
@@ -69,7 +67,7 @@ public class KlasseController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView klasseLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		klasseService.delete(klasseService.find(id, locale));
+		klasseService.loeschen(klasseService.finden(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/klasse");
 	}

@@ -1,76 +1,47 @@
 package com.proxiad.schultagebuch.service;
 
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
-import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.repository.NoteRepository;
-import com.proxiad.schultagebuch.view.KindViewModel;
-import com.proxiad.schultagebuch.view.NoteViewModel;
 
 @Service
 @Transactional
 public class NoteService {
 
-	private static final String DATE_TIME_PATTERN = "dd-MMM-yyyy HH:mm:ss";
-
 	@Autowired
 	private NoteRepository repo;
 
-	public void save(final Note note) {
+	@Autowired
+	private MessageSource messageSource;
+
+	public Note finden(final int id, final Locale locale) {
+		return repo.findById(id).orElseThrow(
+				() -> new IllegalArgumentException(messageSource.getMessage("invalid.grade", new Object[id], locale)));
+	}
+
+	public Optional<Note> findSchulerLetzteNote(final Schuler schuler) {
+		return repo.findFirstBySchulerOrderByDatumDesc(schuler);
+	}
+
+	public List<Note> findSchulerNoten(final Schuler schuler) {
+		return repo.findBySchulerOrderByDatumDesc(schuler);
+	}
+
+	public void speichern(final Note note) {
 		repo.save(note);
 	}
 
-	public List<NoteViewModel> getListNoteViewModelBySchuler(final Schuler schuler, final Locale locale) {
-		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
-		schuler.getNotenSet().stream().forEach(note -> {
-			noteViewModelsList.add(getNoteViewModel(note, locale));
-		});
-		return noteViewModelsList;
-	}
-
-	public List<NoteViewModel> getListNoteViewModelBySchulerUndSchulstunde(final Schuler schuler,
-			final Schulstunde schulstunde, final Locale locale) {
-		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
-		schuler.getNotenSet().stream().filter(note -> note.getSchulstunde().equals(schulstunde)).forEach(note -> {
-			noteViewModelsList.add(getNoteViewModel(note, locale));
-		});
-		return noteViewModelsList;
-	}
-
-	public void delete(final Note note) {
+	public void loeschen(final Note note) {
 		repo.delete(note);
 	}
 
-	public List<KindViewModel> getKinderViewModel(final Elternteil elternteil, final Locale locale) {
-		List<KindViewModel> kinderList = new ArrayList<>();
-		elternteil.getKinder().stream().forEach(kind -> kinderList
-				.add(new KindViewModel(kind.getId(), kind.getKennzeichen(), getSchulerLetzteNote(kind, locale))));
-		return kinderList;
-	}
-
-	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
-		Optional<Note> optionalNote = repo.findFirstBySchulerOrderByDatumDesc(schuler);
-		if (optionalNote.isPresent()) {
-			Note note = optionalNote.get();
-			return getNoteViewModel(note, locale).toString();
-		}
-		return "n/a";
-	}
-
-	private NoteViewModel getNoteViewModel(final Note note, final Locale locale) {
-		return new NoteViewModel(note.getSchulstunde().getSchulfach().getName(),
-				note.getSchulstunde().getLehrer().getName(), note.getWert(),
-				note.getDatum().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, locale)));
-	}
 }

@@ -20,7 +20,7 @@ public abstract class AbstraktController {
 
 	protected ModelAndView ansicht(final String viewName, final Map<String, Object> attributes) {
 		ModelAndView view = new ModelAndView(viewName);
-		view.addAllObjects(attributes);
+		attributes.forEach((attributeName, attributeValue) -> view.addObject(attributeName, attributeValue));
 		return view;
 	}
 

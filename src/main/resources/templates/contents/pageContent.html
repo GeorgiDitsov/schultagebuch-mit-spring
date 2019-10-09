@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-	<div th:fragment="formHeading (title, buttonLink)">
+	<div th:fragment="pageHead (title, buttonLink)">
 		<div class="container text-center my-5">
 			<h1 th:text="${title}"></h1>
 			<div th:if="${buttonLink != null}">
@@ -10,6 +10,14 @@
 		</div>
 		<div class="container text-center">
 			<div th:if="${successful}" class="alert alert-success shadow-lg" th:text="#{successful}"></div>
+		</div>
+	</div>
+	<div th:fragment="searchForm (buttonLink)">
+		<div class="container text-center mb-5">
+			<form class="form-inline justify-content-center" method="get" th:action="@{'/'+${buttonLink}+'/search'}">
+				<input class="form-control w-25 shadow" type="text" name="string">
+				<input class="btn btn-warning shadow" type="submit" th:value="#{button.search}">
+			</form>
 		</div>
 	</div>
 </body>

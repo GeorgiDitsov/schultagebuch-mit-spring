@@ -21,20 +21,20 @@ public class SchulfachService {
 	@Autowired
 	private MessageSource messageSource;
 
-	public void save(Schulfach schulfach) {
+	public void speichern(final Schulfach schulfach) {
 		repo.save(schulfach);
 	}
 
-	public List<Schulfach> findAll() {
+	public List<Schulfach> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Schulfach find(int id, final Locale locale) {
+	public Schulfach finden(int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.subject", new Object[] { id }, locale)));
 	}
 
-	public void delete(Schulfach schulfach) {
+	public void loeschen(final Schulfach schulfach) {
 		repo.delete(schulfach);
 	}
 }

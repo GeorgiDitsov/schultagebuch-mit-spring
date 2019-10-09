@@ -22,24 +22,29 @@ public class BenutzerService {
 	@Autowired
 	private MessageSource messageSource;
 
-	public void save(Benutzer benutzer) {
+	public List<Benutzer> suchen(final String benutzerName) {
+		return repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc("%" + benutzerName + "%");
+	}
+
+	public void speichern(final Benutzer benutzer) {
 		repo.save(benutzer);
 	}
 
-	public List<Benutzer> findAll() {
+	public List<Benutzer> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Benutzer find(final int id, final Locale locale) {
+	public Benutzer finden(final int id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.user", new Object[] { id }, locale)));
 	}
 
-	public void delete(Benutzer benutzer) {
+	public Benutzer findeNachBenutzerName(final String benutzername) {
+		return repo.findByBenutzerName(benutzername).orElseThrow(() -> new UsernameNotFoundException(benutzername));
+	}
+
+	public void loeschen(final Benutzer benutzer) {
 		repo.delete(benutzer);
 	}
 
-	public Benutzer findByBenutzerName(final String benutzername) {
-		return repo.findByBenutzerName(benutzername).orElseThrow(() -> new UsernameNotFoundException(benutzername));
-	}
 }

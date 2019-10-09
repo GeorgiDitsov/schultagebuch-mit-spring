@@ -13,12 +13,12 @@ public final class PersonUtils {
 		// nothing
 	}
 
-	public static Object getPersonAusBenutzerName(final String benutzername, final Object personService,
+	public static Object getPersonAusBenutzerName(final String benutzerName, final Object personService,
 			final Locale locale) {
 		Object person = null;
 		try {
-			person = personService.getClass().getMethod("findByBenutzerName", String.class, Locale.class)
-					.invoke(personService, benutzername, locale);
+			person = personService.getClass().getMethod("findeNachBenutzerName", String.class, Locale.class)
+					.invoke(personService, benutzerName, locale);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			e.printStackTrace();
@@ -29,7 +29,7 @@ public final class PersonUtils {
 	public static Object getNeuePerson(Object person, RolleService rolleServiceSupplier, final Locale locale) {
 		try {
 			person.getClass().getMethod("setBenutzer", Benutzer.class).invoke(person,
-					getBenutzer(RolleUtils.getValidRole(person, rolleServiceSupplier, locale)));
+					getBenutzer(RolleUtils.getValidRolle(person, rolleServiceSupplier, locale)));
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
 			e.printStackTrace();

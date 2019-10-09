@@ -17,4 +17,6 @@ public interface SchulerRepository extends JpaRepository<Schuler, Integer> {
 	public List<Schuler> findByKlasseOrderByIdAsc(Klasse klasse);
 
 	public Optional<Schuler> findByBenutzerBenutzerName(String benutzerName);
+
+	public List<Schuler> findByNameIgnoreCaseLikeOrderByIdAsc(String name);
 }

@@ -1,8 +1,6 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -23,7 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.service.ElternteilService;
 import com.proxiad.schultagebuch.service.SchulerService;
-import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
+import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -37,10 +35,14 @@ public class ElternteilController extends AbstraktController {
 
 	@RequestMapping(value = "/elternteil")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView alleElternZeigen() {
-		Map<String, Object> attributes = new HashMap<>();
-		attributes.put("listElternteil", elternteilService.findAll());
-		return super.ansicht("elternteilForm", attributes);
+	public ModelAndView alleElternAnzeigen() {
+		return super.ansicht("elternteilForm", "listElternteil", elternteilService.findeAlle());
+	}
+
+	@RequestMapping(value = "/elternteil/search")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView gefundenElternAnzeigen(@ModelAttribute(name = "string") final String elternteilName) {
+		return super.ansicht("elternteilForm", "listElternteil", elternteilService.suche(elternteilName));
 	}
 
 	@RequestMapping(value = "/elternteil/edit/{id}")
@@ -48,17 +50,18 @@ public class ElternteilController extends AbstraktController {
 	public RedirectView bestehendesElternteil(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("listSchuler", schulerService.findAll());
-		attributes.addFlashAttribute("elternteil", elternteilService.find(id, locale));
+		attributes.addFlashAttribute("listSchuler", schulerService.findeAlle());
+		attributes.addFlashAttribute("elternteil", elternteilService.elternteilFinde(id, locale));
 		return super.umleiten("/elternteil");
 	}
 
 	@PostMapping(value = "/elternteil/save")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView elternteilSpeichern(RedirectAttributes attributes, @RequestHeader final String referer,
-			@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil, final BindingResult bindingResult) {
-		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		elternteilService.save(elternteil);
+	public RedirectView elternteilSpeichern(@RequestHeader final String referer,
+			@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil, final BindingResult bindingResult,
+			RedirectAttributes attributes) {
+		ValidierungUtils.fehlerPruefen(bindingResult);
+		elternteilService.speichern(elternteil);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/elternteil");
 	}
@@ -67,7 +70,7 @@ public class ElternteilController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView elternteilLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		elternteilService.delete(elternteilService.find(id, locale));
+		elternteilService.loeschen(elternteilService.elternteilFinde(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/elternteil");
 	}

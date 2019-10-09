@@ -14,4 +14,6 @@ public interface LehrerRepository extends JpaRepository<Lehrer, Integer> {
 	public List<Lehrer> findAllByOrderByIdAsc();
 
 	public Optional<Lehrer> findByBenutzerBenutzerName(String benutzerName);
+
+	public List<Lehrer> findByNameIgnoreCaseLikeOrderByIdAsc(String name);
 }

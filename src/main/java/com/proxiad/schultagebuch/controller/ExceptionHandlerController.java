@@ -21,13 +21,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	private static final String ERROR_MESSAGE = "errorMessage";
 
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(value = { ValidationException.class, PSQLException.class, DataAccessException.class })
+	@ExceptionHandler(value = { PSQLException.class, DataAccessException.class })
 	public ModelAndView datenbankFehler(final RuntimeException exception) {
 		return getDefaultErrorView(exception.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class, BadHttpRequest.class })
+	@ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class, ValidationException.class,
+			BadHttpRequest.class })
 	public ModelAndView schlechteAnfrage(final RuntimeException exception) {
 		return getDefaultErrorView(exception.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value());
 	}

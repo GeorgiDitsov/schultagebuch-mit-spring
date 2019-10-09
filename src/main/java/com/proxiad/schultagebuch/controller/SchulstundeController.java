@@ -24,7 +24,7 @@ import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.SchulfachService;
 import com.proxiad.schultagebuch.service.SchulstundeService;
-import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
+import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -44,12 +44,12 @@ public class SchulstundeController extends AbstraktController {
 
 	@RequestMapping(value = "/schulstunde")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView alleSchulstundenZeigen() {
+	public ModelAndView alleSchulstundenAnzeigen() {
 		Map<String, Object> attributes = new HashMap<>();
-		attributes.put("listSchulstunde", schulstundeService.findAll());
-		attributes.put("listKlasse", klasseService.findAll());
-		attributes.put("listSchulfach", schulfachService.findAll());
-		attributes.put("listLehrer", lehrerService.findAll());
+		attributes.put("listSchulstunde", schulstundeService.findeAlle());
+		attributes.put("listKlasse", klasseService.findeAlle());
+		attributes.put("listSchulfach", schulfachService.findeAlle());
+		attributes.put("listLehrer", lehrerService.findeAlle());
 		return super.ansicht("schulstundeForm", attributes);
 	}
 
@@ -57,7 +57,6 @@ public class SchulstundeController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neueSchulstunde(RedirectAttributes attributes) {
 		attributes.addFlashAttribute("add", true);
-		attributes.addFlashAttribute("edit", false);
 		attributes.addFlashAttribute("schulstunde", new Schulstunde());
 		return super.umleiten("/schulstunde");
 	}
@@ -66,9 +65,8 @@ public class SchulstundeController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendeSchulstunde(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		attributes.addFlashAttribute("add", false);
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schulstunde", schulstundeService.find(id, locale));
+		attributes.addFlashAttribute("schulstunde", schulstundeService.finden(id, locale));
 		return super.umleiten("/schulstunde");
 	}
 
@@ -76,8 +74,8 @@ public class SchulstundeController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulstundeSpeichern(@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde,
 			final BindingResult bindingResult, RedirectAttributes attributes) {
-		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		schulstundeService.save(schulstunde);
+		ValidierungUtils.fehlerPruefen(bindingResult);
+		schulstundeService.speichern(schulstunde);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/schulstunde");
 	}
@@ -86,7 +84,7 @@ public class SchulstundeController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulstundeLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		schulstundeService.delete(schulstundeService.find(id, locale));
+		schulstundeService.loeschen(schulstundeService.finden(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/schulstunde");
 	}
