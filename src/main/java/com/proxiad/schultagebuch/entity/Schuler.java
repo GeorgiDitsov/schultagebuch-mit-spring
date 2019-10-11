@@ -63,6 +63,14 @@ public class Schuler {
 		// nothing
 	}
 
+	public Schuler(int id, String name, String pin, Klasse klasse, Benutzer benutzer) {
+		this.id = id;
+		this.name = name;
+		this.pin = pin;
+		this.klasse = klasse;
+		this.benutzer = benutzer;
+	}
+
 	public int getId() {
 		return id;
 	}

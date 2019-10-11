@@ -39,6 +39,11 @@ public class Schulfach {
 		// nothing
 	}
 
+	public Schulfach(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public int getId() {
 		return id;
 	}

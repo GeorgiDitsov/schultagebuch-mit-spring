@@ -52,7 +52,7 @@ public class LehrerController extends AbstraktController {
 	@RequestMapping(value = "/lehrer/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neuerLehrer(final Locale locale, RedirectAttributes attributes) {
-		modalAttributes("add", 0, locale, attributes);
+		modalAttributes("add", (Lehrer) PersonUtils.getNeuePerson(new Lehrer(), rolleService, locale), attributes);
 		return super.umleiten("/lehrer");
 	}
 
@@ -60,7 +60,7 @@ public class LehrerController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehenderLehrer(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		modalAttributes("edit", id, locale, attributes);
+		modalAttributes("edit", lehrerService.finden(id, locale), attributes);
 		return super.umleiten("/lehrer");
 	}
 
@@ -83,13 +83,10 @@ public class LehrerController extends AbstraktController {
 		return super.umleiten("/lehrer");
 	}
 
-	private void modalAttributes(final String modalType, final int lehrerId, final Locale locale,
-			RedirectAttributes attributes) {
+	private void modalAttributes(final String modalType, final Lehrer lehrer, RedirectAttributes attributes) {
 		attributes.addFlashAttribute(modalType, true);
 		attributes.addFlashAttribute("listSchulfach", schulfachService.findeAlle());
-		attributes.addFlashAttribute("lehrer",
-				modalType.equals("add") ? PersonUtils.getNeuePerson(new Lehrer(), rolleService, locale)
-						: modalType.equals("edit") ? lehrerService.finden(lehrerId, locale) : null);
+		attributes.addFlashAttribute("lehrer", lehrer);
 	}
 
 }

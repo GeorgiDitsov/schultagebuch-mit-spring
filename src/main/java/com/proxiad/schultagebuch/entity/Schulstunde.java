@@ -50,6 +50,13 @@ public class Schulstunde {
 		// nothing
 	}
 
+	public Schulstunde(int id, Klasse klasse, Schulfach schulfach, Lehrer lehrer) {
+		this.id = id;
+		this.klasse = klasse;
+		this.schulfach = schulfach;
+		this.lehrer = lehrer;
+	}
+
 	public int getId() {
 		return this.id;
 	}

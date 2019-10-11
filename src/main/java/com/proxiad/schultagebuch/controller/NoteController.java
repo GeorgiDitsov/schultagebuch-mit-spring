@@ -119,9 +119,9 @@ public class NoteController extends AbstraktController {
 			@PathVariable(value = "schulerId") final int schulerId,
 			@PathVariable(value = "schulstundeId") final int schulstundeId, final Locale locale,
 			RedirectAttributes attributes) {
-		attributes.addFlashAttribute("add", true);
-		attributes.addFlashAttribute("note",
-				getNewNote(schulerService.finden(schulerId, locale), schulstundeService.finden(schulstundeId, locale)));
+		noteModalAttributes("add",
+				getNewNote(schulerService.finden(schulerId, locale), schulstundeService.finden(schulstundeId, locale)),
+				attributes);
 		return super.umleiten(referer);
 	}
 
@@ -129,8 +129,7 @@ public class NoteController extends AbstraktController {
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView bestehendeNote(@RequestHeader final String referer,
 			@PathVariable(value = "noteId") final int noteId, final Locale locale, RedirectAttributes attributes) {
-		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("note", noteService.finden(noteId, locale));
+		noteModalAttributes("edit", noteService.finden(noteId, locale), attributes);
 		return super.umleiten(referer);
 	}
 
@@ -171,6 +170,11 @@ public class NoteController extends AbstraktController {
 		note.setSchuler(schuler);
 		note.setSchulstunde(schulstunde);
 		return note;
+	}
+
+	private void noteModalAttributes(final String modalType, final Note note, RedirectAttributes attributes) {
+		attributes.addFlashAttribute(modalType, true);
+		attributes.addFlashAttribute("note", note);
 	}
 
 }

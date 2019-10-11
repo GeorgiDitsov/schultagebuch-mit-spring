@@ -111,16 +111,16 @@
 		</form>
 	</div>
 	<div th:fragment="addSchulfach">
-		<form method="post" th:action="@{/schulfach/save}" th:object="${schulfach}">
-   			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-   			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		<form method="post" th:action="@{/schulfach/save}" th:object="${schulfach}" class="form-inline">
+   			<input type="text" class="form-control w-50" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+   			<input type="submit" class="btn btn-success" th:value="#{button.submit}">
 		</form>
 	</div>
 	<div th:fragment="editSchulfach">
-		<form method="post" th:action="@{/schulfach/save}" th:object="${schulfach}">
+		<form method="post" th:action="@{/schulfach/save}" th:object="${schulfach}" class="form-inline">
 			<input type="hidden" th:field="*{id}">
-			<input type="text" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+			<input type="text" class="form-control" th:field="*{name}" th:placeholder="#{subject.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+			<input type="submit" class="btn btn-success" th:value="#{button.submit}">
 		</form>
 	</div>
 	<div th:fragment="addSchulstunde">
@@ -134,7 +134,7 @@
  				<option th:each="schulfach :${listSchulfach}" th:value="${schulfach.id}" th:text="${schulfach.name}">
  			</select><br/>
 			<label th:text="#{teacher}"></label>
-			<select class="form-control w-50" th:field="*{lehrer}">
+			<select class="form-control w-75" th:field="*{lehrer}">
 				<option th:text="#{no.teacher}" value=>
 				<option th:each="lehrer :${listLehrer}" th:value="${lehrer.id}" th:text="${@kennzeichenUtils.personKennzeichen(lehrer)}">
 			</select><br/>
@@ -161,15 +161,34 @@
 		</form>
 	</div>
 	<div th:fragment="addKlasse">
-		<form th:action="@{/klasse/save}" method="post" th:object="${klasse}">
-			<input type="text" name="klasseName" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
-  			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		<form th:action="@{/klasse/save}" method="post" th:object="${klasse}" class="form-inline">
+			<input type="text" class="form-control w-25" name="klasseName" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+  			<input type="submit" class="btn btn-success" th:value="#{button.submit}">
 		</form>
 	</div>
 	<div th:fragment="editKlasse">
-		<form th:action="@{/klasse/save}" method="post" th:object="${klasse}">
+		<form th:action="@{/klasse/save}" method="post" th:object="${klasse}" class="form-inline">
 			<input type="hidden" th:field="*{id}">
-			<input type="text" name="klasseName" th:value="*{kennzeichen}" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+			<input type="text" class="form-control w-25" name="klasseName" th:value="*{kennzeichen}" th:placeholder="#{class.name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required>
+			<input type="submit" class="btn btn-success" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="addSemester">
+		<form th:action="@{/semester/save}" method="post" th:object="${semester}">
+			<label th:text="#{semester.begin}"></label>
+			<input type="date" class="form-control w-50" name="begin" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<label th:text="#{semester.end}"></label>
+			<input type="date" class="form-control w-50" name="end" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
+		</form>
+	</div>
+	<div th:fragment="editSemester">
+		<form th:action="@{/semester/save}" method="post" th:object="${semester}">
+			<input type="hidden" th:field="*{id}">
+			<label th:text="#{semester.begin}"></label>
+			<input type="text" class="form-control w-50" name="begin" th:value="${#temporals.format(semester.semesterbeginn, 'dd-MMM-yyyy')}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<label th:text="#{semester.end}"></label>
+			<input type="text" class="form-control w-50" name="end" th:value="${#temporals.format(semester.semesterende, 'dd-MMM-yyyy')}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
 			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		</form>
 	</div>

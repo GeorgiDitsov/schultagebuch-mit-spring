@@ -34,10 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/home", "/info").authenticated()
-				.antMatchers("/benutzer", "/schuler", "/elternteil", "/lehrer", "/schulfach", "/schulstunde", "/klasse")
+				.antMatchers("/benutzer", "/schuler", "/elternteil", "/lehrer", "/schulfach", "/schulstunde", "/klasse",
+						"/semester")
 				.hasRole("ADMIN").antMatchers("/meine-noten").hasAnyRole("SCHULER").antMatchers("/meine-kinder")
-				.hasRole("ELTERNTEIL").anyRequest().permitAll().and().formLogin().loginPage("/login")
-				.defaultSuccessUrl("/home", true).permitAll().and().logout()
+				.hasRole("ELTERNTEIL").antMatchers("/meine-schulstunden").hasRole("LEHRER").anyRequest().permitAll()
+				.and().formLogin().loginPage("/login").defaultSuccessUrl("/home", true).permitAll().and().logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll().and().exceptionHandling()
 				.accessDeniedPage("/unauthorized");
 	}

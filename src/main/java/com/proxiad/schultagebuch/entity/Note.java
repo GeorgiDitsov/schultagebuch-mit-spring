@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -40,16 +41,26 @@ public class Note {
 	@Column(name = "note_datum", nullable = false)
 	private LocalDateTime datum;
 
+	@Valid
 	@ManyToOne
 	@JoinColumn(name = "schuler_id", nullable = false)
 	private Schuler schuler;
 
+	@Valid
 	@ManyToOne
 	@JoinColumn(name = "schulstunde_id", nullable = false)
 	private Schulstunde schulstunde;
 
 	public Note() {
 		// nothing
+	}
+
+	public Note(int id, byte wert, LocalDateTime datum, Schuler schuler, Schulstunde schulstunde) {
+		this.id = id;
+		this.wert = wert;
+		this.datum = datum;
+		this.schuler = schuler;
+		this.schulstunde = schulstunde;
 	}
 
 	public int getId() {

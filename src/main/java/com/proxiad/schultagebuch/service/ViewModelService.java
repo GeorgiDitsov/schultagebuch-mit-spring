@@ -28,9 +28,8 @@ public class ViewModelService {
 
 	public List<NoteViewModel> getListNoteViewModelBySchuler(final Schuler schuler, final Locale locale) {
 		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
-		noteService.findSchulerNoten(schuler).stream().forEach(note -> {
-			noteViewModelsList.add(getNoteViewModel(note, locale));
-		});
+		noteService.findSchulerNoten(schuler).stream()
+				.forEach(note -> noteViewModelsList.add(getNoteViewModel(note, locale)));
 		return noteViewModelsList;
 	}
 
@@ -38,9 +37,7 @@ public class ViewModelService {
 			final Schulstunde schulstunde, final Locale locale) {
 		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
 		noteService.findSchulerNoten(schuler).stream().filter(note -> note.getSchulstunde().equals(schulstunde))
-				.forEach(note -> {
-					noteViewModelsList.add(getNoteViewModel(note, locale));
-				});
+				.forEach(note -> noteViewModelsList.add(getNoteViewModel(note, locale)));
 		return noteViewModelsList;
 	}
 

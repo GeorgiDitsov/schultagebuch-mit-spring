@@ -57,6 +57,12 @@ public class Lehrer {
 		// nothing
 	}
 
+	public Lehrer(int id, String name, String pin) {
+		this.id = id;
+		this.name = name;
+		this.pin = pin;
+	}
+
 	public int getId() {
 		return this.id;
 	}

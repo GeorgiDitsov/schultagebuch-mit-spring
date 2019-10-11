@@ -39,6 +39,11 @@ public class Rolle {
 		// nothing
 	}
 
+	public Rolle(int id, RolleTyp name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public int getId() {
 		return id;
 	}

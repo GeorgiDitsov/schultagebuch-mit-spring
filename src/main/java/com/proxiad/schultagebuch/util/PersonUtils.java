@@ -26,10 +26,10 @@ public final class PersonUtils {
 		return person;
 	}
 
-	public static Object getNeuePerson(Object person, RolleService rolleServiceSupplier, final Locale locale) {
+	public static Object getNeuePerson(Object person, RolleService rolleService, final Locale locale) {
 		try {
 			person.getClass().getMethod("setBenutzer", Benutzer.class).invoke(person,
-					getBenutzer(RolleUtils.getValidRolle(person, rolleServiceSupplier, locale)));
+					getBenutzer(RolleUtils.getValidRolle(person, rolleService, locale)));
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
 			e.printStackTrace();

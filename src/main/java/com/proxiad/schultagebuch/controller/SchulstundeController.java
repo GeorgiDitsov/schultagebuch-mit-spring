@@ -1,8 +1,6 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -45,19 +43,13 @@ public class SchulstundeController extends AbstraktController {
 	@RequestMapping(value = "/schulstunde")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ModelAndView alleSchulstundenAnzeigen() {
-		Map<String, Object> attributes = new HashMap<>();
-		attributes.put("listSchulstunde", schulstundeService.findeAlle());
-		attributes.put("listKlasse", klasseService.findeAlle());
-		attributes.put("listSchulfach", schulfachService.findeAlle());
-		attributes.put("listLehrer", lehrerService.findeAlle());
-		return super.ansicht("schulstundeForm", attributes);
+		return super.ansicht("schulstundeForm", "listSchulstunde", schulstundeService.findeAlle());
 	}
 
 	@RequestMapping(value = "/schulstunde/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neueSchulstunde(RedirectAttributes attributes) {
-		attributes.addFlashAttribute("add", true);
-		attributes.addFlashAttribute("schulstunde", new Schulstunde());
+		modalAttributes("add", new Schulstunde(), attributes);
 		return super.umleiten("/schulstunde");
 	}
 
@@ -65,8 +57,7 @@ public class SchulstundeController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendeSchulstunde(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schulstunde", schulstundeService.finden(id, locale));
+		modalAttributes("edit", schulstundeService.finden(id, locale), attributes);
 		return super.umleiten("/schulstunde");
 	}
 
@@ -87,6 +78,14 @@ public class SchulstundeController extends AbstraktController {
 		schulstundeService.loeschen(schulstundeService.finden(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/schulstunde");
+	}
+
+	private void modalAttributes(final String modalType, final Schulstunde schulstunde, RedirectAttributes attributes) {
+		attributes.addFlashAttribute(modalType, true);
+		attributes.addFlashAttribute("schulstunde", schulstunde);
+		attributes.addFlashAttribute("listKlasse", klasseService.findeAlle());
+		attributes.addFlashAttribute("listSchulfach", schulfachService.findeAlle());
+		attributes.addFlashAttribute("listLehrer", lehrerService.findeAlle());
 	}
 
 }

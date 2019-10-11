@@ -48,6 +48,13 @@ public class Benutzer {
 		// nothing
 	}
 
+	public Benutzer(int id, String benutzerName, String passwort, Rolle rolle) {
+		this.id = id;
+		this.benutzerName = benutzerName;
+		this.passwort = passwort;
+		this.rolle = rolle;
+	}
+
 	public int getId() {
 		return this.id;
 	}

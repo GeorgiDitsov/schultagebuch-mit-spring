@@ -52,6 +52,12 @@ public class Klasse {
 		// nothing
 	}
 
+	public Klasse(int id, int jahr, String buchstabe) {
+		this.id = id;
+		this.jahr = jahr;
+		this.buchstabe = buchstabe;
+	}
+
 	public int getId() {
 		return id;
 	}

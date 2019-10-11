@@ -57,7 +57,8 @@ public class SchulerController extends AbstraktController {
 	@RequestMapping(value = "/schuler/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neuerSchuler(final Locale locale, RedirectAttributes attributes) {
-		modalAttributes("add", 0, locale, attributes);
+		modalAttributes("add", (Schuler) PersonUtils.getNeuePerson(new Schuler(), rolleService, locale), locale,
+				attributes);
 		return super.umleiten("/schuler");
 	}
 
@@ -65,7 +66,7 @@ public class SchulerController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehenderSchuler(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		modalAttributes("edit", id, locale, attributes);
+		modalAttributes("edit", schulerService.finden(id, locale), locale, attributes);
 		return super.umleiten("/schuler");
 	}
 
@@ -88,12 +89,10 @@ public class SchulerController extends AbstraktController {
 		return super.umleiten("/schuler");
 	}
 
-	private void modalAttributes(final String modalType, final int schulerId, final Locale locale,
+	private void modalAttributes(final String modalType, final Schuler schuler, final Locale locale,
 			RedirectAttributes attributes) {
 		attributes.addFlashAttribute(modalType, true);
-		attributes.addFlashAttribute("schuler",
-				modalType.equals("add") ? PersonUtils.getNeuePerson(new Schuler(), rolleService, locale)
-						: modalType.equals("edit") ? schulerService.finden(schulerId, locale) : null);
+		attributes.addFlashAttribute("schuler", schuler);
 		attributes.addFlashAttribute("listKlasse", klasseService.findeAlle());
 		attributes.addFlashAttribute("listEltern", elternteilService.findeAlle());
 		attributes.addFlashAttribute("elternteil", PersonUtils.getNeuePerson(new Elternteil(), rolleService, locale));

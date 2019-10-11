@@ -38,8 +38,7 @@ public class KlasseController extends AbstraktController {
 	@RequestMapping(value = "/klasse/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neueKlasse(RedirectAttributes attributes) {
-		attributes.addFlashAttribute("add", true);
-		attributes.addFlashAttribute("klasse", new Klasse());
+		modalAttributes("add", new Klasse(), attributes);
 		return super.umleiten("/klasse");
 	}
 
@@ -47,8 +46,7 @@ public class KlasseController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendeKlasse(@PathVariable(value = "id") final int id, final Locale locale,
 			RedirectAttributes attributes) {
-		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("klasse", klasseService.finden(id, locale));
+		modalAttributes("edit", klasseService.finden(id, locale), attributes);
 		return super.umleiten("/klasse");
 	}
 
@@ -58,7 +56,7 @@ public class KlasseController extends AbstraktController {
 			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
 		ValidierungUtils.fehlerPruefen(bindingResult);
-		klasseService.speichern(KlasseUtils.getKlasseAusString(klasse, klasseName));
+		klasseService.speichern(KlasseUtils.setKlasseAusString(klasse, klasseName));
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/klasse");
 	}
@@ -70,6 +68,11 @@ public class KlasseController extends AbstraktController {
 		klasseService.loeschen(klasseService.finden(id, locale));
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten("/klasse");
+	}
+
+	private void modalAttributes(final String modalType, final Klasse klasse, RedirectAttributes attributes) {
+		attributes.addFlashAttribute(modalType, true);
+		attributes.addFlashAttribute("klasse", klasse);
 	}
 
 }

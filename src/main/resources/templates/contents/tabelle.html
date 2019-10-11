@@ -164,6 +164,27 @@
 		    </tr>
 	    </table>
 	</div>
+	<div th:fragment="alleSemesterTabelle" class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col" th:text="#{id}">
+					<th scope="col" th:text="#{semester.begin}">
+					<th scope="col" th:text="#{semester.end}">
+					<th scope="col" th:text="#{options}">
+				</tr>
+			</thead>
+			<tr th:each="semester: ${listSemester}">
+				<th scope="row" th:text="${semester.id}">
+				<td th:text="${#temporals.format(semester.semesterbeginn, 'dd-MMM-yyyy')}">
+				<td th:text="${#temporals.format(semester.semesterende, 'dd-MMM-yyyy')}">
+				<td>
+					<a th:href="@{'semester/edit/'+${semester.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+					<a th:href="@{'semester/delete/'+${semester.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+				</td>
+			</tr>
+		</table>
+	</div>
 	<div th:fragment="schulerNotenTabelle" class="table-responsive mt-5">
 		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
 			<thead class="thead-dark">
