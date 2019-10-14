@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -56,37 +57,39 @@ public class SchulerController extends AbstraktController {
 
 	@RequestMapping(value = "/schuler/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neuerSchuler(final Locale locale, RedirectAttributes attributes) {
+	public RedirectView neuerSchuler(@RequestHeader final String referer, final Locale locale,
+			RedirectAttributes attributes) {
 		modalAttributes("add", (Schuler) PersonUtils.getNeuePerson(new Schuler(), rolleService, locale), locale,
 				attributes);
-		return super.umleiten("/schuler");
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/schuler/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView bestehenderSchuler(@PathVariable(value = "id") final int id, final Locale locale,
-			RedirectAttributes attributes) {
+	public RedirectView bestehenderSchuler(@RequestHeader final String referer,
+			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
 		modalAttributes("edit", schulerService.finden(id, locale), locale, attributes);
-		return super.umleiten("/schuler");
+		return super.umleiten(referer);
 	}
 
 	@PostMapping(value = "/schuler/save")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView schulerSpeichern(@ModelAttribute(name = "schuler") @Valid Schuler schuler,
-			final BindingResult bindingResult, RedirectAttributes attributes) {
+	public RedirectView schulerSpeichern(@RequestHeader final String referer,
+			@ModelAttribute(name = "schuler") @Valid Schuler schuler, final BindingResult bindingResult,
+			final Locale locale, RedirectAttributes attributes) {
 		ValidierungUtils.fehlerPruefen(bindingResult);
 		schulerService.speichern(schuler);
 		attributes.addFlashAttribute("successful", true);
-		return super.umleiten("/schuler");
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/schuler/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView schulerLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
-			RedirectAttributes attributes) {
+	public RedirectView schulerLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final int id,
+			final Locale locale, RedirectAttributes attributes) {
 		schulerService.loeschen(schulerService.finden(id, locale));
 		attributes.addFlashAttribute("successful", true);
-		return super.umleiten("/schuler");
+		return super.umleiten(referer);
 	}
 
 	private void modalAttributes(final String modalType, final Schuler schuler, final Locale locale,

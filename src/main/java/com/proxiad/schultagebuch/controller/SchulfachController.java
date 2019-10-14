@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -36,36 +37,37 @@ public class SchulfachController extends AbstraktController {
 
 	@RequestMapping(value = "/schulfach/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neuesSchulfach(RedirectAttributes attributes) {
+	public RedirectView neuesSchulfach(@RequestHeader final String referer, RedirectAttributes attributes) {
 		modalAttributes("add", new Schulfach(), attributes);
-		return super.umleiten("/schulfach");
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/schulfach/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView bestehendesSchulfach(@PathVariable(value = "id") final int id, final Locale locale,
-			RedirectAttributes attributes) {
+	public RedirectView bestehendesSchulfach(@RequestHeader final String referer,
+			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
 		modalAttributes("edit", schulfachService.finden(id, locale), attributes);
-		return super.umleiten("/schulfach");
+		return super.umleiten(referer);
 	}
 
 	@PostMapping(value = "/schulfach/save")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView schulfachSpeichern(@ModelAttribute(name = "schulfach") @Valid Schulfach schulfach,
-			final BindingResult bindingResult, RedirectAttributes attributes) {
+	public RedirectView schulfachSpeichern(@RequestHeader final String referer,
+			@ModelAttribute(name = "schulfach") @Valid Schulfach schulfach, final BindingResult bindingResult,
+			RedirectAttributes attributes) {
 		ValidierungUtils.fehlerPruefen(bindingResult);
 		schulfachService.speichern(schulfach);
 		attributes.addFlashAttribute("successful", true);
-		return super.umleiten("/schulfach");
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/schulfach/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView schulfachLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
-			RedirectAttributes attributes) {
+	public RedirectView schulfachLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final int id,
+			final Locale locale, RedirectAttributes attributes) {
 		schulfachService.loeschen(schulfachService.finden(id, locale));
 		attributes.addFlashAttribute("successful", true);
-		return super.umleiten("/schulfach");
+		return super.umleiten(referer);
 	}
 
 	private void modalAttributes(final String modalType, final Schulfach schulfach, RedirectAttributes attributes) {

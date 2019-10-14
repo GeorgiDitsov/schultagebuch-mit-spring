@@ -47,19 +47,18 @@ public class ElternteilController extends AbstraktController {
 
 	@RequestMapping(value = "/elternteil/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView bestehendesElternteil(@PathVariable(value = "id") final int id, final Locale locale,
-			RedirectAttributes attributes) {
+	public RedirectView bestehendesElternteil(@RequestHeader final String referer,
+			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("listSchuler", schulerService.findeAlle());
 		attributes.addFlashAttribute("elternteil", elternteilService.elternteilFinde(id, locale));
-		return super.umleiten("/elternteil");
+		return super.umleiten(referer);
 	}
 
 	@PostMapping(value = "/elternteil/save")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView elternteilSpeichern(@RequestHeader final String referer,
-			@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil, final BindingResult bindingResult,
-			RedirectAttributes attributes) {
+	public RedirectView elternteilSpeichern(@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil,
+			final BindingResult bindingResult, RedirectAttributes attributes) {
 		ValidierungUtils.fehlerPruefen(bindingResult);
 		elternteilService.speichern(elternteil);
 		attributes.addFlashAttribute("successful", true);
@@ -68,11 +67,11 @@ public class ElternteilController extends AbstraktController {
 
 	@RequestMapping(value = "/elternteil/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView elternteilLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
-			RedirectAttributes attributes) {
+	public RedirectView elternteilLoeschen(@RequestHeader final String referer,
+			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
 		elternteilService.loeschen(elternteilService.elternteilFinde(id, locale));
 		attributes.addFlashAttribute("successful", true);
-		return super.umleiten("/elternteil");
+		return super.umleiten(referer);
 	}
 
 }

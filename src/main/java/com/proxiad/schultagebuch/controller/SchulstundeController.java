@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -48,36 +49,37 @@ public class SchulstundeController extends AbstraktController {
 
 	@RequestMapping(value = "/schulstunde/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neueSchulstunde(RedirectAttributes attributes) {
+	public RedirectView neueSchulstunde(@RequestHeader final String referer, RedirectAttributes attributes) {
 		modalAttributes("add", new Schulstunde(), attributes);
-		return super.umleiten("/schulstunde");
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/schulstunde/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView bestehendeSchulstunde(@PathVariable(value = "id") final int id, final Locale locale,
-			RedirectAttributes attributes) {
+	public RedirectView bestehendeSchulstunde(@RequestHeader final String referer,
+			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
 		modalAttributes("edit", schulstundeService.finden(id, locale), attributes);
-		return super.umleiten("/schulstunde");
+		return super.umleiten(referer);
 	}
 
 	@PostMapping(value = "/schulstunde/save")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView schulstundeSpeichern(@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde,
-			final BindingResult bindingResult, RedirectAttributes attributes) {
+	public RedirectView schulstundeSpeichern(@RequestHeader final String referer,
+			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde, final BindingResult bindingResult,
+			RedirectAttributes attributes) {
 		ValidierungUtils.fehlerPruefen(bindingResult);
 		schulstundeService.speichern(schulstunde);
 		attributes.addFlashAttribute("successful", true);
-		return super.umleiten("/schulstunde");
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/schulstunde/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView schulstundeLoeschen(@PathVariable(value = "id") final int id, final Locale locale,
-			RedirectAttributes attributes) {
+	public RedirectView schulstundeLoeschen(@RequestHeader final String referer,
+			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
 		schulstundeService.loeschen(schulstundeService.finden(id, locale));
 		attributes.addFlashAttribute("successful", true);
-		return super.umleiten("/schulstunde");
+		return super.umleiten(referer);
 	}
 
 	private void modalAttributes(final String modalType, final Schulstunde schulstunde, RedirectAttributes attributes) {

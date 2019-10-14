@@ -29,7 +29,7 @@ public class SchulerService {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc("%" + schulerName + "%");
 	}
 
-	public void speichern(Schuler schuler) {
+	public void speichern(final Schuler schuler) {
 		repo.save(schuler);
 	}
 

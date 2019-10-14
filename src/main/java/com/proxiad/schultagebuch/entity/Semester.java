@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.proxiad.schultagebuch.validator.constraint.SemesterConstraint;
 
 @Entity
@@ -28,10 +30,12 @@ public class Semester {
 
 	@NotNull
 	@Column(name = "semesterbeginn")
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	private LocalDateTime semesterbeginn;
 
 	@NotNull
 	@Column(name = "semesterende")
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	private LocalDateTime semesterende;
 
 	public Semester() {

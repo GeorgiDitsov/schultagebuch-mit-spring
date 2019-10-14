@@ -1,6 +1,5 @@
 package com.proxiad.schultagebuch.service;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -14,6 +13,7 @@ import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
+import com.proxiad.schultagebuch.util.DatumUtils;
 import com.proxiad.schultagebuch.view.KindViewModel;
 import com.proxiad.schultagebuch.view.NoteViewModel;
 
@@ -21,14 +21,15 @@ import com.proxiad.schultagebuch.view.NoteViewModel;
 @Transactional
 public class ViewModelService {
 
-	private static final String DATE_TIME_PATTERN = "dd-MMM-yyyy HH:mm:ss";
-
 	@Autowired
 	private NoteService noteService;
 
+	@Autowired
+	private SemesterService semesterService;
+
 	public List<NoteViewModel> getListNoteViewModelBySchuler(final Schuler schuler, final Locale locale) {
 		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
-		noteService.findSchulerNoten(schuler).stream()
+		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester(locale)).stream()
 				.forEach(note -> noteViewModelsList.add(getNoteViewModel(note, locale)));
 		return noteViewModelsList;
 	}
@@ -36,7 +37,8 @@ public class ViewModelService {
 	public List<NoteViewModel> getListNoteViewModelBySchulerUndSchulstunde(final Schuler schuler,
 			final Schulstunde schulstunde, final Locale locale) {
 		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
-		noteService.findSchulerNoten(schuler).stream().filter(note -> note.getSchulstunde().equals(schulstunde))
+		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester(locale)).stream()
+				.filter(note -> note.getSchulstunde().equals(schulstunde))
 				.forEach(note -> noteViewModelsList.add(getNoteViewModel(note, locale)));
 		return noteViewModelsList;
 	}
@@ -49,17 +51,19 @@ public class ViewModelService {
 
 	public KindViewModel schulerToKinderViewModel(final Schuler schuler, final Locale locale) {
 		return new KindViewModel(schuler.getId(), schuler.getKennzeichen(), getSchulerLetzteNote(schuler, locale),
-				noteService.findSchulerNoten(schuler).stream().mapToDouble(Note::getWert).average().orElse(Double.NaN));
+				noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester(locale)).stream()
+						.mapToDouble(Note::getWert).average().orElse(Double.NaN));
 	}
 
 	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
-		Optional<Note> note = noteService.findSchulerLetzteNote(schuler);
+		Optional<Note> note = noteService.findeSchulerLetzteNote(schuler);
 		return note.isPresent() ? getNoteViewModel(note.get(), locale).getKennzeichen() : "n/a";
 	}
 
 	private NoteViewModel getNoteViewModel(final Note note, final Locale locale) {
 		return new NoteViewModel(note.getId(), note.getSchulstunde().getSchulfach().getName(),
 				note.getSchulstunde().getLehrer().getName(), note.getWert(),
-				note.getDatum().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, locale)));
+				DatumUtils.localDateTimeZuString(note.getDatum(), locale));
 	}
+
 }

@@ -174,13 +174,13 @@
 					<th scope="col" th:text="#{options}">
 				</tr>
 			</thead>
-			<tr th:each="semester: ${listSemester}">
-				<th scope="row" th:text="${semester.id}">
-				<td th:text="${#temporals.format(semester.semesterbeginn, 'dd-MMM-yyyy')}">
-				<td th:text="${#temporals.format(semester.semesterende, 'dd-MMM-yyyy')}">
+			<tr th:each="semesterViewModel: ${listSemester}">
+				<th scope="row" th:text="${semesterViewModel.semesterId}">
+				<td th:text="${semesterViewModel.semesterbeginn}">
+				<td th:text="${semesterViewModel.semesterende}">
 				<td>
-					<a th:href="@{'semester/edit/'+${semester.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-					<a th:href="@{'semester/delete/'+${semester.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
+					<a th:href="@{'semester/edit/'+${semesterViewModel.semesterId}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
+					<a th:href="@{'semester/delete/'+${semesterViewModel.semesterId}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
 				</td>
 			</tr>
 		</table>

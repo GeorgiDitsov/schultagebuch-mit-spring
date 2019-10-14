@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
+import com.proxiad.schultagebuch.entity.Semester;
 import com.proxiad.schultagebuch.repository.NoteRepository;
 
 @Service
@@ -28,12 +29,13 @@ public class NoteService {
 				() -> new IllegalArgumentException(messageSource.getMessage("invalid.grade", new Object[id], locale)));
 	}
 
-	public Optional<Note> findSchulerLetzteNote(final Schuler schuler) {
+	public Optional<Note> findeSchulerLetzteNote(final Schuler schuler) {
 		return repo.findFirstBySchulerOrderByDatumDesc(schuler);
 	}
 
-	public List<Note> findSchulerNoten(final Schuler schuler) {
-		return repo.findBySchulerOrderByDatumDesc(schuler);
+	public List<Note> findeSchulerNoten(final Schuler schuler, final Semester semester) {
+		return repo.findBySchulerAndDatumBetweenOrderByDatumDesc(schuler, semester.getSemesterbeginn(),
+				semester.getSemesterende());
 	}
 
 	public void speichern(final Note note) {

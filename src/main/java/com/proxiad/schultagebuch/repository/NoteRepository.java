@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,8 @@ import com.proxiad.schultagebuch.entity.Schuler;
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Integer> {
 
-	public List<Note> findBySchulerOrderByDatumDesc(Schuler schuler);
+	public List<Note> findBySchulerAndDatumBetweenOrderByDatumDesc(Schuler schuler, LocalDateTime begin,
+			LocalDateTime end);
 
 	public Optional<Note> findFirstBySchulerOrderByDatumDesc(Schuler schuler);
 

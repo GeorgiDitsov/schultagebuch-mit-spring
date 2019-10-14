@@ -176,9 +176,9 @@
 	<div th:fragment="addSemester">
 		<form th:action="@{/semester/save}" method="post" th:object="${semester}">
 			<label th:text="#{semester.begin}"></label>
-			<input type="date" class="form-control w-50" name="begin" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<input type="datetime-local" class="form-control w-75" th:field="*{semesterbeginn}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
 			<label th:text="#{semester.end}"></label>
-			<input type="date" class="form-control w-50" name="end" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<input type="datetime-local" class="form-control w-75" th:field="*{semesterende}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
 			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		</form>
 	</div>
@@ -186,9 +186,9 @@
 		<form th:action="@{/semester/save}" method="post" th:object="${semester}">
 			<input type="hidden" th:field="*{id}">
 			<label th:text="#{semester.begin}"></label>
-			<input type="text" class="form-control w-50" name="begin" th:value="${#temporals.format(semester.semesterbeginn, 'dd-MMM-yyyy')}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<input type="datetime-local" class="form-control w-75" th:field="*{semesterbeginn}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
 			<label th:text="#{semester.end}"></label>
-			<input type="text" class="form-control w-50" name="end" th:value="${#temporals.format(semester.semesterende, 'dd-MMM-yyyy')}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
+			<input type="datetime-local" class="form-control w-75" th:field="*{semesterende}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" required><br/>
 			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		</form>
 	</div>
