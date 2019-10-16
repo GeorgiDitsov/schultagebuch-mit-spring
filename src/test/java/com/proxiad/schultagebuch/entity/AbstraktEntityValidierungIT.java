@@ -7,7 +7,7 @@ import javax.validation.ValidatorFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-public abstract class AbstraktEntityValidationTest {
+public abstract class AbstraktEntityValidierungIT {
 
 	private static ValidatorFactory validatorFactory;
 	private static Validator validator;

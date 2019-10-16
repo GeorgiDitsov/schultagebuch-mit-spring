@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.proxiad.schultagebuch.util.RolleTyp;
 
 @SpringBootTest
-public class NoteTest extends AbstraktEntityValidationTest {
+public class NoteValidierungIT extends AbstraktEntityValidierungIT {
 
 	@Autowired
 	private Note note;
