@@ -16,6 +16,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.proxiad.schultagebuch.validator.constraint.NoteConstraint;
@@ -37,9 +38,13 @@ public class Note {
 	@Column(name = "note_wert", nullable = false)
 	private byte wert;
 
+	@CreationTimestamp
+	@Column(name = "note_insert_datum", nullable = false)
+	private LocalDateTime noteInsertDatum;
+
 	@UpdateTimestamp
-	@Column(name = "note_datum", nullable = false)
-	private LocalDateTime datum;
+	@Column(name = "note_update_datum", nullable = false)
+	private LocalDateTime noteUpdateDatum;
 
 	@Valid
 	@ManyToOne
@@ -55,10 +60,12 @@ public class Note {
 		// nothing
 	}
 
-	public Note(int id, byte wert, LocalDateTime datum, Schuler schuler, Schulstunde schulstunde) {
+	public Note(int id, byte wert, LocalDateTime noteInsertDatum, LocalDateTime noteUpdateDatum, Schuler schuler,
+			Schulstunde schulstunde) {
 		this.id = id;
 		this.wert = wert;
-		this.datum = datum;
+		this.noteInsertDatum = noteInsertDatum;
+		this.noteUpdateDatum = noteUpdateDatum;
 		this.schuler = schuler;
 		this.schulstunde = schulstunde;
 	}
@@ -79,12 +86,20 @@ public class Note {
 		this.wert = wert;
 	}
 
-	public LocalDateTime getDatum() {
-		return datum;
+	public LocalDateTime getNoteInsertDatum() {
+		return noteInsertDatum;
 	}
 
-	public void setDatum(LocalDateTime datum) {
-		this.datum = datum;
+	public void setNoteInsertDatum(LocalDateTime noteInsertDatum) {
+		this.noteInsertDatum = noteInsertDatum;
+	}
+
+	public LocalDateTime getNoteUpdateDatum() {
+		return noteUpdateDatum;
+	}
+
+	public void setNoteUpdateDatum(LocalDateTime noteUpdateDatum) {
+		this.noteUpdateDatum = noteUpdateDatum;
 	}
 
 	public Schuler getSchuler() {
@@ -127,8 +142,8 @@ public class Note {
 
 	@Override
 	public String toString() {
-		return "Note [id=" + id + ", wert=" + wert + ", datum=" + datum + ", schuler=" + schuler + ", schulstunde="
-				+ schulstunde + "]";
+		return "Note [id=" + id + ", wert=" + wert + ", noteInsertDatum=" + noteInsertDatum + ", noteUpdateDatum="
+				+ noteUpdateDatum + ", schuler=" + schuler + ", schulstunde=" + schulstunde + "]";
 	}
 
 }

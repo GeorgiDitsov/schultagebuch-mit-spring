@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -29,32 +30,23 @@ public class NoteValidierungIT extends AbstraktEntityValidierungIT {
 	@Autowired
 	private Schulstunde schulstunde;
 
-	@Autowired
-	private Klasse klasse;
-
-	@Autowired
-	private Schulfach schulfach;
-
-	@Autowired
-	private Benutzer benutzer;
-
-	@Autowired
-	private Rolle rolle;
-
 	@Before
 	public void initTestContext() {
-		rolle = new Rolle(1, RolleTyp.ROLLE_SCHULER);
-		benutzer = new Benutzer(149, "ValidBenutzerName", "validPass", rolle);
-		klasse = new Klasse(121, 1, "z");
-		schuler = new Schuler(1, "Vasil Vasilev", "0001010000", klasse, benutzer);
-		schulfach = new Schulfach(55, "Math");
-		schulstunde = new Schulstunde(123, klasse, schulfach, null);
+		Klasse klasse = new Klasse(121, 1, "z");
+		schuler = new Schuler(1, "Vasil Vasilev", "0001010000", klasse,
+				new Benutzer(149, "ValidBenutzerName", "validPass", new Rolle(1, RolleTyp.ROLLE_SCHULER)));
+		Schulfach schulfach = new Schulfach(55, "Math");
+		Lehrer lehrer = new Lehrer(Integer.MAX_VALUE, "Ivan Ivanov", "8008088888",
+				new Benutzer(150, "OtherBenutzerName", "validPass", new Rolle(2, RolleTyp.ROLLE_LEHRER)));
+		lehrer.setSchulfachSet(new HashSet<>());
+		lehrer.getSchulfachSet().add(schulfach);
+		schulstunde = new Schulstunde(123, klasse, schulfach, lehrer);
 	}
 
 	@Test
 	public void validRelationZwischenSchulerUndSchulstunde() {
 		// Given
-		note = new Note(14, (byte) 6, LocalDateTime.now(), schuler, schulstunde);
+		note = new Note(14, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde);
 
 		// When
 		Set<ConstraintViolation<Note>> violations = getValidator().validate(note);
@@ -67,7 +59,7 @@ public class NoteValidierungIT extends AbstraktEntityValidierungIT {
 	public void keineRelationZwischenSchulerUndSchulstunde() {
 		// Given
 		schuler.setKlasse(new Klasse(321, 1, "a"));
-		note = new Note(14, (byte) 6, LocalDateTime.now(), schuler, schulstunde);
+		note = new Note(14, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde);
 
 		// When
 		Set<ConstraintViolation<Note>> violations = getValidator().validate(note);

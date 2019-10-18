@@ -1,5 +1,7 @@
 package com.proxiad.schultagebuch.validator;
 
+import java.util.Objects;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -11,7 +13,7 @@ public class PersonNameValidator implements ConstraintValidator<PersonNameConstr
 
 	@Override
 	public boolean isValid(String personName, ConstraintValidatorContext context) {
-		return personName != null && personName.matches(PERSON_NAME_REGEX);
+		return Objects.nonNull(personName) && personName.matches(PERSON_NAME_REGEX);
 	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
+import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.entity.Semester;
 import com.proxiad.schultagebuch.repository.NoteRepository;
 
@@ -30,11 +31,17 @@ public class NoteService {
 	}
 
 	public Optional<Note> findeSchulerLetzteNote(final Schuler schuler) {
-		return repo.findFirstBySchulerOrderByDatumDesc(schuler);
+		return repo.findFirstBySchulerOrderByNoteUpdateDatumDesc(schuler);
 	}
 
 	public List<Note> findeSchulerNoten(final Schuler schuler, final Semester semester) {
-		return repo.findBySchulerAndDatumBetweenOrderByDatumDesc(schuler, semester.getSemesterbeginn(),
+		return repo.findBySchulerAndNoteUpdateDatumBetweenOrderByNoteUpdateDatumDesc(schuler, semester.getSemesterbeginn(),
+				semester.getSemesterende());
+	}
+
+	public List<Note> findeSchulerNotenDurchSchulstunde(final Schuler schuler, final Schulstunde schulstunde,
+			final Semester semester) {
+		return repo.findBySchulerAndSchulstundeAndNoteUpdateDatumBetween(schuler, schulstunde, semester.getSemesterbeginn(),
 				semester.getSemesterende());
 	}
 

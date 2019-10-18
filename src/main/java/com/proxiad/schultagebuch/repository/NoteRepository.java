@@ -9,13 +9,17 @@ import org.springframework.stereotype.Repository;
 
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
+import com.proxiad.schultagebuch.entity.Schulstunde;
 
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Integer> {
 
-	public List<Note> findBySchulerAndDatumBetweenOrderByDatumDesc(Schuler schuler, LocalDateTime begin,
-			LocalDateTime end);
+	public List<Note> findBySchulerAndNoteUpdateDatumBetweenOrderByNoteUpdateDatumDesc(Schuler schuler,
+			LocalDateTime begin, LocalDateTime end);
 
-	public Optional<Note> findFirstBySchulerOrderByDatumDesc(Schuler schuler);
+	public List<Note> findBySchulerAndSchulstundeAndNoteUpdateDatumBetween(Schuler schuler, Schulstunde schulstunde,
+			LocalDateTime begin, LocalDateTime end);
+
+	public Optional<Note> findFirstBySchulerOrderByNoteUpdateDatumDesc(Schuler schuler);
 
 }

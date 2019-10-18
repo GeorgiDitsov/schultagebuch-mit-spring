@@ -60,14 +60,14 @@ public class ViewModelServiceIT {
 	}
 
 	@Test
-	public void getEmptyListNoteViewModelBySchuler() {
+	public void getEmptyListNoteViewModelDurchSchuler() {
 		// Given
 		Schuler schuler = new Schuler(1, "Ivan Ivanov", "0001010000", klasse, benutzer);
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
-
-		// When
 		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
+
+		// When
 		List<NoteViewModel> list = viewModelService.getListNoteViewModelBySchuler(schuler, Locale.getDefault());
 
 		// Then
@@ -75,15 +75,15 @@ public class ViewModelServiceIT {
 	}
 
 	@Test
-	public void getEmptyListNoteViewModelBySchulerUndSchulstunde() {
+	public void getEmptyListNoteViewModelDurchSchulerUndSchulstunde() {
 		// Given
 		Schuler schuler = new Schuler(2, "Stanislav Pelov", "1010101010", klasse, benutzer);
 		Schulstunde schulstunde = new Schulstunde(11, klasse, new Schulfach(1, "Math"), new Lehrer());
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
-
-		// When
 		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
+
+		// When
 		List<NoteViewModel> list = viewModelService.getListNoteViewModelBySchulerUndSchulstunde(schuler, schulstunde,
 				Locale.getDefault());
 

@@ -13,6 +13,7 @@ import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
+import com.proxiad.schultagebuch.util.BerechnungUtils;
 import com.proxiad.schultagebuch.util.DatumUtils;
 import com.proxiad.schultagebuch.view.KindViewModel;
 import com.proxiad.schultagebuch.view.NoteViewModel;
@@ -45,14 +46,22 @@ public class ViewModelService {
 
 	public List<KindViewModel> getKinderViewModelle(final Elternteil elternteil, final Locale locale) {
 		List<KindViewModel> kinderList = new ArrayList<>();
-		elternteil.getKinder().stream().forEach(kind -> kinderList.add(schulerToKinderViewModel(kind, locale)));
+		elternteil.getKinder().stream().forEach(kind -> kinderList.add(schulerZuKinderViewModel(kind, locale)));
 		return kinderList;
 	}
 
-	public KindViewModel schulerToKinderViewModel(final Schuler schuler, final Locale locale) {
+	public KindViewModel schulerZuKinderViewModel(final Schuler schuler, final Locale locale) {
 		return new KindViewModel(schuler.getId(), schuler.getKennzeichen(), getSchulerLetzteNote(schuler, locale),
-				noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester(locale)).stream()
-						.mapToDouble(Note::getWert).average().orElse(Double.NaN));
+				BerechnungUtils.durchschnittlichHalbjaehrigeNoten(getSchulerHalbjaehrigeNoten(schuler, locale)));
+	}
+
+	private List<Long> getSchulerHalbjaehrigeNoten(final Schuler schuler, final Locale locale) {
+		List<Long> halbjaehrigeNoten = new ArrayList<>();
+		schuler.getKlasse().getSchulstundeSet().stream()
+				.forEach(schulstunde -> halbjaehrigeNoten.add(
+						BerechnungUtils.durchschnittlichNoten(noteService.findeSchulerNotenDurchSchulstunde(schuler,
+								schulstunde, semesterService.findeAktuelleSemester(locale)))));
+		return halbjaehrigeNoten;
 	}
 
 	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
@@ -63,7 +72,7 @@ public class ViewModelService {
 	private NoteViewModel getNoteViewModel(final Note note, final Locale locale) {
 		return new NoteViewModel(note.getId(), note.getSchulstunde().getSchulfach().getName(),
 				note.getSchulstunde().getLehrer().getName(), note.getWert(),
-				DatumUtils.localDateTimeZuString(note.getDatum(), locale));
+				DatumUtils.localDateTimeZuString(note.getNoteUpdateDatum(), locale));
 	}
 
 }

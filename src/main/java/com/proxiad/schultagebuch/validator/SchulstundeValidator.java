@@ -12,9 +12,8 @@ public class SchulstundeValidator implements ConstraintValidator<SchulstundeCons
 
 	@Override
 	public boolean isValid(Schulstunde schulstunde, ConstraintValidatorContext context) {
-		return Optional.ofNullable(schulstunde.getLehrer()).isPresent()
-				? (schulstunde.getLehrer().getSchulfachSet().contains(schulstunde.getSchulfach()) ? true : false)
-				: true;
+		return Optional.ofNullable(schulstunde.getLehrer()).map(lehrer -> lehrer.getSchulfachSet())
+				.filter(faecher -> faecher.contains(schulstunde.getSchulfach())).isPresent();
 	}
 
 }

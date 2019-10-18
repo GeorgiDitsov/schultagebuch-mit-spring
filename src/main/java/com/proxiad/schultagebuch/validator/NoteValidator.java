@@ -1,5 +1,7 @@
 package com.proxiad.schultagebuch.validator;
 
+import java.util.Objects;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -10,7 +12,7 @@ public class NoteValidator implements ConstraintValidator<NoteConstraint, Note> 
 
 	@Override
 	public boolean isValid(Note note, ConstraintValidatorContext context) {
-		return note != null && note.getSchuler().getKlasse().equals(note.getSchulstunde().getKlasse());
+		return Objects.nonNull(note) && note.getSchuler().getKlasse().equals(note.getSchulstunde().getKlasse());
 	}
 
 }

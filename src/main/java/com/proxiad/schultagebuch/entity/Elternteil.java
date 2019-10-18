@@ -55,6 +55,13 @@ public class Elternteil {
 		// nothing
 	}
 
+	public Elternteil(int id, String name, String pin, Benutzer benutzer) {
+		this.id = id;
+		this.name = name;
+		this.pin = pin;
+		this.benutzer = benutzer;
+	}
+
 	public int getId() {
 		return this.id;
 	}
