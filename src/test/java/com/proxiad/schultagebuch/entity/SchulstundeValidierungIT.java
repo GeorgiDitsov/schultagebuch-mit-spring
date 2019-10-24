@@ -33,17 +33,17 @@ public class SchulstundeValidierungIT extends AbstraktEntityValidierungIT {
 	public void initTestContext() {
 		benutzer = new Benutzer();
 		benutzer.setRolle(new Rolle(Integer.MAX_VALUE, RolleTyp.ROLLE_LEHRER));
-		schulfach = new Schulfach(Integer.MAX_VALUE, "Englisch");
+		schulfach = new Schulfach(Long.MAX_VALUE, "Englisch");
 		schulstunde = new Schulstunde();
-		schulstunde.setId(Integer.MAX_VALUE);
-		schulstunde.setKlasse(new Klasse(Integer.MAX_VALUE, 9, "b"));
-		schulstunde.setSchulfach(new Schulfach(Integer.MAX_VALUE, "Englisch"));
+		schulstunde.setId(Long.MAX_VALUE);
+		schulstunde.setKlasse(new Klasse(Long.MAX_VALUE, 9, "b"));
+		schulstunde.setSchulfach(new Schulfach(Long.MAX_VALUE, "Englisch"));
 	}
 
 	@Test
 	public void validRelationZwischenLehrerUndSchulfach() {
 		// Given
-		Lehrer lehrer = new Lehrer(Integer.MAX_VALUE, "Nikola Penkov", "8001010000", benutzer);
+		Lehrer lehrer = new Lehrer(Long.MAX_VALUE, "Nikola Penkov", "8001010000", benutzer);
 		lehrer.setSchulfachSet(new HashSet<>());
 		lehrer.getSchulfachSet().add(schulfach);
 		schulstunde.setLehrer(lehrer);
@@ -58,9 +58,9 @@ public class SchulstundeValidierungIT extends AbstraktEntityValidierungIT {
 	@Test
 	public void keineRelationZwischenLehrerUndSchulfach() {
 		// Given
-		Lehrer lehrer = new Lehrer(Integer.MAX_VALUE, "Stefan Popov", "7901010000", benutzer);
+		Lehrer lehrer = new Lehrer(Long.MAX_VALUE, "Stefan Popov", "7901010000", benutzer);
 		lehrer.setSchulfachSet(new HashSet<>());
-		lehrer.getSchulfachSet().add(new Schulfach(1, "Deutsch"));
+		lehrer.getSchulfachSet().add(new Schulfach(1L, "Deutsch"));
 		schulstunde.setLehrer(lehrer);
 
 		// When

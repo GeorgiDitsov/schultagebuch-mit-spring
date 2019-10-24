@@ -34,17 +34,17 @@ public class ElternteilValidierungIT extends AbstraktEntityValidierungIT {
 
 	@Before
 	public void initTestContext() {
-		schuler = new Schuler(Integer.MAX_VALUE, "Rosen Bachev", "0707070808", new Klasse(Integer.MAX_VALUE, 6, "a"),
-				new Benutzer(Integer.MAX_VALUE, "benutzername", "passwort",
+		schuler = new Schuler(Long.MAX_VALUE, "Rosen Bachev", "0707070808", new Klasse(Long.MAX_VALUE, 6, "a"),
+				new Benutzer(Long.MAX_VALUE, "benutzername", "passwort",
 						new Rolle(Integer.MAX_VALUE, RolleTyp.ROLLE_SCHULER)));
 		elternteil = new Elternteil();
-		elternteil.setId(123);
+		elternteil.setId(123L);
 		Set<Schuler> kinder = new HashSet<>();
 		kinder.add(schuler);
 		elternteil.setKinder(kinder);
 		rolle = new Rolle();
 		benutzer = new Benutzer();
-		benutzer.setId(Integer.MAX_VALUE);
+		benutzer.setId(Long.MAX_VALUE);
 		benutzer.setBenutzerName("ValidBenutzername");
 		benutzer.setPasswort("ValidPass");
 	}

@@ -32,6 +32,54 @@ public class SchulerValidierungIT extends AbstraktEntityValidierungIT {
 	}
 
 	@Test
+	public void richtigSchulerName() {
+		// Given
+		schuler.setName("Spas Petkov");
+
+		// When
+		Set<ConstraintViolation<Schuler>> violations = getValidator().validateProperty(schuler, "name");
+
+		// Then
+		assertThat(violations, is(empty()));
+	}
+
+	@Test
+	public void falschSchulerName() {
+		// Given
+		schuler.setName("spas Petkov");
+
+		// When
+		Set<ConstraintViolation<Schuler>> violations = getValidator().validateProperty(schuler, "name");
+
+		// Then
+		assertThat(violations, is(not(empty())));
+	}
+
+	@Test
+	public void richtigSchulerPin() {
+		// Given
+		schuler.setPin("0001010000");
+
+		// When
+		Set<ConstraintViolation<Schuler>> violations = getValidator().validateProperty(schuler, "pin");
+
+		// Then
+		assertThat(violations, is(empty()));
+	}
+
+	@Test
+	public void falschSchulerPin() {
+		// Given
+		schuler.setPin("0000000000");
+
+		// When
+		Set<ConstraintViolation<Schuler>> violations = getValidator().validateProperty(schuler, "pin");
+
+		// Then
+		assertThat(violations, is(not(empty())));
+	}
+
+	@Test
 	public void richtigSchulerBenutzerRolle() {
 		// Given
 		benutzer.getRolle().setName(RolleTyp.ROLLE_SCHULER);

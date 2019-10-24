@@ -25,9 +25,9 @@ public class NoteService {
 	@Autowired
 	private MessageSource messageSource;
 
-	public Note finden(final int id, final Locale locale) {
-		return repo.findById(id).orElseThrow(
-				() -> new IllegalArgumentException(messageSource.getMessage("invalid.grade", new Object[id], locale)));
+	public Note finden(final Long id, final Locale locale) {
+		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
+				messageSource.getMessage("invalid.grade", new Object[] { id }, locale)));
 	}
 
 	public Optional<Note> findeSchulerLetzteNote(final Schuler schuler) {
@@ -35,22 +35,22 @@ public class NoteService {
 	}
 
 	public List<Note> findeSchulerNoten(final Schuler schuler, final Semester semester) {
-		return repo.findBySchulerAndNoteUpdateDatumBetweenOrderByNoteUpdateDatumDesc(schuler, semester.getSemesterbeginn(),
-				semester.getSemesterende());
+		return repo.findBySchulerAndNoteUpdateDatumBetweenOrderByNoteUpdateDatumDesc(schuler,
+				semester.getSemesterbeginn(), semester.getSemesterende());
 	}
 
 	public List<Note> findeSchulerNotenDurchSchulstunde(final Schuler schuler, final Schulstunde schulstunde,
 			final Semester semester) {
-		return repo.findBySchulerAndSchulstundeAndNoteUpdateDatumBetween(schuler, schulstunde, semester.getSemesterbeginn(),
-				semester.getSemesterende());
+		return repo.findBySchulerAndSchulstundeAndNoteUpdateDatumBetween(schuler, schulstunde,
+				semester.getSemesterbeginn(), semester.getSemesterende());
 	}
 
 	public void speichern(final Note note) {
 		repo.save(note);
 	}
 
-	public void loeschen(final Note note) {
-		repo.delete(note);
+	public void loeschen(final Long id) {
+		repo.deleteById(id);
 	}
 
 }

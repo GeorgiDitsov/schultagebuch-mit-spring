@@ -2,6 +2,7 @@ package com.proxiad.schultagebuch.converter;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -11,12 +12,12 @@ public class LocalDateTimeAttributeConverter implements AttributeConverter<Local
 
 	@Override
 	public Timestamp convertToDatabaseColumn(LocalDateTime datum) {
-		return datum == null ? null : Timestamp.valueOf(datum);
+		return Objects.isNull(datum) ? null : Timestamp.valueOf(datum);
 	}
 
 	@Override
 	public LocalDateTime convertToEntityAttribute(Timestamp sqlTimestamp) {
-		return sqlTimestamp == null ? null : sqlTimestamp.toLocalDateTime();
+		return Objects.isNull(sqlTimestamp) ? null : sqlTimestamp.toLocalDateTime();
 	}
 
 }

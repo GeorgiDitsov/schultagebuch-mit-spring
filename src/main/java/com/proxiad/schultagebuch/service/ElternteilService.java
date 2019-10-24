@@ -26,15 +26,11 @@ public class ElternteilService {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc("%" + elternteilName + "%");
 	}
 
-	public void speichern(final Elternteil elternteil) {
-		repo.save(elternteil);
-	}
-
 	public List<Elternteil> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Elternteil elternteilFinde(final int id, final Locale locale) {
+	public Elternteil elternteilFinde(final Long id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.parent", new Object[] { id }, locale)));
 	}
@@ -44,8 +40,12 @@ public class ElternteilService {
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}
 
-	public void loeschen(final Elternteil elternteil) {
-		repo.delete(elternteil);
+	public void speichern(final Elternteil elternteil) {
+		repo.save(elternteil);
+	}
+
+	public void loeschen(final Long id) {
+		repo.deleteById(id);
 	}
 
 }

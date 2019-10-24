@@ -10,7 +10,7 @@ import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 
 @Repository
-public interface SchulstundeRepository extends JpaRepository<Schulstunde, Integer> {
+public interface SchulstundeRepository extends JpaRepository<Schulstunde, Long> {
 
 	public List<Schulstunde> findAllByOrderByKlasseIdAscIdAsc();
 

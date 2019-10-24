@@ -44,8 +44,8 @@ public class BenutzerController extends AbstraktController {
 
 	@RequestMapping(value = "/benutzer/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView bestehendBenutzer(@RequestHeader final String referer, @PathVariable(value = "id") final int id,
-			final Locale locale, RedirectAttributes attributes) {
+	public RedirectView bestehendBenutzer(@RequestHeader final String referer,
+			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("benutzer", benutzerService.finden(id, locale));
 		return super.umleiten(referer);
@@ -64,9 +64,9 @@ public class BenutzerController extends AbstraktController {
 
 	@RequestMapping(value = "/benutzer/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView benutzerLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final int id,
+	public RedirectView benutzerLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
 			final Locale locale, RedirectAttributes attributes) {
-		benutzerService.loeschen(benutzerService.finden(id, locale));
+		benutzerService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}

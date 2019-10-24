@@ -9,6 +9,9 @@ import com.proxiad.schultagebuch.service.RolleService;
 
 public final class PersonUtils {
 
+	private static final String FIND_BY_BENUTZERNAME = "findeNachBenutzerName";
+	private static final String SET_BENUTZER = "setBenutzer";
+
 	private PersonUtils() {
 		// nothing
 	}
@@ -17,7 +20,7 @@ public final class PersonUtils {
 			final Locale locale) {
 		Object person = null;
 		try {
-			person = personService.getClass().getMethod("findeNachBenutzerName", String.class, Locale.class)
+			person = personService.getClass().getMethod(FIND_BY_BENUTZERNAME, String.class, Locale.class)
 					.invoke(personService, benutzerName, locale);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
@@ -28,7 +31,7 @@ public final class PersonUtils {
 
 	public static Object getNeuePerson(Object person, RolleService rolleService, final Locale locale) {
 		try {
-			person.getClass().getMethod("setBenutzer", Benutzer.class).invoke(person,
+			person.getClass().getMethod(SET_BENUTZER, Benutzer.class).invoke(person,
 					getBenutzer(RolleUtils.getValidRolle(person, rolleService, locale)));
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {

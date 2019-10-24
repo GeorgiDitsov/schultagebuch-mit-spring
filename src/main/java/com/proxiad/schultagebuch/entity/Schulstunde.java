@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.persistence.Column;
@@ -27,7 +28,7 @@ public class Schulstunde {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_schulstunde_generator")
 	@SequenceGenerator(name = "PK_schulstunde_generator", sequenceName = "schulstunde_id_seq", allocationSize = 1)
 	@Column(name = "schulstunde_id", updatable = false)
-	private int id;
+	private Long id;
 
 	@NotNull
 	@Valid
@@ -50,18 +51,18 @@ public class Schulstunde {
 		// nothing
 	}
 
-	public Schulstunde(int id, Klasse klasse, Schulfach schulfach, Lehrer lehrer) {
+	public Schulstunde(Long id, Klasse klasse, Schulfach schulfach, Lehrer lehrer) {
 		this.id = id;
 		this.klasse = klasse;
 		this.schulfach = schulfach;
 		this.lehrer = lehrer;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -97,7 +98,7 @@ public class Schulstunde {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -105,12 +106,15 @@ public class Schulstunde {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Schulstunde other = (Schulstunde) obj;
-		if (id != other.id)
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

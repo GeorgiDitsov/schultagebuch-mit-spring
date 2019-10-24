@@ -27,12 +27,12 @@ public class SchulstundeService {
 		return repo.findAllByOrderByKlasseIdAscIdAsc();
 	}
 
-	public Schulstunde finden(final int id, final Locale locale) {
+	public Schulstunde finden(final Long id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.course", new Object[] { id }, locale)));
 	}
 
-	public Schulstunde lehrerSchulstundeFinden(final int id, final Lehrer lehrer, final Locale locale) {
+	public Schulstunde lehrerSchulstundeFinden(final Long id, final Lehrer lehrer, final Locale locale) {
 		return repo.findById(id).filter(schulstunde -> schulstunde.getLehrer().equals(lehrer))
 				.orElseThrow(() -> new IllegalArgumentException(
 						messageSource.getMessage("invalid.teacher.subject.relation", null, locale)));
@@ -50,7 +50,7 @@ public class SchulstundeService {
 		repo.save(schulstunde);
 	}
 
-	public void loeschen(final Schulstunde schulstunde) {
-		repo.delete(schulstunde);
+	public void loeschen(final Long id) {
+		repo.deleteById(id);
 	}
 }

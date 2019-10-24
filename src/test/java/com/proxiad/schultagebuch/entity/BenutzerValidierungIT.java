@@ -29,7 +29,7 @@ public class BenutzerValidierungIT extends AbstraktEntityValidierungIT {
 	public void initTestContext() {
 		rolle = new Rolle(1, RolleTyp.ROLLE_LEHRER);
 		benutzer = new Benutzer();
-		benutzer.setId(Integer.MAX_VALUE);
+		benutzer.setId(Long.MAX_VALUE);
 	}
 
 	@Test

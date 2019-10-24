@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class Lehrer {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_lehrer_generator")
 	@SequenceGenerator(name = "PK_lehrer_generator", sequenceName = "lehrer_id_seq", allocationSize = 1)
 	@Column(name = "lehrer_id", updatable = false)
-	private int id;
+	private Long id;
 
 	@PersonNameConstraint
 	@Column(name = "lehrer_name")
@@ -57,18 +58,18 @@ public class Lehrer {
 		// nothing
 	}
 
-	public Lehrer(int id, String name, String pin, Benutzer benutzer) {
+	public Lehrer(Long id, String name, String pin, Benutzer benutzer) {
 		this.id = id;
 		this.name = name;
 		this.pin = pin;
 		this.benutzer = benutzer;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -119,8 +120,8 @@ public class Lehrer {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((pin == null) ? 0 : pin.hashCode());
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
+		result = prime * result + ((Objects.isNull(pin)) ? 0 : pin.hashCode());
 		return result;
 	}
 
@@ -128,15 +129,18 @@ public class Lehrer {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Lehrer other = (Lehrer) obj;
-		if (id != other.id)
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		if (pin == null) {
-			if (other.pin != null)
+		if (Objects.isNull(pin)) {
+			if (Objects.nonNull(other.pin))
 				return false;
 		} else if (!pin.equals(other.pin))
 			return false;

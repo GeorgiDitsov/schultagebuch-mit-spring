@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.proxiad.schultagebuch.entity.Benutzer;
 
 @Repository
-public interface BenutzerRepository extends JpaRepository<Benutzer, Integer> {
+public interface BenutzerRepository extends JpaRepository<Benutzer, Long> {
 
 	public List<Benutzer> findAllByOrderByIdAsc();
 

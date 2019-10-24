@@ -45,7 +45,7 @@ public class KlasseController extends AbstraktController {
 
 	@RequestMapping(value = "/klasse/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView bestehendeKlasse(@RequestHeader final String referer, @PathVariable(value = "id") final int id,
+	public RedirectView bestehendeKlasse(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
 			final Locale locale, RedirectAttributes attributes) {
 		modalAttributes("edit", klasseService.finden(id, locale), attributes);
 		return super.umleiten(referer);
@@ -65,9 +65,9 @@ public class KlasseController extends AbstraktController {
 
 	@RequestMapping(value = "/klasse/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView klasseLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final int id,
+	public RedirectView klasseLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
 			final Locale locale, RedirectAttributes attributes) {
-		klasseService.loeschen(klasseService.finden(id, locale));
+		klasseService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}

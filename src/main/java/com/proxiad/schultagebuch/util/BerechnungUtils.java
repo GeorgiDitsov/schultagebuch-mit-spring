@@ -10,12 +10,12 @@ public final class BerechnungUtils {
 		// nothing
 	}
 
-	public static long durchschnittlichNoten(final Collection<Note> noten) {
+	public static Long durchschnittlichNoten(final Collection<Note> noten) {
 		return Math.round(noten.stream().mapToDouble(Note::getWert).average().orElse(Double.NaN));
 	}
 
 	public static double durchschnittlichHalbjaehrigeNoten(final Collection<Long> collectionOfLongs) {
-		return collectionOfLongs.stream().filter(l -> l != 0).mapToDouble(Long::doubleValue).average()
+		return collectionOfLongs.stream().filter(l -> l >= 2 && l <= 6).mapToDouble(Long::doubleValue).average()
 				.orElse(Double.NaN);
 	}
 

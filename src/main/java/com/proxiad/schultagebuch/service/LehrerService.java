@@ -26,15 +26,11 @@ public class LehrerService {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc("%" + lehrerName + "%");
 	}
 
-	public void speichern(final Lehrer lehrer) {
-		repo.save(lehrer);
-	}
-
 	public List<Lehrer> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Lehrer finden(final int id, final Locale locale) {
+	public Lehrer finden(final Long id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.teacher", new Object[] { id }, locale)));
 	}
@@ -44,7 +40,11 @@ public class LehrerService {
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}
 
-	public void loeschen(final Lehrer lehrer) {
-		repo.delete(lehrer);
+	public void speichern(final Lehrer lehrer) {
+		repo.save(lehrer);
+	}
+
+	public void loeschen(final Long id) {
+		repo.deleteById(id);
 	}
 }

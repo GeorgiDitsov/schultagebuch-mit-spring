@@ -29,10 +29,6 @@ public class SchulerService {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc("%" + schulerName + "%");
 	}
 
-	public void speichern(final Schuler schuler) {
-		repo.save(schuler);
-	}
-
 	public List<Schuler> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
@@ -41,18 +37,18 @@ public class SchulerService {
 		return repo.findByKlasseOrderByIdAsc(klasse);
 	}
 
-	public Schuler finden(final int id, final Locale locale) {
+	public Schuler finden(final Long id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.student", new Object[] { id }, locale)));
 	}
 
-	public Schuler elternteilKindFinde(final int schulerId, final Elternteil elternteil, final Locale locale) {
+	public Schuler elternteilKindFinde(final Long schulerId, final Elternteil elternteil, final Locale locale) {
 		return repo.findById(schulerId).filter(kind -> elternteil.getKinder().contains(kind))
 				.orElseThrow(() -> new IllegalArgumentException(
 						messageSource.getMessage("invalid.parent.student.relation", null, locale)));
 	}
 
-	public Schuler schulerFindeNachSchulstunde(final int schulerId, final Schulstunde schulstunde,
+	public Schuler schulerFindeNachSchulstunde(final Long schulerId, final Schulstunde schulstunde,
 			final Locale locale) {
 		return repo.findById(schulerId).filter(schuler -> schulstunde.getKlasse().getSchulerSet().contains(schuler))
 				.orElseThrow(() -> new IllegalArgumentException(
@@ -64,8 +60,12 @@ public class SchulerService {
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}
 
-	public void loeschen(final Schuler schuler) {
-		repo.delete(schuler);
+	public void speichern(final Schuler schuler) {
+		repo.save(schuler);
+	}
+
+	public void loeschen(final Long id) {
+		repo.deleteById(id);
 	}
 
 }

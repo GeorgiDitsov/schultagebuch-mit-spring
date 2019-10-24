@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.repository.BenutzerRepository;
@@ -24,6 +25,10 @@ import com.proxiad.schultagebuch.repository.BenutzerRepository;
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class BenutzerServiceIT {
+
+	private static final String BENUTZERNAME = "benutzername";
+//	private static final String BENUTZER_PASSWORT = "passwort";
+	private static final StringBuilder BENUTZERNAME_LIKE = new StringBuilder("%%").insert(1, BENUTZERNAME);
 
 	@Mock
 	private BenutzerRepository repo;
@@ -35,16 +40,28 @@ public class BenutzerServiceIT {
 	private BenutzerService service;
 
 	@Test
-	public void keineBenutzerGefundenMitDiesemBenutzername() {
+	public void gefundenLeereListeDerBenutzer() {
 		// Given
-		String benutzername = "benutzername";
-		when(repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc("%" + benutzername + "%")).thenReturn(new ArrayList<>());
+		when(repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(BENUTZERNAME_LIKE.toString()))
+				.thenReturn(new ArrayList<>());
 
 		// When
-		List<Benutzer> list = service.suchen(benutzername);
+		List<Benutzer> list = service.suchen(BENUTZERNAME);
 
 		// Then
 		assertThat(list, is(emptyCollectionOf(Benutzer.class)));
+	}
+
+	@Test(expected = UsernameNotFoundException.class)
+	public void keineBenutzerGefundenDurchBenutzername() {
+		// Given
+		String benutzername = BENUTZERNAME;
+
+		// When
+		when(repo.findByBenutzerName(benutzername)).thenReturn(Optional.empty());
+
+		// Then
+		service.findeDurchBenutzerName(benutzername);
 	}
 
 	@Test
@@ -62,7 +79,7 @@ public class BenutzerServiceIT {
 	@Test(expected = IllegalArgumentException.class)
 	public void keineBenutzerMitDieseId() {
 		// Given
-		int id = Integer.MAX_VALUE;
+		Long id = Long.MAX_VALUE;
 
 		// When
 		when(repo.findById(id)).thenReturn(Optional.empty());

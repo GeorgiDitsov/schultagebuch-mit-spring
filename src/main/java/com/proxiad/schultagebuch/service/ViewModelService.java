@@ -72,6 +72,7 @@ public class ViewModelService {
 	private NoteViewModel getNoteViewModel(final Note note, final Locale locale) {
 		return new NoteViewModel(note.getId(), note.getSchulstunde().getSchulfach().getName(),
 				note.getSchulstunde().getLehrer().getName(), note.getWert(),
+				DatumUtils.localDateTimeZuString(note.getNoteInsertDatum(), locale),
 				DatumUtils.localDateTimeZuString(note.getNoteUpdateDatum(), locale));
 	}
 

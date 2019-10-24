@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.proxiad.schultagebuch.entity.Schulfach;
 
 @Repository
-public interface SchulfachRepository extends JpaRepository<Schulfach, Integer> {
+public interface SchulfachRepository extends JpaRepository<Schulfach, Long> {
 
 	public List<Schulfach> findAllByOrderByIdAsc();
 }

@@ -11,6 +11,9 @@ import com.proxiad.schultagebuch.entity.Benutzer;
 @Component
 public final class KennzeichenUtils {
 
+	private static final String GET_NAME = "getName";
+	private static final String GET_PIN = "getPin";
+
 	private KennzeichenUtils() {
 		// nothing
 	}
@@ -19,8 +22,8 @@ public final class KennzeichenUtils {
 		String name = null;
 		String pin = null;
 		try {
-			name = (String) person.getClass().getMethod("getName").invoke(person);
-			pin = (String) person.getClass().getMethod("getPin").invoke(person);
+			name = (String) person.getClass().getMethod(GET_NAME).invoke(person);
+			pin = (String) person.getClass().getMethod(GET_PIN).invoke(person);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
 			e.printStackTrace();

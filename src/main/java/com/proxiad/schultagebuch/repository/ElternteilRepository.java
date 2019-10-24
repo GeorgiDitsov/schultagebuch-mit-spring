@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.proxiad.schultagebuch.entity.Elternteil;
 
 @Repository
-public interface ElternteilRepository extends JpaRepository<Elternteil, Integer> {
+public interface ElternteilRepository extends JpaRepository<Elternteil, Long> {
 
 	public List<Elternteil> findAllByOrderByIdAsc();
 

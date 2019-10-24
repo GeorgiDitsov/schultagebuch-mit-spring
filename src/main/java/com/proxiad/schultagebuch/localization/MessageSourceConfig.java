@@ -9,11 +9,14 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @Configuration
 public class MessageSourceConfig {
 
+	private static final String CLASSPATH = "classpath:messages";
+	private static final String DEFAULT_ENCODING = "UTF-8";
+
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.setBasename("classpath:messages");
-		messageSource.setDefaultEncoding("UTF-8");
+		messageSource.setBasename(CLASSPATH);
+		messageSource.setDefaultEncoding(DEFAULT_ENCODING);
 		return messageSource;
 	}
 

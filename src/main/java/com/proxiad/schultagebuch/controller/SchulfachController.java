@@ -45,7 +45,7 @@ public class SchulfachController extends AbstraktController {
 	@RequestMapping(value = "/schulfach/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendesSchulfach(@RequestHeader final String referer,
-			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
 		modalAttributes("edit", schulfachService.finden(id, locale), attributes);
 		return super.umleiten(referer);
 	}
@@ -63,9 +63,9 @@ public class SchulfachController extends AbstraktController {
 
 	@RequestMapping(value = "/schulfach/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView schulfachLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final int id,
-			final Locale locale, RedirectAttributes attributes) {
-		schulfachService.loeschen(schulfachService.finden(id, locale));
+	public RedirectView schulfachLoeschen(@RequestHeader final String referer,
+			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
+		schulfachService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}

@@ -12,7 +12,7 @@ import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 
 @Repository
-public interface NoteRepository extends JpaRepository<Note, Integer> {
+public interface NoteRepository extends JpaRepository<Note, Long> {
 
 	public List<Note> findBySchulerAndNoteUpdateDatumBetweenOrderByNoteUpdateDatumDesc(Schuler schuler,
 			LocalDateTime begin, LocalDateTime end);

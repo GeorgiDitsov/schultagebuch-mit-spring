@@ -2,29 +2,32 @@ package com.proxiad.schultagebuch.view;
 
 public class NoteViewModel {
 
-	private int noteId;
+	private Long noteId;
 	private String schulfachName;
 	private String lehrerName;
 	private byte note;
-	private String noteDatum;
+	private String noteInsertDatum;
+	private String noteUpdateDatum;
 
 	public NoteViewModel() {
 		// nothing
 	}
 
-	public NoteViewModel(int noteId, String schulfachName, String lehrerName, byte note, String noteDatum) {
+	public NoteViewModel(Long noteId, String schulfachName, String lehrerName, byte note, String noteInsertDatum,
+			String noteUpdateDatum) {
 		this.noteId = noteId;
 		this.schulfachName = schulfachName;
 		this.lehrerName = lehrerName;
 		this.note = note;
-		this.noteDatum = noteDatum;
+		this.noteInsertDatum = noteInsertDatum;
+		this.noteUpdateDatum = noteUpdateDatum;
 	}
 
-	public int getNoteId() {
+	public Long getNoteId() {
 		return noteId;
 	}
 
-	public void setNoteId(int noteId) {
+	public void setNoteId(Long noteId) {
 		this.noteId = noteId;
 	}
 
@@ -52,16 +55,24 @@ public class NoteViewModel {
 		this.note = note;
 	}
 
-	public String getNoteDatum() {
-		return noteDatum;
+	public String getNoteInsertDatum() {
+		return noteInsertDatum;
 	}
 
-	public void setNoteDatum(String noteDatum) {
-		this.noteDatum = noteDatum;
+	public void setNoteInsertDatum(String noteInsertDatum) {
+		this.noteInsertDatum = noteInsertDatum;
+	}
+
+	public String getNoteUpdateDatum() {
+		return noteUpdateDatum;
+	}
+
+	public void setNoteUpdateDatum(String noteDatum) {
+		this.noteUpdateDatum = noteDatum;
 	}
 
 	public String getKennzeichen() {
-		return schulfachName + ", " + lehrerName + ", " + note + ", " + noteDatum;
+		return schulfachName + ", " + lehrerName + ", " + note + ", " + noteUpdateDatum;
 	}
 
 }

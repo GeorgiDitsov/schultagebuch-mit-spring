@@ -192,7 +192,8 @@
 		        	<th scope="col" th:text="#{subject}">
 		        	<th scope="col" th:text="#{teacher}">
 		        	<th scope="col" th:text="#{grade}">
-		        	<th scope="col" th:text="#{date}">
+		        	<th scope="col" th:text="#{date(#{insert})}">
+		        	<th scope="col" th:text="#{date(#{update})}">
 		        	<th sec:authorize="hasRole('LEHRER')" scope="col" th:text=#{options}>
 		    	</tr>
 		   	</thead>
@@ -200,7 +201,8 @@
 	  			<td th:text="${noteViewModel.schulfachName}">
 	  			<td th:text="${noteViewModel.lehrerName}">
 	  			<th th:text="${noteViewModel.note}">
-	  			<td th:text="${noteViewModel.noteDatum}">
+	  			<td th:text="${noteViewModel.noteInsertDatum}">
+	  			<td th:text="${noteViewModel.noteUpdateDatum}">
 	  			<td sec:authorize="hasRole('LEHRER')">
 	  				<a th:href="@{'/note/edit/'+${noteViewModel.noteId}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	  				<a th:href="@{'/note/delete/'+${noteViewModel.noteId}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>

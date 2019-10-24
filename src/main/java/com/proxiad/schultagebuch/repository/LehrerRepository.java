@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.proxiad.schultagebuch.entity.Lehrer;
 
 @Repository
-public interface LehrerRepository extends JpaRepository<Lehrer, Integer> {
+public interface LehrerRepository extends JpaRepository<Lehrer, Long> {
 
 	public List<Lehrer> findAllByOrderByIdAsc();
 

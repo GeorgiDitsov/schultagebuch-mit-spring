@@ -22,7 +22,7 @@ public class UserDetailsImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Benutzer benutzer = benutzerService.findeNachBenutzerName(username);
+		Benutzer benutzer = benutzerService.findeDurchBenutzerName(username);
 		return new User(benutzer.getBenutzerName(), benutzer.getPasswort(), getAuthorities(benutzer));
 	}
 

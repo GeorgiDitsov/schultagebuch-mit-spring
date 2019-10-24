@@ -48,7 +48,7 @@ public class ElternteilController extends AbstraktController {
 	@RequestMapping(value = "/elternteil/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendesElternteil(@RequestHeader final String referer,
-			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("listSchuler", schulerService.findeAlle());
 		attributes.addFlashAttribute("elternteil", elternteilService.elternteilFinde(id, locale));
@@ -68,8 +68,8 @@ public class ElternteilController extends AbstraktController {
 	@RequestMapping(value = "/elternteil/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView elternteilLoeschen(@RequestHeader final String referer,
-			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
-		elternteilService.loeschen(elternteilService.elternteilFinde(id, locale));
+			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
+		elternteilService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}

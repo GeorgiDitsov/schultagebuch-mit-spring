@@ -1,6 +1,7 @@
 package com.proxiad.schultagebuch.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +31,7 @@ public class Note {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_note_generator")
 	@SequenceGenerator(name = "PK_note_generator", sequenceName = "note_id_seq", allocationSize = 1)
 	@Column(name = "note_id", updatable = false)
-	private int id;
+	private Long id;
 
 	@NotNull
 	@Min(2)
@@ -60,7 +61,7 @@ public class Note {
 		// nothing
 	}
 
-	public Note(int id, byte wert, LocalDateTime noteInsertDatum, LocalDateTime noteUpdateDatum, Schuler schuler,
+	public Note(Long id, byte wert, LocalDateTime noteInsertDatum, LocalDateTime noteUpdateDatum, Schuler schuler,
 			Schulstunde schulstunde) {
 		this.id = id;
 		this.wert = wert;
@@ -70,11 +71,11 @@ public class Note {
 		this.schulstunde = schulstunde;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -122,7 +123,7 @@ public class Note {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -135,7 +136,10 @@ public class Note {
 		if (getClass() != obj.getClass())
 			return false;
 		Note other = (Note) obj;
-		if (id != other.id)
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

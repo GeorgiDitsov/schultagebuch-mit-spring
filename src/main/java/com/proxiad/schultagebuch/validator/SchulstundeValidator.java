@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.validator;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.ConstraintValidator;
@@ -12,8 +13,9 @@ public class SchulstundeValidator implements ConstraintValidator<SchulstundeCons
 
 	@Override
 	public boolean isValid(Schulstunde schulstunde, ConstraintValidatorContext context) {
-		return Optional.ofNullable(schulstunde.getLehrer()).map(lehrer -> lehrer.getSchulfachSet())
-				.filter(faecher -> faecher.contains(schulstunde.getSchulfach())).isPresent();
+		return Objects.isNull(schulstunde.getLehrer()) ? true
+				: Optional.ofNullable(schulstunde.getLehrer()).map(lehrer -> lehrer.getSchulfachSet())
+						.filter(faecher -> faecher.contains(schulstunde.getSchulfach())).isPresent();
 	}
 
 }

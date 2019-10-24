@@ -2,7 +2,7 @@ package com.proxiad.schultagebuch.view;
 
 public class KindViewModel {
 
-	private int kindId;
+	private Long kindId;
 	private String kindKennzeichen;
 	private String letzteNoteKennzeichen;
 	private double halbjaehrigeErfolg;
@@ -11,18 +11,18 @@ public class KindViewModel {
 		// nothing
 	}
 
-	public KindViewModel(int kindId, String kindKennzeichen, String letzteNoteKennzeichen, double halbjaehrigeErfolg) {
+	public KindViewModel(Long kindId, String kindKennzeichen, String letzteNoteKennzeichen, double halbjaehrigeErfolg) {
 		this.kindId = kindId;
 		this.kindKennzeichen = kindKennzeichen;
 		this.letzteNoteKennzeichen = letzteNoteKennzeichen;
 		this.halbjaehrigeErfolg = halbjaehrigeErfolg;
 	}
 
-	public int getKindId() {
+	public Long getKindId() {
 		return kindId;
 	}
 
-	public void setKindId(int kindId) {
+	public void setKindId(Long kindId) {
 		this.kindId = kindId;
 	}
 

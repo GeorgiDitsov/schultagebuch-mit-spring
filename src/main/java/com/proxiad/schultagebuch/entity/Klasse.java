@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -27,7 +28,7 @@ public class Klasse {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_klasse_generator")
 	@SequenceGenerator(name = "PK_klasse_generator", sequenceName = "klasse_id_seq", allocationSize = 1)
 	@Column(name = "klasse_id", updatable = false)
-	private int id;
+	private Long id;
 
 	@NotNull
 	@Min(1)
@@ -52,17 +53,17 @@ public class Klasse {
 		// nothing
 	}
 
-	public Klasse(int id, int jahr, String buchstabe) {
+	public Klasse(Long id, int jahr, String buchstabe) {
 		this.id = id;
 		this.jahr = jahr;
 		this.buchstabe = buchstabe;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -106,7 +107,7 @@ public class Klasse {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -114,12 +115,15 @@ public class Klasse {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Klasse other = (Klasse) obj;
-		if (id != other.id)
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

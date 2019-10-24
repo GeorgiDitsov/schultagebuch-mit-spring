@@ -79,8 +79,8 @@ public class NoteController extends AbstraktController {
 
 	@RequestMapping(value = "/meine-kinder/noten/{id}")
 	@PreAuthorize("hasRole('ELTERNTEIL')")
-	public RedirectView elternteilKindNotenAnzeigen(@PathVariable(value = "id") final int id, final Principal principal,
-			final Locale locale, RedirectAttributes attributes) {
+	public RedirectView elternteilKindNotenAnzeigen(@PathVariable(value = "id") final Long id,
+			final Principal principal, final Locale locale, RedirectAttributes attributes) {
 		Schuler kind = schulerService.elternteilKindFinde(id, getElternteil(principal.getName(), locale), locale);
 		attributes.addFlashAttribute("showSchulerfolg", true);
 		attributes.addFlashAttribute("kind", kind);
@@ -100,8 +100,8 @@ public class NoteController extends AbstraktController {
 
 	@RequestMapping(value = "/meine-schulstunden/schulstunde/{schulstundeId}/schuler/{schulerId}")
 	@PreAuthorize("hasRole('LEHRER')")
-	public ModelAndView schulerNotenAnzeigen(@PathVariable(value = "schulstundeId") final int schulstundeId,
-			@PathVariable(value = "schulerId") final int schulerId, final Principal principal, final Locale locale) {
+	public ModelAndView schulerNotenAnzeigen(@PathVariable(value = "schulstundeId") final Long schulstundeId,
+			@PathVariable(value = "schulerId") final Long schulerId, final Principal principal, final Locale locale) {
 		Schulstunde schulstunde = schulstundeService.lehrerSchulstundeFinden(schulstundeId,
 				getLehrer(principal.getName(), locale), locale);
 		Schuler schuler = schulerService.schulerFindeNachSchulstunde(schulerId, schulstunde, locale);
@@ -116,8 +116,8 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/schulstunde/{schulstundeId}/schuler/{schulerId}/note/add")
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView neueNote(@RequestHeader final String referer,
-			@PathVariable(value = "schulerId") final int schulerId,
-			@PathVariable(value = "schulstundeId") final int schulstundeId, final Locale locale,
+			@PathVariable(value = "schulstundeId") final Long schulstundeId,
+			@PathVariable(value = "schulerId") final Long schulerId, final Locale locale,
 			RedirectAttributes attributes) {
 		noteModalAttributes("add",
 				getNewNote(schulerService.finden(schulerId, locale), schulstundeService.finden(schulstundeId, locale)),
@@ -128,8 +128,8 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/note/edit/{noteId}")
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView bestehendeNote(@RequestHeader final String referer,
-			@PathVariable(value = "noteId") final int noteId, final Locale locale, RedirectAttributes attributes) {
-		noteModalAttributes("edit", noteService.finden(noteId, locale), attributes);
+			@PathVariable(value = "noteId") final Long id, final Locale locale, RedirectAttributes attributes) {
+		noteModalAttributes("edit", noteService.finden(id, locale), attributes);
 		return super.umleiten(referer);
 	}
 
@@ -146,9 +146,9 @@ public class NoteController extends AbstraktController {
 
 	@RequestMapping(value = "/note/delete/{noteId}")
 	@PreAuthorize("hasRole('LEHRER')")
-	public RedirectView noteLoeschen(@RequestHeader final String referer, @PathVariable(value = "noteId") final int id,
+	public RedirectView noteLoeschen(@RequestHeader final String referer, @PathVariable(value = "noteId") final Long id,
 			final Locale locale, RedirectAttributes attributes) {
-		noteService.loeschen(noteService.finden(id, locale));
+		noteService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}
