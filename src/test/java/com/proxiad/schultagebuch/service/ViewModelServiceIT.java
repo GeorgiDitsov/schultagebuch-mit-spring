@@ -2,6 +2,8 @@ package com.proxiad.schultagebuch.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyCollectionOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
@@ -12,13 +14,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
@@ -26,27 +26,16 @@ import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.entity.Note;
-import com.proxiad.schultagebuch.entity.Rolle;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulfach;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.entity.Semester;
-import com.proxiad.schultagebuch.util.RolleTyp;
 import com.proxiad.schultagebuch.view.KindViewModel;
 import com.proxiad.schultagebuch.view.NoteViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class ViewModelServiceIT {
-
-	@Autowired
-	private Klasse klasse;
-
-	@Autowired
-	private Benutzer benutzer;
-
-	@Autowired
-	private Rolle rolle;
 
 	@Mock
 	private NoteService noteService;
@@ -57,40 +46,79 @@ public class ViewModelServiceIT {
 	@InjectMocks
 	private ViewModelService viewModelService;
 
-	@Before
-	public void initTestContext() {
-		klasse = new Klasse(1L, 11, "z");
-		rolle = new Rolle(1, RolleTyp.ROLLE_SCHULER);
-		benutzer = new Benutzer(1L, "ValidUsername", "validPass", rolle);
+	@Test
+	public void getListeDerNoteViewModelleDurchSchulerTest() {
+		// Given
+		Schuler schuler = new Schuler();
+		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
+		List<Note> listOfNoten = new ArrayList<>();
+		Schulstunde schulstunde = new Schulstunde(23L, new Klasse(), new Schulfach(1111L, "Sport"),
+				new Lehrer(198L, "Zdravko Petkov", "1010101010", new Benutzer()));
+		listOfNoten.add(new Note(32L, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
+		listOfNoten.add(new Note(33L, (byte) 2, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
+		listOfNoten.add(new Note(34L, (byte) 3, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
+		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
+		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(listOfNoten);
+
+		// When
+		List<NoteViewModel> listOfNoteViewModels = viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler,
+				Locale.getDefault());
+
+		// Then
+		assertThat(listOfNoteViewModels, hasSize(equalTo(3)));
 	}
 
 	@Test
-	public void getEmptyListNoteViewModelDurchSchuler() {
+	public void getLeereListeDerNoteViewModelleDurchSchuler() {
 		// Given
-		Schuler schuler = new Schuler(1L, "Ivan Ivanov", "0001010000", klasse, benutzer);
+		Schuler schuler = new Schuler();
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
 		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
 
 		// When
-		List<NoteViewModel> list = viewModelService.getListNoteViewModelBySchuler(schuler, Locale.getDefault());
+		List<NoteViewModel> list = viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler,
+				Locale.getDefault());
 
 		// Then
 		assertThat(list, is(emptyCollectionOf(NoteViewModel.class)));
 	}
 
 	@Test
-	public void getLeereListNoteViewModelDurchSchulerUndSchulstunde() {
+	public void getListeDerNoteViewModelleDurchSchulerUndSchulstundeTest() {
 		// Given
-		Schuler schuler = new Schuler(2L, "Stanislav Pelov", "1010101010", klasse, benutzer);
-		Schulstunde schulstunde = new Schulstunde(11L, klasse, new Schulfach(1L, "Math"), new Lehrer());
+		Schuler schuler = new Schuler();
+		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
+		List<Note> listOfNoten = new ArrayList<>();
+		Schulstunde schulstunde = new Schulstunde(23L, new Klasse(), new Schulfach(1111L, "Sport"),
+				new Lehrer(198L, "Zdravko Petkov", "1010101010", new Benutzer()));
+		listOfNoten.add(new Note(32L, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
+		listOfNoten.add(new Note(33L, (byte) 2, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
+		listOfNoten.add(new Note(34L, (byte) 3, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
+		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
+		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(listOfNoten);
+
+		// When
+		List<NoteViewModel> listOfNoteViewModels = viewModelService
+				.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler, schulstunde, Locale.getDefault());
+
+		// Then
+		assertThat(listOfNoteViewModels, hasSize(equalTo(3)));
+
+	}
+
+	@Test
+	public void getLeereListeDerNoteViewModelleDurchSchulerUndSchulstunde() {
+		// Given
+		Schuler schuler = new Schuler();
+		Schulstunde schulstunde = new Schulstunde();
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
 		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
 
 		// When
-		List<NoteViewModel> list = viewModelService.getListNoteViewModelBySchulerUndSchulstunde(schuler, schulstunde,
-				Locale.getDefault());
+		List<NoteViewModel> list = viewModelService.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler,
+				schulstunde, Locale.getDefault());
 
 		// Then
 		assertThat(list, is(emptyCollectionOf(NoteViewModel.class)));
@@ -100,17 +128,18 @@ public class ViewModelServiceIT {
 	public void getListNoteViewModelDurchSchulerUndSchulstundeMitFalschRelation() {
 		// Given
 		Schuler schuler = new Schuler();
-		schuler.setKlasse(klasse);
-		Schulstunde schulstunde = new Schulstunde(24L, new Klasse(), new Schulfach(), new Lehrer());
-		Schulstunde andereSchulstunde = new Schulstunde(258L, new Klasse(), new Schulfach(), new Lehrer());
+		Schulstunde schulstunde = new Schulstunde();
+		schulstunde.setId(124L);
+		Schulstunde andereSchulstunde = new Schulstunde();
+		andereSchulstunde.setId(111L);
+		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
 		List<Note> notenList = new ArrayList<>();
 		notenList.add(new Note(1L, (byte) 5, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
-		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
 		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(notenList);
 
 		// When
-		List<NoteViewModel> list = viewModelService.getListNoteViewModelBySchulerUndSchulstunde(schuler,
+		List<NoteViewModel> list = viewModelService.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler,
 				andereSchulstunde, Locale.getDefault());
 
 		// Then
@@ -118,14 +147,15 @@ public class ViewModelServiceIT {
 	}
 
 	@Test
-	public void elternteilMitOhneKinderKinderViewModelle() {
+	public void elternteilMitOhneKinder() {
 		// Given
 		Elternteil elternteil = new Elternteil();
 		Set<Schuler> ohneKinderSet = new HashSet<>();
 		elternteil.setKinder(ohneKinderSet);
 
 		// When
-		List<KindViewModel> kinder = viewModelService.getKinderViewModelle(elternteil, Locale.getDefault());
+		List<KindViewModel> kinder = viewModelService.getListeDerKinderViewModelleDurchElternteil(elternteil,
+				Locale.getDefault());
 
 		// Then
 		assertThat(kinder, is(emptyCollectionOf(KindViewModel.class)));

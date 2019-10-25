@@ -14,7 +14,7 @@ import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.util.BerechnungUtils;
-import com.proxiad.schultagebuch.util.DatumUtils;
+import com.proxiad.schultagebuch.util.NoteUtils;
 import com.proxiad.schultagebuch.view.KindViewModel;
 import com.proxiad.schultagebuch.view.NoteViewModel;
 
@@ -28,31 +28,37 @@ public class ViewModelService {
 	@Autowired
 	private SemesterService semesterService;
 
-	public List<NoteViewModel> getListNoteViewModelBySchuler(final Schuler schuler, final Locale locale) {
-		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
+	public List<NoteViewModel> getListeDerNoteViewModelleDurchSchuler(final Schuler schuler, final Locale locale) {
+		List<NoteViewModel> listOfNoteViewModels = new ArrayList<>();
 		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester(locale)).stream()
-				.forEach(note -> noteViewModelsList.add(getNoteViewModel(note, locale)));
-		return noteViewModelsList;
+				.forEach(note -> listOfNoteViewModels.add(NoteUtils.noteZuNoteViewModel(note, locale)));
+		return listOfNoteViewModels;
 	}
 
-	public List<NoteViewModel> getListNoteViewModelBySchulerUndSchulstunde(final Schuler schuler,
+	public List<NoteViewModel> getListeDerNoteViewModelleDurchSchulerUndSchulstunde(final Schuler schuler,
 			final Schulstunde schulstunde, final Locale locale) {
-		List<NoteViewModel> noteViewModelsList = new ArrayList<>();
+		List<NoteViewModel> listOfNoteViewModels = new ArrayList<>();
 		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester(locale)).stream()
 				.filter(note -> note.getSchulstunde().equals(schulstunde))
-				.forEach(note -> noteViewModelsList.add(getNoteViewModel(note, locale)));
-		return noteViewModelsList;
+				.forEach(note -> listOfNoteViewModels.add(NoteUtils.noteZuNoteViewModel(note, locale)));
+		return listOfNoteViewModels;
 	}
 
-	public List<KindViewModel> getKinderViewModelle(final Elternteil elternteil, final Locale locale) {
-		List<KindViewModel> kinderList = new ArrayList<>();
-		elternteil.getKinder().stream().forEach(kind -> kinderList.add(schulerZuKinderViewModel(kind, locale)));
-		return kinderList;
+	public List<KindViewModel> getListeDerKinderViewModelleDurchElternteil(final Elternteil elternteil,
+			final Locale locale) {
+		List<KindViewModel> listOfKinder = new ArrayList<>();
+		elternteil.getKinder().stream().forEach(kind -> listOfKinder.add(schulerZuKinderViewModel(kind, locale)));
+		return listOfKinder;
 	}
 
 	public KindViewModel schulerZuKinderViewModel(final Schuler schuler, final Locale locale) {
 		return new KindViewModel(schuler.getId(), schuler.getKennzeichen(), getSchulerLetzteNote(schuler, locale),
 				BerechnungUtils.durchschnittlichHalbjaehrigeNoten(getSchulerHalbjaehrigeNoten(schuler, locale)));
+	}
+
+	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
+		Optional<Note> note = noteService.findeSchulerLetzteNote(schuler);
+		return note.isPresent() ? NoteUtils.noteZuNoteViewModel(note.get(), locale).getKennzeichen() : "n/a";
 	}
 
 	private List<Long> getSchulerHalbjaehrigeNoten(final Schuler schuler, final Locale locale) {
@@ -62,18 +68,6 @@ public class ViewModelService {
 						BerechnungUtils.durchschnittlichNoten(noteService.findeSchulerNotenDurchSchulstunde(schuler,
 								schulstunde, semesterService.findeAktuelleSemester(locale)))));
 		return halbjaehrigeNoten;
-	}
-
-	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
-		Optional<Note> note = noteService.findeSchulerLetzteNote(schuler);
-		return note.isPresent() ? getNoteViewModel(note.get(), locale).getKennzeichen() : "n/a";
-	}
-
-	private NoteViewModel getNoteViewModel(final Note note, final Locale locale) {
-		return new NoteViewModel(note.getId(), note.getSchulstunde().getSchulfach().getName(),
-				note.getSchulstunde().getLehrer().getName(), note.getWert(),
-				DatumUtils.localDateTimeZuString(note.getNoteInsertDatum(), locale),
-				DatumUtils.localDateTimeZuString(note.getNoteUpdateDatum(), locale));
 	}
 
 }

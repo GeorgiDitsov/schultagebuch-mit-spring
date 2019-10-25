@@ -35,7 +35,7 @@ public class ElternteilService {
 				messageSource.getMessage("invalid.parent", new Object[] { id }, locale)));
 	}
 
-	public Elternteil findeNachBenutzerName(final String benutzerName, final Locale locale) {
+	public Elternteil findeDurchBenutzerName(final String benutzerName, final Locale locale) {
 		return repo.findByBenutzerBenutzerName(benutzerName)
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}

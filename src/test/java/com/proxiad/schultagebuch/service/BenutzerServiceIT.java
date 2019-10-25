@@ -27,7 +27,6 @@ import com.proxiad.schultagebuch.repository.BenutzerRepository;
 public class BenutzerServiceIT {
 
 	private static final String BENUTZERNAME = "benutzername";
-//	private static final String BENUTZER_PASSWORT = "passwort";
 	private static final StringBuilder BENUTZERNAME_LIKE = new StringBuilder("%%").insert(1, BENUTZERNAME);
 
 	@Mock
@@ -86,7 +85,6 @@ public class BenutzerServiceIT {
 
 		// Then
 		service.finden(id, Locale.getDefault());
-
 	}
 
 }

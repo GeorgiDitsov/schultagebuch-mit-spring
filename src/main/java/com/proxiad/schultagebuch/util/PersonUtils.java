@@ -9,7 +9,7 @@ import com.proxiad.schultagebuch.service.RolleService;
 
 public final class PersonUtils {
 
-	private static final String FIND_BY_BENUTZERNAME = "findeNachBenutzerName";
+	private static final String FIND_BY_BENUTZERNAME = "findeDurchBenutzerName";
 	private static final String SET_BENUTZER = "setBenutzer";
 
 	private PersonUtils() {

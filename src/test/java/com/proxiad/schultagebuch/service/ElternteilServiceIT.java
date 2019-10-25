@@ -60,7 +60,7 @@ public class ElternteilServiceIT {
 		when(repo.findByBenutzerBenutzerName(benutzername)).thenReturn(Optional.empty());
 
 		// Then
-		service.findeNachBenutzerName(benutzername, Locale.getDefault());
+		service.findeDurchBenutzerName(benutzername, Locale.getDefault());
 	}
 
 	@Test(expected = IllegalArgumentException.class)

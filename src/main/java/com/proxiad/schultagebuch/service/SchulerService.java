@@ -48,14 +48,14 @@ public class SchulerService {
 						messageSource.getMessage("invalid.parent.student.relation", null, locale)));
 	}
 
-	public Schuler schulerFindeNachSchulstunde(final Long schulerId, final Schulstunde schulstunde,
+	public Schuler findeDurchSchulstunde(final Long schulerId, final Schulstunde schulstunde,
 			final Locale locale) {
 		return repo.findById(schulerId).filter(schuler -> schulstunde.getKlasse().getSchulerSet().contains(schuler))
 				.orElseThrow(() -> new IllegalArgumentException(
 						messageSource.getMessage("invalid.student.course.relation", null, locale)));
 	}
 
-	public Schuler findeNachBenutzerName(final String benutzerName, final Locale locale) {
+	public Schuler findeDurchBenutzerName(final String benutzerName, final Locale locale) {
 		return repo.findByBenutzerBenutzerName(benutzerName)
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}

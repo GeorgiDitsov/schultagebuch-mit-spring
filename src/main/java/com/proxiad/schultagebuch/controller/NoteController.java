@@ -32,6 +32,7 @@ import com.proxiad.schultagebuch.service.NoteService;
 import com.proxiad.schultagebuch.service.SchulerService;
 import com.proxiad.schultagebuch.service.SchulstundeService;
 import com.proxiad.schultagebuch.service.ViewModelService;
+import com.proxiad.schultagebuch.util.NoteUtils;
 import com.proxiad.schultagebuch.util.PersonUtils;
 import com.proxiad.schultagebuch.util.ValidierungUtils;
 
@@ -63,7 +64,7 @@ public class NoteController extends AbstraktController {
 		Schuler schuler = getSchuler(principal.getName(), locale);
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("schulerViewModel", viewModelService.schulerZuKinderViewModel(schuler, locale));
-		attributes.put("listNoten", viewModelService.getListNoteViewModelBySchuler(schuler, locale));
+		attributes.put("listNoten", viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler, locale));
 		return super.ansicht("notenForm", attributes);
 	}
 
@@ -73,7 +74,7 @@ public class NoteController extends AbstraktController {
 		Elternteil elternteil = getElternteil(principal.getName(), locale);
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("elternteil", elternteil);
-		attributes.put("listKinder", viewModelService.getKinderViewModelle(elternteil, locale));
+		attributes.put("listKinder", viewModelService.getListeDerKinderViewModelleDurchElternteil(elternteil, locale));
 		return super.ansicht("notenForm", attributes);
 	}
 
@@ -84,7 +85,8 @@ public class NoteController extends AbstraktController {
 		Schuler kind = schulerService.elternteilKindFinde(id, getElternteil(principal.getName(), locale), locale);
 		attributes.addFlashAttribute("showSchulerfolg", true);
 		attributes.addFlashAttribute("kind", kind);
-		attributes.addFlashAttribute("listNoten", viewModelService.getListNoteViewModelBySchuler(kind, locale));
+		attributes.addFlashAttribute("listNoten",
+				viewModelService.getListeDerNoteViewModelleDurchSchuler(kind, locale));
 		return super.umleiten("/meine-kinder");
 	}
 
@@ -104,12 +106,12 @@ public class NoteController extends AbstraktController {
 			@PathVariable(value = "schulerId") final Long schulerId, final Principal principal, final Locale locale) {
 		Schulstunde schulstunde = schulstundeService.lehrerSchulstundeFinden(schulstundeId,
 				getLehrer(principal.getName(), locale), locale);
-		Schuler schuler = schulerService.schulerFindeNachSchulstunde(schulerId, schulstunde, locale);
+		Schuler schuler = schulerService.findeDurchSchulstunde(schulerId, schulstunde, locale);
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("schuler", schuler);
 		attributes.put("schulstunde", schulstunde);
 		attributes.put("listNoten",
-				viewModelService.getListNoteViewModelBySchulerUndSchulstunde(schuler, schulstunde, locale));
+				viewModelService.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler, schulstunde, locale));
 		return super.ansicht("notenForm", attributes);
 	}
 
@@ -120,7 +122,8 @@ public class NoteController extends AbstraktController {
 			@PathVariable(value = "schulerId") final Long schulerId, final Locale locale,
 			RedirectAttributes attributes) {
 		noteModalAttributes("add",
-				getNewNote(schulerService.finden(schulerId, locale), schulstundeService.finden(schulstundeId, locale)),
+				NoteUtils.getNeueNoteFuerSchulerUndSchulstunde(schulerService.finden(schulerId, locale),
+						schulstundeService.finden(schulstundeId, locale)),
 				attributes);
 		return super.umleiten(referer);
 	}
@@ -163,13 +166,6 @@ public class NoteController extends AbstraktController {
 
 	private Lehrer getLehrer(final String benutzerName, final Locale locale) {
 		return (Lehrer) PersonUtils.getPersonAusBenutzerName(benutzerName, lehrerService, locale);
-	}
-
-	private Note getNewNote(final Schuler schuler, final Schulstunde schulstunde) {
-		Note note = new Note();
-		note.setSchuler(schuler);
-		note.setSchulstunde(schulstunde);
-		return note;
 	}
 
 	private void noteModalAttributes(final String modalType, final Note note, RedirectAttributes attributes) {

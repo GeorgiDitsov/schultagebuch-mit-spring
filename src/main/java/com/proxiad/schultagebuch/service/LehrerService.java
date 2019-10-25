@@ -35,7 +35,7 @@ public class LehrerService {
 				messageSource.getMessage("invalid.teacher", new Object[] { id }, locale)));
 	}
 
-	public Lehrer findeNachBenutzerName(final String benutzerName, final Locale locale) {
+	public Lehrer findeDurchBenutzerName(final String benutzerName, final Locale locale) {
 		return repo.findByBenutzerBenutzerName(benutzerName)
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}
