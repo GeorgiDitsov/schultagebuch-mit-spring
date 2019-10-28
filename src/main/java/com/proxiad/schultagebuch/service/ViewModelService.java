@@ -14,9 +14,11 @@ import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.util.BerechnungUtils;
+import com.proxiad.schultagebuch.util.DatumUtils;
 import com.proxiad.schultagebuch.util.NoteUtils;
 import com.proxiad.schultagebuch.view.KindViewModel;
 import com.proxiad.schultagebuch.view.NoteViewModel;
+import com.proxiad.schultagebuch.view.SemesterViewModel;
 
 @Service
 @Transactional
@@ -49,6 +51,15 @@ public class ViewModelService {
 		List<KindViewModel> listOfKinder = new ArrayList<>();
 		elternteil.getKinder().stream().forEach(kind -> listOfKinder.add(schulerZuKinderViewModel(kind, locale)));
 		return listOfKinder;
+	}
+
+	public List<SemesterViewModel> getListerDerSemesterViewModelle(final Locale locale) {
+		List<SemesterViewModel> listOfSemesterViewModelle = new ArrayList<>();
+		semesterService.findeAlle().stream()
+				.forEach(semester -> listOfSemesterViewModelle.add(new SemesterViewModel(semester.getId(),
+						DatumUtils.localDateTimeZuString(semester.getSemesterbeginn(), locale),
+						DatumUtils.localDateTimeZuString(semester.getSemesterende(), locale))));
+		return listOfSemesterViewModelle;
 	}
 
 	public KindViewModel schulerZuKinderViewModel(final Schuler schuler, final Locale locale) {

@@ -22,6 +22,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.validator.constraint.BenutzerSchulerRolleConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
@@ -121,11 +122,12 @@ public class Schuler {
 	}
 
 	public String getKennzeichen() {
-		return String.join(", ", name, pin, getKlasseKennzeichen());
+		return String.join(StringKonstanten.SEPARATOR, name, pin, getKlasseKennzeichen());
 	}
 
 	public String getKlasseKennzeichen() {
-		return Optional.ofNullable(klasse).isPresent() ? klasse.getKennzeichen() : "n/a";
+		return Optional.ofNullable(klasse).isPresent() ? klasse.getKennzeichen()
+				: StringKonstanten.OBJEKT_NICHT_VERFUEGBAR;
 	}
 
 	@Override

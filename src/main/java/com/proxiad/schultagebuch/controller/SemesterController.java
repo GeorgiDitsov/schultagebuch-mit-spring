@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Semester;
 import com.proxiad.schultagebuch.service.SemesterService;
+import com.proxiad.schultagebuch.service.ViewModelService;
 import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
@@ -29,10 +30,13 @@ public class SemesterController extends AbstraktController {
 	@Autowired
 	private SemesterService semesterService;
 
+	@Autowired
+	private ViewModelService viewModelService;
+
 	@RequestMapping(value = "/semester")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ModelAndView alleSemesterAnzeigen(final Locale locale) {
-		return super.ansicht("semesterForm", "listSemester", semesterService.findeAlleSemesterViewModelle(locale));
+		return super.ansicht("semesterForm", "listSemester", viewModelService.getListerDerSemesterViewModelle(locale));
 	}
 
 	@RequestMapping(value = "/semester/add")

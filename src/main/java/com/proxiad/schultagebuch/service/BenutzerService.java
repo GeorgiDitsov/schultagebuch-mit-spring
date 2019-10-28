@@ -27,6 +27,10 @@ public class BenutzerService {
 		return repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(benutzerName));
 	}
 
+	public List<Benutzer> findeAlle() {
+		return repo.findAllByOrderByIdAsc();
+	}
+
 	public Benutzer finden(final Long id, final Locale locale) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
 				messageSource.getMessage("invalid.user", new Object[] { id }, locale)));
@@ -34,10 +38,6 @@ public class BenutzerService {
 
 	public Benutzer findeDurchBenutzerName(final String benutzername) {
 		return repo.findByBenutzerName(benutzername).orElseThrow(() -> new UsernameNotFoundException(benutzername));
-	}
-
-	public List<Benutzer> findeAlle() {
-		return repo.findAllByOrderByIdAsc();
 	}
 
 	public void speichern(final Benutzer benutzer) {

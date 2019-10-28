@@ -1,5 +1,7 @@
 package com.proxiad.schultagebuch.view;
 
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
+
 public class NoteViewModel {
 
 	private Long noteId;
@@ -72,7 +74,7 @@ public class NoteViewModel {
 	}
 
 	public String getKennzeichen() {
-		return String.join(", ", schulfachName, lehrerName, note, noteUpdateDatum);
+		return String.join(StringKonstanten.SEPARATOR, schulfachName, lehrerName, note, noteUpdateDatum);
 	}
 
 }

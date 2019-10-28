@@ -1,5 +1,7 @@
 package com.proxiad.schultagebuch.view;
 
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
+
 public class KindViewModel {
 
 	private Long kindId;
@@ -51,7 +53,7 @@ public class KindViewModel {
 	}
 
 	public String getKennzeichen() {
-		return String.join(", ", kindKennzeichen, halbjaehrigeErfolg);
+		return String.join(StringKonstanten.SEPARATOR, kindKennzeichen, halbjaehrigeErfolg);
 	}
 
 }

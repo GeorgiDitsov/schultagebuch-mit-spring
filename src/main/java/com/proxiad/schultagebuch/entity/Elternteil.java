@@ -19,6 +19,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.validator.constraint.BenutzerElternteilRolleContraint;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
@@ -104,7 +105,7 @@ public class Elternteil {
 	}
 
 	public String getKennzeichen() {
-		return String.join(", ", name, pin);
+		return String.join(StringKonstanten.SEPARATOR, name, pin);
 	}
 
 	@Override

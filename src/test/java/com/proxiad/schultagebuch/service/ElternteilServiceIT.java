@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.repository.ElternteilRepository;
+import com.proxiad.schultagebuch.util.SuchenUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -28,7 +29,6 @@ public class ElternteilServiceIT {
 
 	private static final String ELTERNTEIL_NAME = "Stefan Stefanov";
 	private static final String BENUTZERNAME = "ValidBenutzername11";
-	private static final StringBuilder ELTERNTEIL_NAME_LIKE = new StringBuilder("%%").insert(1, ELTERNTEIL_NAME);
 
 	@Mock
 	private ElternteilRepository repo;
@@ -42,7 +42,8 @@ public class ElternteilServiceIT {
 	@Test
 	public void gefundenLeereListeDerEltern() {
 		// Given
-		when(repo.findByNameIgnoreCaseLikeOrderByIdAsc(ELTERNTEIL_NAME_LIKE.toString())).thenReturn(new ArrayList<>());
+		when(repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(ELTERNTEIL_NAME)))
+				.thenReturn(new ArrayList<>());
 
 		// When
 		List<Elternteil> listOfEltern = service.suche(ELTERNTEIL_NAME);

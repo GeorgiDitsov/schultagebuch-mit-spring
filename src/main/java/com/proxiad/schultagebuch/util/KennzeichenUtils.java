@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 
 @Component
 public final class KennzeichenUtils {
@@ -14,9 +15,6 @@ public final class KennzeichenUtils {
 	private static final String GET_NAME = "getName";
 	private static final String GET_PIN = "getPin";
 	private static final String HIDDEN_NUMBERS = "****";
-	private static final String SEPARATOR = ", ";
-	private static final String NEW_LINE = "\n";
-	private static final String NOT_AVAILABLE = "n/a";
 
 	private KennzeichenUtils() {
 		// nothing
@@ -32,7 +30,7 @@ public final class KennzeichenUtils {
 				| SecurityException e) {
 			e.printStackTrace();
 		}
-		return new StringBuilder(name).append(SEPARATOR).append(pinKennzeichen(pin)).toString();
+		return new StringBuilder(name).append(StringKonstanten.SEPARATOR).append(pinKennzeichen(pin)).toString();
 	}
 
 	public static String pinKennzeichen(String pin) {
@@ -41,13 +39,15 @@ public final class KennzeichenUtils {
 
 	public static String menschenKennzeichen(Collection<Object> menschen) {
 		StringBuilder kennzeichen = new StringBuilder();
-		Optional.of(menschen).filter(collection -> !collection.isEmpty()).ifPresent(collection -> collection
-				.forEach(person -> kennzeichen.append(KennzeichenUtils.personKennzeichen(person)).append(NEW_LINE)));
-		return menschen.isEmpty() ? NOT_AVAILABLE : kennzeichen.toString();
+		Optional.of(menschen).filter(collection -> !collection.isEmpty())
+				.ifPresent(collection -> collection.forEach(person -> kennzeichen
+						.append(KennzeichenUtils.personKennzeichen(person)).append(StringKonstanten.NEUE_ZEILE)));
+		return menschen.isEmpty() ? StringKonstanten.OBJEKT_NICHT_VERFUEGBAR : kennzeichen.toString();
 	}
 
 	public static String benutzerNameKennzeichen(Benutzer benutzer) {
-		return Optional.ofNullable(benutzer).isPresent() ? benutzer.getBenutzerName() : NOT_AVAILABLE;
+		return Optional.ofNullable(benutzer).isPresent() ? benutzer.getBenutzerName()
+				: StringKonstanten.OBJEKT_NICHT_VERFUEGBAR;
 	}
 
 }

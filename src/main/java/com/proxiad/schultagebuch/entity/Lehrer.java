@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.validator.constraint.BenutzerLehrerRolleContraint;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
@@ -106,14 +107,14 @@ public class Lehrer {
 	}
 
 	public String getKennzeichen() {
-		return String.join(", ", name, pin);
+		return String.join(StringKonstanten.SEPARATOR, name, pin);
 	}
 
 	public String getSchulfaecherKennzeichen() {
 		StringBuilder kennzeichen = new StringBuilder();
-		Optional.of(schulfachSet).filter(set -> !set.isEmpty())
-				.ifPresent(set -> set.forEach(schulfach -> kennzeichen.append(schulfach.getName()).append("\n")));
-		return schulfachSet.isEmpty() ? "n/a" : kennzeichen.toString();
+		Optional.of(schulfachSet).filter(set -> !set.isEmpty()).ifPresent(set -> set
+				.forEach(schulfach -> kennzeichen.append(schulfach.getName()).append(StringKonstanten.NEUE_ZEILE)));
+		return schulfachSet.isEmpty() ? StringKonstanten.OBJEKT_NICHT_VERFUEGBAR : kennzeichen.toString();
 	}
 
 	@Override
