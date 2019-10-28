@@ -57,7 +57,7 @@ public class Semester {
 		this.id = id;
 	}
 
-	public @NotNull LocalDateTime getSemesterbeginn() {
+	public LocalDateTime getSemesterbeginn() {
 		return semesterbeginn;
 	}
 
@@ -65,7 +65,7 @@ public class Semester {
 		this.semesterbeginn = semesterbeginn;
 	}
 
-	public @NotNull LocalDateTime getSemesterende() {
+	public LocalDateTime getSemesterende() {
 		return semesterende;
 	}
 

@@ -22,7 +22,7 @@ public final class NoteUtils {
 
 	public static NoteViewModel noteZuNoteViewModel(final Note note, final Locale locale) {
 		return new NoteViewModel(note.getId(), note.getSchulstunde().getSchulfach().getName(),
-				note.getSchulstunde().getLehrer().getName(), note.getWert(),
+				note.getSchulstunde().getLehrer().getName(), String.valueOf(note.getWert()),
 				DatumUtils.localDateTimeZuString(note.getNoteInsertDatum(), locale),
 				DatumUtils.localDateTimeZuString(note.getNoteUpdateDatum(), locale));
 	}

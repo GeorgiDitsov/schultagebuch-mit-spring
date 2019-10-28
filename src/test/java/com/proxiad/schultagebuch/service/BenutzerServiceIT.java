@@ -21,13 +21,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.repository.BenutzerRepository;
+import com.proxiad.schultagebuch.util.SuchenUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class BenutzerServiceIT {
 
 	private static final String BENUTZERNAME = "benutzername";
-	private static final StringBuilder BENUTZERNAME_LIKE = new StringBuilder("%%").insert(1, BENUTZERNAME);
 
 	@Mock
 	private BenutzerRepository repo;
@@ -41,7 +41,7 @@ public class BenutzerServiceIT {
 	@Test
 	public void gefundenLeereListeDerBenutzer() {
 		// Given
-		when(repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(BENUTZERNAME_LIKE.toString()))
+		when(repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(BENUTZERNAME)))
 				.thenReturn(new ArrayList<>());
 
 		// When

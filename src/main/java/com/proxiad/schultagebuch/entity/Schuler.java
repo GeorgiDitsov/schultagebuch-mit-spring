@@ -121,7 +121,7 @@ public class Schuler {
 	}
 
 	public String getKennzeichen() {
-		return name + ", " + pin + ", " + getKlasseKennzeichen();
+		return String.join(", ", name, pin, getKlasseKennzeichen());
 	}
 
 	public String getKlasseKennzeichen() {

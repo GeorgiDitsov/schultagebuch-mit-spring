@@ -5,13 +5,13 @@ public class KindViewModel {
 	private Long kindId;
 	private String kindKennzeichen;
 	private String letzteNoteKennzeichen;
-	private double halbjaehrigeErfolg;
+	private String halbjaehrigeErfolg;
 
 	public KindViewModel() {
 		// nothing
 	}
 
-	public KindViewModel(Long kindId, String kindKennzeichen, String letzteNoteKennzeichen, double halbjaehrigeErfolg) {
+	public KindViewModel(Long kindId, String kindKennzeichen, String letzteNoteKennzeichen, String halbjaehrigeErfolg) {
 		this.kindId = kindId;
 		this.kindKennzeichen = kindKennzeichen;
 		this.letzteNoteKennzeichen = letzteNoteKennzeichen;
@@ -42,16 +42,16 @@ public class KindViewModel {
 		this.letzteNoteKennzeichen = letzteNoteKennzeichen;
 	}
 
-	public double getHalbjaehrigeErfolg() {
+	public String getHalbjaehrigeErfolg() {
 		return halbjaehrigeErfolg;
 	}
 
-	public void setHalbjaehrigeErfolg(double halbjaehrigeErfolg) {
+	public void setHalbjaehrigeErfolg(String halbjaehrigeErfolg) {
 		this.halbjaehrigeErfolg = halbjaehrigeErfolg;
 	}
 
 	public String getKennzeichen() {
-		return kindKennzeichen + ", " + halbjaehrigeErfolg;
+		return String.join(", ", kindKennzeichen, halbjaehrigeErfolg);
 	}
 
 }

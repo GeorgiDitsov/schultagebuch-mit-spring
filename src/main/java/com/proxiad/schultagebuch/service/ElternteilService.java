@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.repository.ElternteilRepository;
+import com.proxiad.schultagebuch.util.SuchenUtils;
 
 @Service
 @Transactional
@@ -23,7 +24,7 @@ public class ElternteilService {
 	private MessageSource messageSource;
 
 	public List<Elternteil> suche(final String elternteilName) {
-		return repo.findByNameIgnoreCaseLikeOrderByIdAsc("%" + elternteilName + "%");
+		return repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(elternteilName));
 	}
 
 	public List<Elternteil> findeAlle() {

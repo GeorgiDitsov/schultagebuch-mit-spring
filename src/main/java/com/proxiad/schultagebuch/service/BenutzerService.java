@@ -11,12 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.repository.BenutzerRepository;
+import com.proxiad.schultagebuch.util.SuchenUtils;
 
 @Service
 @Transactional
 public class BenutzerService {
-
-	private static final StringBuilder BENUTZER_LIKE = new StringBuilder("%%");
 
 	@Autowired
 	private BenutzerRepository repo;
@@ -25,7 +24,7 @@ public class BenutzerService {
 	private MessageSource messageSource;
 
 	public List<Benutzer> suchen(final String benutzerName) {
-		return repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(BENUTZER_LIKE.insert(1, benutzerName).toString());
+		return repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(benutzerName));
 	}
 
 	public Benutzer finden(final Long id, final Locale locale) {

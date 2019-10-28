@@ -82,7 +82,7 @@ public class NoteController extends AbstraktController {
 	@PreAuthorize("hasRole('ELTERNTEIL')")
 	public RedirectView elternteilKindNotenAnzeigen(@PathVariable(value = "id") final Long id,
 			final Principal principal, final Locale locale, RedirectAttributes attributes) {
-		Schuler kind = schulerService.elternteilKindFinde(id, getElternteil(principal.getName(), locale), locale);
+		Schuler kind = schulerService.findeElternteilKind(id, getElternteil(principal.getName(), locale), locale);
 		attributes.addFlashAttribute("showSchulerfolg", true);
 		attributes.addFlashAttribute("kind", kind);
 		attributes.addFlashAttribute("listNoten",
@@ -104,7 +104,7 @@ public class NoteController extends AbstraktController {
 	@PreAuthorize("hasRole('LEHRER')")
 	public ModelAndView schulerNotenAnzeigen(@PathVariable(value = "schulstundeId") final Long schulstundeId,
 			@PathVariable(value = "schulerId") final Long schulerId, final Principal principal, final Locale locale) {
-		Schulstunde schulstunde = schulstundeService.lehrerSchulstundeFinden(schulstundeId,
+		Schulstunde schulstunde = schulstundeService.findeLehrerSchulstunde(schulstundeId,
 				getLehrer(principal.getName(), locale), locale);
 		Schuler schuler = schulerService.findeDurchSchulstunde(schulerId, schulstunde, locale);
 		Map<String, Object> attributes = new HashMap<>();

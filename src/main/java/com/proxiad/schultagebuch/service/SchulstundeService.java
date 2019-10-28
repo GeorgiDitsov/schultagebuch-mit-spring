@@ -32,7 +32,7 @@ public class SchulstundeService {
 				messageSource.getMessage("invalid.course", new Object[] { id }, locale)));
 	}
 
-	public Schulstunde lehrerSchulstundeFinden(final Long id, final Lehrer lehrer, final Locale locale) {
+	public Schulstunde findeLehrerSchulstunde(final Long id, final Lehrer lehrer, final Locale locale) {
 		return repo.findById(id).filter(schulstunde -> schulstunde.getLehrer().equals(lehrer))
 				.orElseThrow(() -> new IllegalArgumentException(
 						messageSource.getMessage("invalid.teacher.subject.relation", null, locale)));

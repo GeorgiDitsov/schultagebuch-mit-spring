@@ -104,7 +104,7 @@ public class Elternteil {
 	}
 
 	public String getKennzeichen() {
-		return name + ", " + pin;
+		return String.join(", ", name, pin);
 	}
 
 	@Override

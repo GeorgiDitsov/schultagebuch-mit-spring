@@ -13,6 +13,10 @@ public final class KennzeichenUtils {
 
 	private static final String GET_NAME = "getName";
 	private static final String GET_PIN = "getPin";
+	private static final String HIDDEN_NUMBERS = "****";
+	private static final String SEPARATOR = ", ";
+	private static final String NEW_LINE = "\n";
+	private static final String NOT_AVAILABLE = "n/a";
 
 	private KennzeichenUtils() {
 		// nothing
@@ -28,22 +32,22 @@ public final class KennzeichenUtils {
 				| SecurityException e) {
 			e.printStackTrace();
 		}
-		return name + ", " + pinKennzeichen(pin);
+		return new StringBuilder(name).append(SEPARATOR).append(pinKennzeichen(pin)).toString();
 	}
 
 	public static String pinKennzeichen(String pin) {
-		return pin.substring(0, 6) + "****";
+		return new StringBuilder(pin.substring(0, 6)).append(HIDDEN_NUMBERS).toString();
 	}
 
 	public static String menschenKennzeichen(Collection<Object> menschen) {
 		StringBuilder kennzeichen = new StringBuilder();
 		Optional.of(menschen).filter(collection -> !collection.isEmpty()).ifPresent(collection -> collection
-				.forEach(person -> kennzeichen.append(KennzeichenUtils.personKennzeichen(person)).append("\n")));
-		return menschen.isEmpty() ? "n/a" : kennzeichen.toString();
+				.forEach(person -> kennzeichen.append(KennzeichenUtils.personKennzeichen(person)).append(NEW_LINE)));
+		return menschen.isEmpty() ? NOT_AVAILABLE : kennzeichen.toString();
 	}
 
 	public static String benutzerNameKennzeichen(Benutzer benutzer) {
-		return Optional.ofNullable(benutzer).isPresent() ? benutzer.getBenutzerName() : "n/a";
+		return Optional.ofNullable(benutzer).isPresent() ? benutzer.getBenutzerName() : NOT_AVAILABLE;
 	}
 
 }

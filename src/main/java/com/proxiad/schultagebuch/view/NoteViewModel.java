@@ -5,7 +5,7 @@ public class NoteViewModel {
 	private Long noteId;
 	private String schulfachName;
 	private String lehrerName;
-	private byte note;
+	private String note;
 	private String noteInsertDatum;
 	private String noteUpdateDatum;
 
@@ -13,7 +13,7 @@ public class NoteViewModel {
 		// nothing
 	}
 
-	public NoteViewModel(Long noteId, String schulfachName, String lehrerName, byte note, String noteInsertDatum,
+	public NoteViewModel(Long noteId, String schulfachName, String lehrerName, String note, String noteInsertDatum,
 			String noteUpdateDatum) {
 		this.noteId = noteId;
 		this.schulfachName = schulfachName;
@@ -47,11 +47,11 @@ public class NoteViewModel {
 		this.lehrerName = lehrerName;
 	}
 
-	public byte getNote() {
+	public String getNote() {
 		return note;
 	}
 
-	public void setNote(byte note) {
+	public void setNote(String note) {
 		this.note = note;
 	}
 
@@ -72,7 +72,7 @@ public class NoteViewModel {
 	}
 
 	public String getKennzeichen() {
-		return schulfachName + ", " + lehrerName + ", " + note + ", " + noteUpdateDatum;
+		return String.join(", ", schulfachName, lehrerName, note, noteUpdateDatum);
 	}
 
 }

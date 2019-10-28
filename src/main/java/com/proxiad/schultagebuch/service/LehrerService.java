@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.repository.LehrerRepository;
+import com.proxiad.schultagebuch.util.SuchenUtils;
 
 @Service
 @Transactional
@@ -23,7 +24,7 @@ public class LehrerService {
 	private MessageSource messageSource;
 
 	public List<Lehrer> suche(final String lehrerName) {
-		return repo.findByNameIgnoreCaseLikeOrderByIdAsc("%" + lehrerName + "%");
+		return repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(lehrerName));
 	}
 
 	public List<Lehrer> findeAlle() {

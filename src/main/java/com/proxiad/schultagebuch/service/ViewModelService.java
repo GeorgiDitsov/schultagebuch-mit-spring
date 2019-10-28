@@ -53,7 +53,8 @@ public class ViewModelService {
 
 	public KindViewModel schulerZuKinderViewModel(final Schuler schuler, final Locale locale) {
 		return new KindViewModel(schuler.getId(), schuler.getKennzeichen(), getSchulerLetzteNote(schuler, locale),
-				BerechnungUtils.durchschnittlichHalbjaehrigeNoten(getSchulerHalbjaehrigeNoten(schuler, locale)));
+				String.valueOf(BerechnungUtils
+						.durchschnittlichHalbjaehrigeNoten(getSchulerHalbjaehrigeNoten(schuler, locale))));
 	}
 
 	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {

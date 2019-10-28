@@ -14,6 +14,7 @@ import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.repository.SchulerRepository;
+import com.proxiad.schultagebuch.util.SuchenUtils;
 
 @Service
 @Transactional
@@ -26,14 +27,14 @@ public class SchulerService {
 	private MessageSource messageSource;
 
 	public List<Schuler> suche(final String schulerName) {
-		return repo.findByNameIgnoreCaseLikeOrderByIdAsc("%" + schulerName + "%");
+		return repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(schulerName));
 	}
 
 	public List<Schuler> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public List<Schuler> schulernViewModelleFinden(final Klasse klasse) {
+	public List<Schuler> findeAlleSchulernImKlasse(final Klasse klasse) {
 		return repo.findByKlasseOrderByIdAsc(klasse);
 	}
 
@@ -42,14 +43,13 @@ public class SchulerService {
 				messageSource.getMessage("invalid.student", new Object[] { id }, locale)));
 	}
 
-	public Schuler elternteilKindFinde(final Long schulerId, final Elternteil elternteil, final Locale locale) {
+	public Schuler findeElternteilKind(final Long schulerId, final Elternteil elternteil, final Locale locale) {
 		return repo.findById(schulerId).filter(kind -> elternteil.getKinder().contains(kind))
 				.orElseThrow(() -> new IllegalArgumentException(
 						messageSource.getMessage("invalid.parent.student.relation", null, locale)));
 	}
 
-	public Schuler findeDurchSchulstunde(final Long schulerId, final Schulstunde schulstunde,
-			final Locale locale) {
+	public Schuler findeDurchSchulstunde(final Long schulerId, final Schulstunde schulstunde, final Locale locale) {
 		return repo.findById(schulerId).filter(schuler -> schulstunde.getKlasse().getSchulerSet().contains(schuler))
 				.orElseThrow(() -> new IllegalArgumentException(
 						messageSource.getMessage("invalid.student.course.relation", null, locale)));

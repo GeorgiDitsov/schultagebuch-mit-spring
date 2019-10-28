@@ -106,7 +106,7 @@ public class Lehrer {
 	}
 
 	public String getKennzeichen() {
-		return name + ", " + pin;
+		return String.join(", ", name, pin);
 	}
 
 	public String getSchulfaecherKennzeichen() {
