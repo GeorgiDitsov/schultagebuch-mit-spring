@@ -49,8 +49,8 @@ public class SemesterController extends AbstraktController {
 	@RequestMapping(value = "/semester/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendesSemester(@RequestHeader final String referer,
-			@PathVariable(value = "id") final int id, final Locale locale, RedirectAttributes attributes) {
-		modalAttributes("edit", semesterService.finde(id, locale), attributes);
+			@PathVariable(value = "id") final int id, RedirectAttributes attributes) {
+		modalAttributes("edit", semesterService.finde(id), attributes);
 		return super.umleiten(referer);
 	}
 
@@ -58,7 +58,7 @@ public class SemesterController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView semesterSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "semester") @Valid Semester semester, final BindingResult bindingResult,
-			final Locale locale, RedirectAttributes attributes) {
+			RedirectAttributes attributes) {
 		ValidierungUtils.fehlerPruefen(bindingResult);
 		semesterService.speichern(semester);
 		attributes.addFlashAttribute("successful", true);
@@ -68,8 +68,8 @@ public class SemesterController extends AbstraktController {
 	@RequestMapping(value = "/semester/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView semesterLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final int id,
-			final Locale locale, RedirectAttributes attributes) {
-		semesterService.loeschen(semesterService.finde(id, locale));
+			RedirectAttributes attributes) {
+		semesterService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}

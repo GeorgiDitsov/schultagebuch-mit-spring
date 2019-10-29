@@ -13,6 +13,7 @@ import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.util.BerechnungUtils;
 import com.proxiad.schultagebuch.util.DatumUtils;
 import com.proxiad.schultagebuch.util.NoteUtils;
@@ -32,7 +33,7 @@ public class ViewModelService {
 
 	public List<NoteViewModel> getListeDerNoteViewModelleDurchSchuler(final Schuler schuler, final Locale locale) {
 		List<NoteViewModel> listOfNoteViewModels = new ArrayList<>();
-		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester(locale)).stream()
+		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester()).stream()
 				.forEach(note -> listOfNoteViewModels.add(NoteUtils.noteZuNoteViewModel(note, locale)));
 		return listOfNoteViewModels;
 	}
@@ -40,7 +41,7 @@ public class ViewModelService {
 	public List<NoteViewModel> getListeDerNoteViewModelleDurchSchulerUndSchulstunde(final Schuler schuler,
 			final Schulstunde schulstunde, final Locale locale) {
 		List<NoteViewModel> listOfNoteViewModels = new ArrayList<>();
-		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester(locale)).stream()
+		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester()).stream()
 				.filter(note -> note.getSchulstunde().equals(schulstunde))
 				.forEach(note -> listOfNoteViewModels.add(NoteUtils.noteZuNoteViewModel(note, locale)));
 		return listOfNoteViewModels;
@@ -64,21 +65,22 @@ public class ViewModelService {
 
 	public KindViewModel schulerZuKinderViewModel(final Schuler schuler, final Locale locale) {
 		return new KindViewModel(schuler.getId(), schuler.getKennzeichen(), getSchulerLetzteNote(schuler, locale),
-				String.valueOf(BerechnungUtils
-						.durchschnittlichHalbjaehrigeNoten(getSchulerHalbjaehrigeNoten(schuler, locale))));
+				String.valueOf(
+						BerechnungUtils.durchschnittlichHalbjaehrigeNoten(getSchulerHalbjaehrigeNoten(schuler))));
 	}
 
 	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
 		Optional<Note> note = noteService.findeSchulerLetzteNote(schuler);
-		return note.isPresent() ? NoteUtils.noteZuNoteViewModel(note.get(), locale).getKennzeichen() : "n/a";
+		return note.isPresent() ? NoteUtils.noteZuNoteViewModel(note.get(), locale).getKennzeichen()
+				: StringKonstanten.OBJEKT_NICHT_VERFUEGBAR;
 	}
 
-	private List<Long> getSchulerHalbjaehrigeNoten(final Schuler schuler, final Locale locale) {
+	private List<Long> getSchulerHalbjaehrigeNoten(final Schuler schuler) {
 		List<Long> halbjaehrigeNoten = new ArrayList<>();
 		schuler.getKlasse().getSchulstundeSet().stream()
 				.forEach(schulstunde -> halbjaehrigeNoten.add(
 						BerechnungUtils.durchschnittlichNoten(noteService.findeSchulerNotenDurchSchulstunde(schuler,
-								schulstunde, semesterService.findeAktuelleSemester(locale)))));
+								schulstunde, semesterService.findeAktuelleSemester()))));
 		return halbjaehrigeNoten;
 	}
 

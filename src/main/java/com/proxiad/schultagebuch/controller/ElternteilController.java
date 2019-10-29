@@ -1,7 +1,5 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,27 +46,28 @@ public class ElternteilController extends AbstraktController {
 	@RequestMapping(value = "/elternteil/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendesElternteil(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("listSchuler", schulerService.findeAlle());
-		attributes.addFlashAttribute("elternteil", elternteilService.elternteilFinde(id, locale));
+		attributes.addFlashAttribute("elternteil", elternteilService.elternteilFinde(id));
 		return super.umleiten(referer);
 	}
 
 	@PostMapping(value = "/elternteil/save")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView elternteilSpeichern(@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil,
-			final BindingResult bindingResult, RedirectAttributes attributes) {
+	public RedirectView elternteilSpeichern(@RequestHeader final String referer,
+			@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil, final BindingResult bindingResult,
+			RedirectAttributes attributes) {
 		ValidierungUtils.fehlerPruefen(bindingResult);
 		elternteilService.speichern(elternteil);
 		attributes.addFlashAttribute("successful", true);
-		return super.umleiten("/elternteil");
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/elternteil/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView elternteilLoeschen(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
 		elternteilService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

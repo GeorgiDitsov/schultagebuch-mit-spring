@@ -1,15 +1,14 @@
 package com.proxiad.schultagebuch.service;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.BenutzerRepository;
 import com.proxiad.schultagebuch.util.SuchenUtils;
 
@@ -20,9 +19,6 @@ public class BenutzerService {
 	@Autowired
 	private BenutzerRepository repo;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	public List<Benutzer> suchen(final String benutzerName) {
 		return repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(benutzerName));
 	}
@@ -31,9 +27,9 @@ public class BenutzerService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Benutzer finden(final Long id, final Locale locale) {
-		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.user", new Object[] { id }, locale)));
+	public Benutzer finden(final Long id) {
+		return repo.findById(id)
+				.orElseThrow(() -> new EntityNichtGefundenException("user.not.found", new Object[] { id }));
 	}
 
 	public Benutzer findeDurchBenutzerName(final String benutzername) {

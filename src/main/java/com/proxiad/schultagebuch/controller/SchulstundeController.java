@@ -1,7 +1,5 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +55,8 @@ public class SchulstundeController extends AbstraktController {
 	@RequestMapping(value = "/schulstunde/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendeSchulstunde(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
-		modalAttributes("edit", schulstundeService.finden(id, locale), attributes);
+			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
+		modalAttributes("edit", schulstundeService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
 
@@ -76,7 +74,7 @@ public class SchulstundeController extends AbstraktController {
 	@RequestMapping(value = "/schulstunde/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulstundeLoeschen(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
 		schulstundeService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

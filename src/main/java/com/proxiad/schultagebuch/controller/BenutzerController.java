@@ -1,7 +1,5 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +43,9 @@ public class BenutzerController extends AbstraktController {
 	@RequestMapping(value = "/benutzer/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendBenutzer(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("benutzer", benutzerService.finden(id, locale));
+		attributes.addFlashAttribute("benutzer", benutzerService.finden(id));
 		return super.umleiten(referer);
 	}
 
@@ -65,7 +63,7 @@ public class BenutzerController extends AbstraktController {
 	@RequestMapping(value = "/benutzer/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView benutzerLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			final Locale locale, RedirectAttributes attributes) {
+			RedirectAttributes attributes) {
 		benutzerService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

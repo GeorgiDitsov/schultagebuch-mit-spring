@@ -1,14 +1,13 @@
 package com.proxiad.schultagebuch.service;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Rolle;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.RolleRepository;
 import com.proxiad.schultagebuch.util.RolleTyp;
 
@@ -19,16 +18,13 @@ public class RolleService {
 	@Autowired
 	private RolleRepository repo;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	public List<Rolle> findeAlle() {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Rolle finden(final RolleTyp rolleTyp, final Locale locale) {
-		return repo.findByName(rolleTyp).orElseThrow(
-				() -> new IllegalArgumentException(messageSource.getMessage("invalid.role", null, locale)));
+	public Rolle finden(final RolleTyp rolleTyp) {
+		return repo.findByName(rolleTyp)
+				.orElseThrow(() -> new EntityNichtGefundenException("role.not.found", new Object[] { rolleTyp }));
 	}
 
 }

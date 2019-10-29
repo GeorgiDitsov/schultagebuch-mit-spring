@@ -1,11 +1,9 @@
 package com.proxiad.schultagebuch.service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +11,7 @@ import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.entity.Semester;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.NoteRepository;
 
 @Service
@@ -22,12 +21,13 @@ public class NoteService {
 	@Autowired
 	private NoteRepository repo;
 
-	@Autowired
-	private MessageSource messageSource;
+	public List<Note> findeAlle() {
+		return repo.findAllByOrderByNoteUpdateDatumDesc();
+	}
 
-	public Note finden(final Long id, final Locale locale) {
-		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.grade", new Object[] { id }, locale)));
+	public Note finden(final Long id) {
+		return repo.findById(id)
+				.orElseThrow(() -> new EntityNichtGefundenException("grade.not.found", new Object[] { id }));
 	}
 
 	public Optional<Note> findeSchulerLetzteNote(final Schuler schuler) {

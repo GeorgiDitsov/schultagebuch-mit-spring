@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -16,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.proxiad.schultagebuch.entity.Elternteil;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.ElternteilRepository;
 import com.proxiad.schultagebuch.util.SuchenUtils;
 
@@ -32,9 +31,6 @@ public class ElternteilServiceIT {
 
 	@Mock
 	private ElternteilRepository repo;
-
-	@Mock
-	private MessageSource messageSource;
 
 	@InjectMocks
 	private ElternteilService service;
@@ -61,10 +57,10 @@ public class ElternteilServiceIT {
 		when(repo.findByBenutzerBenutzerName(benutzername)).thenReturn(Optional.empty());
 
 		// Then
-		service.findeDurchBenutzerName(benutzername, Locale.getDefault());
+		service.findeDurchBenutzerName(benutzername);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = EntityNichtGefundenException.class)
 	public void keineElternteilGefundenMitDieseId() {
 		// Given
 		Long id = Long.MAX_VALUE;
@@ -73,7 +69,7 @@ public class ElternteilServiceIT {
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
 		// Then
-		service.elternteilFinde(id, Locale.getDefault());
+		service.elternteilFinde(id);
 	}
 
 }

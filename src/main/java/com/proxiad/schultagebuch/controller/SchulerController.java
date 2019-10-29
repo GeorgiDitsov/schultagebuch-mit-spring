@@ -1,7 +1,5 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +43,7 @@ public class SchulerController extends AbstraktController {
 
 	@RequestMapping(value = "/schuler")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView alleSchulernAnzeigen(final Locale locale) {
+	public ModelAndView alleSchulernAnzeigen() {
 		return super.ansicht("schulerForm", "listSchuler", schulerService.findeAlle());
 	}
 
@@ -57,18 +55,16 @@ public class SchulerController extends AbstraktController {
 
 	@RequestMapping(value = "/schuler/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neuerSchuler(@RequestHeader final String referer, final Locale locale,
-			RedirectAttributes attributes) {
-		modalAttributes("add", (Schuler) PersonUtils.getNeuePerson(new Schuler(), rolleService, locale), locale,
-				attributes);
+	public RedirectView neuerSchuler(@RequestHeader final String referer, RedirectAttributes attributes) {
+		modalAttributes("add", (Schuler) PersonUtils.getNeuePerson(new Schuler(), rolleService), attributes);
 		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/schuler/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehenderSchuler(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
-		modalAttributes("edit", schulerService.finden(id, locale), locale, attributes);
+			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
+		modalAttributes("edit", schulerService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
 
@@ -76,7 +72,7 @@ public class SchulerController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulerSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "schuler") @Valid Schuler schuler, final BindingResult bindingResult,
-			final Locale locale, RedirectAttributes attributes) {
+			RedirectAttributes attributes) {
 		ValidierungUtils.fehlerPruefen(bindingResult);
 		schulerService.speichern(schuler);
 		attributes.addFlashAttribute("successful", true);
@@ -86,19 +82,17 @@ public class SchulerController extends AbstraktController {
 	@RequestMapping(value = "/schuler/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulerLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			final Locale locale, RedirectAttributes attributes) {
+			RedirectAttributes attributes) {
 		schulerService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}
 
-	private void modalAttributes(final String modalType, final Schuler schuler, final Locale locale,
-			RedirectAttributes attributes) {
+	private void modalAttributes(final String modalType, final Schuler schuler, RedirectAttributes attributes) {
 		attributes.addFlashAttribute(modalType, true);
 		attributes.addFlashAttribute("schuler", schuler);
 		attributes.addFlashAttribute("listKlasse", klasseService.findeAlle());
 		attributes.addFlashAttribute("listEltern", elternteilService.findeAlle());
-		attributes.addFlashAttribute("elternteil", PersonUtils.getNeuePerson(new Elternteil(), rolleService, locale));
-
+		attributes.addFlashAttribute("elternteil", PersonUtils.getNeuePerson(new Elternteil(), rolleService));
 	}
 }

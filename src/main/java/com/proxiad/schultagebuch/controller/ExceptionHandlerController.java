@@ -1,15 +1,23 @@
 package com.proxiad.schultagebuch.controller;
 
+import java.util.Locale;
+
 import javax.validation.ValidationException;
 
 import org.postgresql.util.PSQLException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
+import com.proxiad.schultagebuch.exception.EntityUngueltigeRelationException;
 
 import javassist.tools.web.BadHttpRequest;
 
@@ -20,10 +28,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	private static final String ERROR_STATUS = "statusCode";
 	private static final String ERROR_MESSAGE = "errorMessage";
 
+	@Autowired
+	private MessageSource messageSource;
+
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value = { PSQLException.class, DataAccessException.class })
 	public ModelAndView datenbankFehler(final RuntimeException exception) {
-		return getDefaultErrorView(exception.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+		int statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
+		return getDefaultErrorView(exception.getLocalizedMessage(), statusCode);
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -31,6 +43,27 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 			BadHttpRequest.class })
 	public ModelAndView schlechteAnfrage(final RuntimeException exception) {
 		return getDefaultErrorView(exception.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value());
+	}
+
+	@ExceptionHandler(EntityNichtGefundenException.class)
+	public ModelAndView schulerNichtGefunden(final EntityNichtGefundenException exception, final Locale locale) {
+		String errorMessage = messageSource.getMessage(exception.getMessage(), exception.getArgs(), locale);
+		int statusCode = HttpStatus.BAD_REQUEST.value();
+		return getDefaultErrorView(errorMessage, statusCode);
+	}
+
+	@ExceptionHandler(EntityUngueltigeRelationException.class)
+	public ModelAndView entityUngueltigeRelation(final EntityUngueltigeRelationException exception,
+			final Locale locale) {
+		String errorMessage = messageSource.getMessage(exception.getMessage(), null, locale);
+		int statusCode = HttpStatus.BAD_REQUEST.value();
+		return getDefaultErrorView(errorMessage, statusCode);
+	}
+
+	@ExceptionHandler(UsernameNotFoundException.class)
+	public ModelAndView benutzernameNichtGefunden(final UsernameNotFoundException exception) {
+		int statusCode = HttpStatus.BAD_REQUEST.value();
+		return getDefaultErrorView(exception.getLocalizedMessage(), statusCode);
 	}
 
 	private ModelAndView getDefaultErrorView(final String errorMessage, final int statusCode) {

@@ -58,10 +58,16 @@ public class NoteController extends AbstraktController {
 	@Autowired
 	private ViewModelService viewModelService;
 
+	@RequestMapping(value = "/note")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView alleNotenAnzeigen() {
+		return super.ansicht("notenForm", "listNote", noteService.findeAlle());
+	}
+
 	@RequestMapping(value = "/meine-noten")
 	@PreAuthorize("hasRole('SCHULER')")
 	public ModelAndView schulerViewAnzeigen(final Principal principal, final Locale locale) {
-		Schuler schuler = getSchuler(principal.getName(), locale);
+		Schuler schuler = getSchuler(principal.getName());
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("schulerViewModel", viewModelService.schulerZuKinderViewModel(schuler, locale));
 		attributes.put("listNoten", viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler, locale));
@@ -71,7 +77,7 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/meine-kinder")
 	@PreAuthorize("hasRole('ELTERNTEIL')")
 	public ModelAndView elternteilKinderAnzeigen(final Principal principal, final Locale locale) {
-		Elternteil elternteil = getElternteil(principal.getName(), locale);
+		Elternteil elternteil = getElternteil(principal.getName());
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("elternteil", elternteil);
 		attributes.put("listKinder", viewModelService.getListeDerKinderViewModelleDurchElternteil(elternteil, locale));
@@ -82,7 +88,7 @@ public class NoteController extends AbstraktController {
 	@PreAuthorize("hasRole('ELTERNTEIL')")
 	public RedirectView elternteilKindNotenAnzeigen(@PathVariable(value = "id") final Long id,
 			final Principal principal, final Locale locale, RedirectAttributes attributes) {
-		Schuler kind = schulerService.findeElternteilKind(id, getElternteil(principal.getName(), locale), locale);
+		Schuler kind = schulerService.findeElternteilKind(id, getElternteil(principal.getName()));
 		attributes.addFlashAttribute("showSchulerfolg", true);
 		attributes.addFlashAttribute("kind", kind);
 		attributes.addFlashAttribute("listNoten",
@@ -92,8 +98,8 @@ public class NoteController extends AbstraktController {
 
 	@RequestMapping(value = "/meine-schulstunden")
 	@PreAuthorize("hasRole('LEHRER')")
-	public ModelAndView lehrerSchulstundenAnzeigen(final Principal principal, final Locale locale) {
-		Lehrer lehrer = getLehrer(principal.getName(), locale);
+	public ModelAndView lehrerSchulstundenAnzeigen(final Principal principal) {
+		Lehrer lehrer = getLehrer(principal.getName());
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("lehrer", lehrer);
 		attributes.put("listSchulstunden", schulstundeService.findeDurchLehrer(lehrer));
@@ -105,8 +111,8 @@ public class NoteController extends AbstraktController {
 	public ModelAndView schulerNotenAnzeigen(@PathVariable(value = "schulstundeId") final Long schulstundeId,
 			@PathVariable(value = "schulerId") final Long schulerId, final Principal principal, final Locale locale) {
 		Schulstunde schulstunde = schulstundeService.findeLehrerSchulstunde(schulstundeId,
-				getLehrer(principal.getName(), locale), locale);
-		Schuler schuler = schulerService.findeDurchSchulstunde(schulerId, schulstunde, locale);
+				getLehrer(principal.getName()));
+		Schuler schuler = schulerService.findeDurchSchulstunde(schulerId, schulstunde);
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("schuler", schuler);
 		attributes.put("schulstunde", schulstunde);
@@ -119,20 +125,17 @@ public class NoteController extends AbstraktController {
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView neueNote(@RequestHeader final String referer,
 			@PathVariable(value = "schulstundeId") final Long schulstundeId,
-			@PathVariable(value = "schulerId") final Long schulerId, final Locale locale,
-			RedirectAttributes attributes) {
-		noteModalAttributes("add",
-				NoteUtils.getNeueNoteFuerSchulerUndSchulstunde(schulerService.finden(schulerId, locale),
-						schulstundeService.finden(schulstundeId, locale)),
-				attributes);
+			@PathVariable(value = "schulerId") final Long schulerId, RedirectAttributes attributes) {
+		noteModalAttributes("add", NoteUtils.getNeueNoteFuerSchulerUndSchulstunde(schulerService.finden(schulerId),
+				schulstundeService.finden(schulstundeId)), attributes);
 		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/note/edit/{noteId}")
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView bestehendeNote(@RequestHeader final String referer,
-			@PathVariable(value = "noteId") final Long id, final Locale locale, RedirectAttributes attributes) {
-		noteModalAttributes("edit", noteService.finden(id, locale), attributes);
+			@PathVariable(value = "noteId") final Long id, RedirectAttributes attributes) {
+		noteModalAttributes("edit", noteService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
 
@@ -150,22 +153,22 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/note/delete/{noteId}")
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView noteLoeschen(@RequestHeader final String referer, @PathVariable(value = "noteId") final Long id,
-			final Locale locale, RedirectAttributes attributes) {
+			RedirectAttributes attributes) {
 		noteService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}
 
-	private Schuler getSchuler(final String benutzerName, final Locale locale) {
-		return (Schuler) PersonUtils.getPersonAusBenutzerName(benutzerName, schulerService, locale);
+	private Schuler getSchuler(final String benutzerName) {
+		return (Schuler) PersonUtils.getPersonAusBenutzerName(benutzerName, schulerService);
 	}
 
-	private Elternteil getElternteil(final String bennutzerName, final Locale locale) {
-		return (Elternteil) PersonUtils.getPersonAusBenutzerName(bennutzerName, elternteilService, locale);
+	private Elternteil getElternteil(final String bennutzerName) {
+		return (Elternteil) PersonUtils.getPersonAusBenutzerName(bennutzerName, elternteilService);
 	}
 
-	private Lehrer getLehrer(final String benutzerName, final Locale locale) {
-		return (Lehrer) PersonUtils.getPersonAusBenutzerName(benutzerName, lehrerService, locale);
+	private Lehrer getLehrer(final String benutzerName) {
+		return (Lehrer) PersonUtils.getPersonAusBenutzerName(benutzerName, lehrerService);
 	}
 
 	private void noteModalAttributes(final String modalType, final Note note, RedirectAttributes attributes) {

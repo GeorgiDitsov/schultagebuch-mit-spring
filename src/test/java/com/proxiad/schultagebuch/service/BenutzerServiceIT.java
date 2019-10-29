@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -16,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.BenutzerRepository;
 import com.proxiad.schultagebuch.util.SuchenUtils;
 
@@ -31,9 +30,6 @@ public class BenutzerServiceIT {
 
 	@Mock
 	private BenutzerRepository repo;
-
-	@Mock
-	private MessageSource messageSource;
 
 	@InjectMocks
 	private BenutzerService service;
@@ -75,7 +71,7 @@ public class BenutzerServiceIT {
 		assertThat(list, is(emptyCollectionOf(Benutzer.class)));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = EntityNichtGefundenException.class)
 	public void keineBenutzerMitDieseId() {
 		// Given
 		Long id = Long.MAX_VALUE;
@@ -84,7 +80,7 @@ public class BenutzerServiceIT {
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
 		// Then
-		service.finden(id, Locale.getDefault());
+		service.finden(id);
 	}
 
 }

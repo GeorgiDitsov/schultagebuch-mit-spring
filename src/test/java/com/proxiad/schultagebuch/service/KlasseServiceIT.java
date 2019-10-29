@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -19,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 
 import com.proxiad.schultagebuch.entity.Klasse;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.KlasseRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,7 +46,7 @@ public class KlasseServiceIT {
 		assertThat(listOfKlassen, is(emptyCollectionOf(Klasse.class)));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = EntityNichtGefundenException.class)
 	public void keineKlasseGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
@@ -55,7 +55,7 @@ public class KlasseServiceIT {
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
 		// Then
-		service.finden(id, Locale.getDefault());
+		service.finden(id);
 	}
 
 }

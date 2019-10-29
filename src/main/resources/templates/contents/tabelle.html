@@ -185,6 +185,30 @@
 			</tr>
 		</table>
 	</div>
+	<div th:fragment="alleNotenTabelle" class="table-responsive">
+		<table class="table table-bordered table-striped mx-auto mb-5 w-75 shadow">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col" th:text="#{id}">
+					<th scope="col" th:text="#{student}">
+					<th scope="col" th:text="#{subject}">
+					<th scope="col" th:text="#{teacher}">
+					<th scope="col" th:text="#{grade}">
+					<th scope="col" th:text="#{date(#{insert})}">
+					<th scope="col" th:text="#{date(#{update})}">
+				</tr>
+			</thead>
+			<tr th:each="note: ${listNote}">
+				<th scope="row" th:text="${note.id}">
+				<td th:text="${note.schuler.name}">
+				<td th:text="${note.schulstunde.schulfach.name}">
+				<td th:text="${note.schulstunde.lehrer.name}">
+				<th scope="row" th:text="${note.wert}">
+				<td th:text="${#temporals.format(note.noteInsertDatum, 'dd-MMM-yyyy HH:mm:ss')}">
+				<td th:text="${#temporals.format(note.noteUpdateDatum, 'dd-MMM-yyyy HH:mm:ss')}">
+			</tr>
+		</table>
+	</div>
 	<div th:fragment="schulerNotenTabelle" class="table-responsive mt-5">
 		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
 			<thead class="thead-dark">

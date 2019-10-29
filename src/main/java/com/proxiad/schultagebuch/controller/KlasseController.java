@@ -1,7 +1,5 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -46,8 +44,8 @@ public class KlasseController extends AbstraktController {
 	@RequestMapping(value = "/klasse/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendeKlasse(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			final Locale locale, RedirectAttributes attributes) {
-		modalAttributes("edit", klasseService.finden(id, locale), attributes);
+			RedirectAttributes attributes) {
+		modalAttributes("edit", klasseService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
 
@@ -66,7 +64,7 @@ public class KlasseController extends AbstraktController {
 	@RequestMapping(value = "/klasse/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView klasseLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			final Locale locale, RedirectAttributes attributes) {
+			RedirectAttributes attributes) {
 		klasseService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

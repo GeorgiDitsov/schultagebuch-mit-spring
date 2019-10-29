@@ -57,7 +57,7 @@ public class ViewModelServiceIT {
 		listOfNoten.add(new Note(32L, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(33L, (byte) 2, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(34L, (byte) 3, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
-		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
+		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(listOfNoten);
 
 		// When
@@ -73,7 +73,7 @@ public class ViewModelServiceIT {
 		// Given
 		Schuler schuler = new Schuler();
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
-		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
+		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
 
 		// When
@@ -95,7 +95,7 @@ public class ViewModelServiceIT {
 		listOfNoten.add(new Note(32L, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(33L, (byte) 2, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(34L, (byte) 3, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
-		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
+		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(listOfNoten);
 
 		// When
@@ -113,7 +113,7 @@ public class ViewModelServiceIT {
 		Schuler schuler = new Schuler();
 		Schulstunde schulstunde = new Schulstunde();
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
-		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
+		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
 
 		// When
@@ -135,7 +135,7 @@ public class ViewModelServiceIT {
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
 		List<Note> notenList = new ArrayList<>();
 		notenList.add(new Note(1L, (byte) 5, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
-		when(semesterService.findeAktuelleSemester(Locale.getDefault())).thenReturn(semester);
+		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(notenList);
 
 		// When

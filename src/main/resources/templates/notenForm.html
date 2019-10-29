@@ -7,6 +7,10 @@
 </head>
 <body>
 	<div th:replace="contents/navbar.html :: navbar"></div>
+	<div sec:authorize="hasRole('ADMIN')">
+		<div th:replace="contents/pageContent.html :: pageHead(title=#{grades}, buttonLink=${null})"></div>
+		<div th:replace="contents/tabelle.html :: alleNotenTabelle"></div>
+	</div>
 	<div sec:authorize="hasRole('SCHULER')">
 		<div th:replace="contents/pageContent.html :: pageHead(title=#{title.student(${schulerViewModel.kindKennzeichen})}+', '+#{title.half.year.success(${schulerViewModel.halbjaehrigeErfolg})}, buttonLink=${null})"></div>
 		<div th:replace="contents/tabelle.html :: schulerNotenTabelle"></div>

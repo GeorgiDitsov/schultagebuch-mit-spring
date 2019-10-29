@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -20,6 +19,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.proxiad.schultagebuch.entity.Lehrer;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.LehrerRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -48,7 +48,7 @@ public class LehrerServiceIT {
 
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = EntityNichtGefundenException.class)
 	public void keineLehrerGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
@@ -57,7 +57,7 @@ public class LehrerServiceIT {
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
 		// Then
-		service.finden(id, Locale.getDefault());
+		service.finden(id);
 	}
 
 	@Test(expected = UsernameNotFoundException.class)
@@ -69,7 +69,7 @@ public class LehrerServiceIT {
 		when(repo.findByBenutzerBenutzerName(benutzername)).thenReturn(Optional.empty());
 
 		// Then
-		service.findeDurchBenutzerName(benutzername, Locale.getDefault());
+		service.findeDurchBenutzerName(benutzername);
 	}
 
 }

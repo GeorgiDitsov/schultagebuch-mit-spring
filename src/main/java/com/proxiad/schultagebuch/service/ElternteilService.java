@@ -1,15 +1,14 @@
 package com.proxiad.schultagebuch.service;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Elternteil;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.ElternteilRepository;
 import com.proxiad.schultagebuch.util.SuchenUtils;
 
@@ -20,9 +19,6 @@ public class ElternteilService {
 	@Autowired
 	private ElternteilRepository repo;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	public List<Elternteil> suche(final String elternteilName) {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(elternteilName));
 	}
@@ -31,12 +27,12 @@ public class ElternteilService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Elternteil elternteilFinde(final Long id, final Locale locale) {
-		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.parent", new Object[] { id }, locale)));
+	public Elternteil elternteilFinde(final Long id) {
+		return repo.findById(id)
+				.orElseThrow(() -> new EntityNichtGefundenException("parent.not.found", new Object[] { id }));
 	}
 
-	public Elternteil findeDurchBenutzerName(final String benutzerName, final Locale locale) {
+	public Elternteil findeDurchBenutzerName(final String benutzerName) {
 		return repo.findByBenutzerBenutzerName(benutzerName)
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}

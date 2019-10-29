@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -22,6 +21,7 @@ import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.entity.Semester;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.NoteRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,7 +37,7 @@ public class NoteServiceIT {
 	@InjectMocks
 	private NoteService service;
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = EntityNichtGefundenException.class)
 	public void keineNoteMitDieseId() {
 		// Given
 		Long id = Long.MAX_VALUE;
@@ -46,7 +46,7 @@ public class NoteServiceIT {
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
 		// Then
-		service.finden(id, Locale.getDefault());
+		service.finden(id);
 	}
 
 	@Test

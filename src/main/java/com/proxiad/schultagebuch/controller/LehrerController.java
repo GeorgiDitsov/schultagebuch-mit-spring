@@ -1,7 +1,5 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,17 +50,16 @@ public class LehrerController extends AbstraktController {
 
 	@RequestMapping(value = "/lehrer/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neuerLehrer(@RequestHeader final String referer, final Locale locale,
-			RedirectAttributes attributes) {
-		modalAttributes("add", (Lehrer) PersonUtils.getNeuePerson(new Lehrer(), rolleService, locale), attributes);
+	public RedirectView neuerLehrer(@RequestHeader final String referer, RedirectAttributes attributes) {
+		modalAttributes("add", (Lehrer) PersonUtils.getNeuePerson(new Lehrer(), rolleService), attributes);
 		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/lehrer/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehenderLehrer(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, final Locale locale, RedirectAttributes attributes) {
-		modalAttributes("edit", lehrerService.finden(id, locale), attributes);
+			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
+		modalAttributes("edit", lehrerService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
 
@@ -80,7 +77,7 @@ public class LehrerController extends AbstraktController {
 	@RequestMapping(value = "/lehrer/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView lehrerLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			final Locale locale, RedirectAttributes attributes) {
+			RedirectAttributes attributes) {
 		lehrerService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

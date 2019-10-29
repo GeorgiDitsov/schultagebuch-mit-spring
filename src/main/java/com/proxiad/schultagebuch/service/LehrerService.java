@@ -1,15 +1,14 @@
 package com.proxiad.schultagebuch.service;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Lehrer;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.LehrerRepository;
 import com.proxiad.schultagebuch.util.SuchenUtils;
 
@@ -20,9 +19,6 @@ public class LehrerService {
 	@Autowired
 	private LehrerRepository repo;
 
-	@Autowired
-	private MessageSource messageSource;
-
 	public List<Lehrer> suche(final String lehrerName) {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(lehrerName));
 	}
@@ -31,12 +27,12 @@ public class LehrerService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Lehrer finden(final Long id, final Locale locale) {
-		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.teacher", new Object[] { id }, locale)));
+	public Lehrer finden(final Long id) {
+		return repo.findById(id)
+				.orElseThrow(() -> new EntityNichtGefundenException("teacher.not.found", new Object[] { id }));
 	}
 
-	public Lehrer findeDurchBenutzerName(final String benutzerName, final Locale locale) {
+	public Lehrer findeDurchBenutzerName(final String benutzerName) {
 		return repo.findByBenutzerBenutzerName(benutzerName)
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}

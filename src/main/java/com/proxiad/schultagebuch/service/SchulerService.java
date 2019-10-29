@@ -1,10 +1,8 @@
 package com.proxiad.schultagebuch.service;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +11,8 @@ import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
+import com.proxiad.schultagebuch.exception.EntityUngueltigeRelationException;
 import com.proxiad.schultagebuch.repository.SchulerRepository;
 import com.proxiad.schultagebuch.util.SuchenUtils;
 
@@ -22,9 +22,6 @@ public class SchulerService {
 
 	@Autowired
 	private SchulerRepository repo;
-
-	@Autowired
-	private MessageSource messageSource;
 
 	public List<Schuler> suche(final String schulerName) {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(schulerName));
@@ -38,24 +35,22 @@ public class SchulerService {
 		return repo.findByKlasseOrderByIdAsc(klasse);
 	}
 
-	public Schuler finden(final Long id, final Locale locale) {
-		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException(
-				messageSource.getMessage("invalid.student", new Object[] { id }, locale)));
+	public Schuler finden(final Long id) {
+		return repo.findById(id)
+				.orElseThrow(() -> new EntityNichtGefundenException("student.not.found", new Object[] { id }));
 	}
 
-	public Schuler findeElternteilKind(final Long schulerId, final Elternteil elternteil, final Locale locale) {
+	public Schuler findeElternteilKind(final Long schulerId, final Elternteil elternteil) {
 		return repo.findById(schulerId).filter(kind -> elternteil.getKinder().contains(kind))
-				.orElseThrow(() -> new IllegalArgumentException(
-						messageSource.getMessage("invalid.parent.student.relation", null, locale)));
+				.orElseThrow(() -> new EntityUngueltigeRelationException("invalid.parent.student.relation"));
 	}
 
-	public Schuler findeDurchSchulstunde(final Long schulerId, final Schulstunde schulstunde, final Locale locale) {
+	public Schuler findeDurchSchulstunde(final Long schulerId, final Schulstunde schulstunde) {
 		return repo.findById(schulerId).filter(schuler -> schulstunde.getKlasse().getSchulerSet().contains(schuler))
-				.orElseThrow(() -> new IllegalArgumentException(
-						messageSource.getMessage("invalid.student.course.relation", null, locale)));
+				.orElseThrow(() -> new EntityUngueltigeRelationException("invalid.student.course.relation"));
 	}
 
-	public Schuler findeDurchBenutzerName(final String benutzerName, final Locale locale) {
+	public Schuler findeDurchBenutzerName(final String benutzerName) {
 		return repo.findByBenutzerBenutzerName(benutzerName)
 				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
 	}

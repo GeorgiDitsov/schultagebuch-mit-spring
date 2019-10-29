@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -19,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 
 import com.proxiad.schultagebuch.entity.Schulstunde;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.SchulstundeRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -47,7 +47,7 @@ public class SchulstundeServiceIT {
 		assertThat(gefundenListe, is(emptyCollectionOf(Schulstunde.class)));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = EntityNichtGefundenException.class)
 	public void keineSchulstundeGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
@@ -56,7 +56,7 @@ public class SchulstundeServiceIT {
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
 		// Then
-		service.finden(id, Locale.getDefault());
+		service.finden(id);
 	}
 
 }

@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,7 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
@@ -31,6 +29,8 @@ import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulfach;
 import com.proxiad.schultagebuch.entity.Schulstunde;
+import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
+import com.proxiad.schultagebuch.exception.EntityUngueltigeRelationException;
 import com.proxiad.schultagebuch.repository.SchulerRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,9 +39,6 @@ public class SchulerServiceIT {
 
 	@Mock
 	private SchulerRepository repo;
-
-	@Mock
-	private MessageSource messageSource;
 
 	@InjectMocks
 	private SchulerService service;
@@ -88,7 +85,7 @@ public class SchulerServiceIT {
 		assertThat(listOfSchuler, hasSize(equalTo(3)));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = EntityNichtGefundenException.class)
 	public void keineSchulerGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
@@ -97,7 +94,7 @@ public class SchulerServiceIT {
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
 		// Then
-		service.finden(id, Locale.getDefault());
+		service.finden(id);
 	}
 
 	@Test
@@ -111,13 +108,13 @@ public class SchulerServiceIT {
 
 		// When
 		when(repo.findById(1L)).thenReturn(Optional.of(kind));
-		Schuler schuler = service.findeElternteilKind(kind.getId(), elternteil, Locale.getDefault());
+		Schuler schuler = service.findeElternteilKind(kind.getId(), elternteil);
 
 		// Then
 		assertThat(schuler, samePropertyValuesAs(kind));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = EntityUngueltigeRelationException.class)
 	public void eltenteilMitOhneKind() {
 		// Given
 		Long schulerId = Long.MAX_VALUE;
@@ -126,7 +123,7 @@ public class SchulerServiceIT {
 		when(repo.findById(schulerId)).thenReturn(Optional.empty());
 
 		// Then
-		service.findeElternteilKind(schulerId, new Elternteil(), Locale.getDefault());
+		service.findeElternteilKind(schulerId, new Elternteil());
 	}
 
 	@Test
@@ -141,13 +138,13 @@ public class SchulerServiceIT {
 
 		// When
 		when(repo.findById(schuler.getId())).thenReturn(Optional.of(schuler));
-		Schuler gefundenSchuler = service.findeDurchSchulstunde(schuler.getId(), schulstunde, Locale.getDefault());
+		Schuler gefundenSchuler = service.findeDurchSchulstunde(schuler.getId(), schulstunde);
 
 		// Then
 		assertThat(gefundenSchuler, samePropertyValuesAs(schuler));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = EntityUngueltigeRelationException.class)
 	public void keineSchulerGefundenDurchSchulstunde() {
 		// Given
 		Long schulerId = Long.MAX_VALUE;
@@ -156,7 +153,7 @@ public class SchulerServiceIT {
 		when(repo.findById(schulerId)).thenReturn(Optional.empty());
 
 		// Then
-		service.findeDurchSchulstunde(schulerId, new Schulstunde(), Locale.getDefault());
+		service.findeDurchSchulstunde(schulerId, new Schulstunde());
 	}
 
 	@Test(expected = UsernameNotFoundException.class)
@@ -168,7 +165,7 @@ public class SchulerServiceIT {
 		when(repo.findByBenutzerBenutzerName(benutzename)).thenReturn(Optional.empty());
 
 		// Then
-		service.findeDurchBenutzerName(benutzename, Locale.getDefault());
+		service.findeDurchBenutzerName(benutzename);
 	}
 
 }
