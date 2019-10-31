@@ -56,7 +56,9 @@ public class SchulerController extends AbstraktController {
 	@RequestMapping(value = "/schuler/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neuerSchuler(@RequestHeader final String referer, RedirectAttributes attributes) {
-		modalAttributes("add", (Schuler) PersonUtils.getNeuePerson(new Schuler(), rolleService), attributes);
+		modalAttributes("add",
+				(Schuler) PersonUtils.erstellenPersonMitValidBenutzerAttribute(new Schuler(), rolleService),
+				attributes);
 		return super.umleiten(referer);
 	}
 
@@ -93,6 +95,7 @@ public class SchulerController extends AbstraktController {
 		attributes.addFlashAttribute("schuler", schuler);
 		attributes.addFlashAttribute("listKlasse", klasseService.findeAlle());
 		attributes.addFlashAttribute("listEltern", elternteilService.findeAlle());
-		attributes.addFlashAttribute("elternteil", PersonUtils.getNeuePerson(new Elternteil(), rolleService));
+		attributes.addFlashAttribute("elternteil",
+				PersonUtils.erstellenPersonMitValidBenutzerAttribute(new Elternteil(), rolleService));
 	}
 }

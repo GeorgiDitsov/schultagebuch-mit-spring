@@ -6,6 +6,10 @@ public class EntityUngueltigeRelationException extends RuntimeException {
 
 	private String message;
 
+	public EntityUngueltigeRelationException() {
+		super();
+	}
+
 	public EntityUngueltigeRelationException(String message) {
 		this.message = message;
 	}

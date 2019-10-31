@@ -51,7 +51,8 @@ public class LehrerController extends AbstraktController {
 	@RequestMapping(value = "/lehrer/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neuerLehrer(@RequestHeader final String referer, RedirectAttributes attributes) {
-		modalAttributes("add", (Lehrer) PersonUtils.getNeuePerson(new Lehrer(), rolleService), attributes);
+		modalAttributes("add",
+				(Lehrer) PersonUtils.erstellenPersonMitValidBenutzerAttribute(new Lehrer(), rolleService), attributes);
 		return super.umleiten(referer);
 	}
 

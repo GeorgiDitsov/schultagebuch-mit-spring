@@ -14,7 +14,7 @@ public final class RolleUtils {
 		// nothing
 	}
 
-	public static Rolle getValidRolle(final Object person, final RolleService rolleService) {
+	public static Rolle erstellenValidRolleFuerPerson(final Object person, final RolleService rolleService) {
 		return rolleService.finden(person instanceof Schuler ? RolleTyp.ROLLE_SCHULER
 				: person instanceof Lehrer ? RolleTyp.ROLLE_LEHRER
 						: person instanceof Elternteil ? RolleTyp.ROLLE_ELTERNTEIL : FALSCH_ROLLE);

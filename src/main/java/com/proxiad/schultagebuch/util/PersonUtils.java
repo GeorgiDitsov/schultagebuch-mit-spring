@@ -1,10 +1,10 @@
 package com.proxiad.schultagebuch.util;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Locale;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Rolle;
+import com.proxiad.schultagebuch.exception.FalschServiceException;
 import com.proxiad.schultagebuch.service.RolleService;
 
 public final class PersonUtils {
@@ -16,33 +16,28 @@ public final class PersonUtils {
 		// nothing
 	}
 
-	public static Object getPersonAusBenutzerName(final String benutzerName, final Object personService) {
-		Object person = null;
+	public static Object getPersonDurchBenutzername(final String benutzerName, final Object personService) {
+		Object person = new Object();
 		try {
-			person = personService.getClass().getMethod(FIND_BY_BENUTZERNAME, String.class, Locale.class)
-					.invoke(personService, benutzerName);
+			person = personService.getClass().getMethod(FIND_BY_BENUTZERNAME, String.class).invoke(personService,
+					benutzerName);
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			throw new FalschServiceException();
+		}
+		return person;
+	}
+
+	public static Object erstellenPersonMitValidBenutzerAttribute(Object person, RolleService rolleService) {
+		Rolle rolle = RolleUtils.erstellenValidRolleFuerPerson(person, rolleService);
+		Benutzer benutzer = BenutzerUtils.erstellenBenutzerMitRolle(rolle);
+		try {
+			person.getClass().getMethod(SET_BENUTZER, Benutzer.class).invoke(person, benutzer);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return person;
-	}
-
-	public static Object getNeuePerson(Object person, RolleService rolleService) {
-		try {
-			person.getClass().getMethod(SET_BENUTZER, Benutzer.class).invoke(person,
-					getBenutzer(RolleUtils.getValidRolle(person, rolleService)));
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-				| SecurityException e) {
-			e.printStackTrace();
-		}
-		return person;
-	}
-
-	private static Benutzer getBenutzer(Rolle validRolle) {
-		Benutzer benutzer = new Benutzer();
-		benutzer.setRolle(validRolle);
-		return benutzer;
 	}
 
 }

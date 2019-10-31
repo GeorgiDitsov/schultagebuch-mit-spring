@@ -2,8 +2,6 @@ package com.proxiad.schultagebuch.controller;
 
 import java.util.Locale;
 
-import javax.validation.ValidationException;
-
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -18,8 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.exception.EntityUngueltigeRelationException;
-
-import javassist.tools.web.BadHttpRequest;
+import com.proxiad.schultagebuch.exception.FalschServiceException;
 
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
@@ -36,13 +33,6 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	public ModelAndView datenbankFehler(final RuntimeException exception) {
 		int statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 		return getDefaultErrorView(exception.getLocalizedMessage(), statusCode);
-	}
-
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class, ValidationException.class,
-			BadHttpRequest.class })
-	public ModelAndView schlechteAnfrage(final RuntimeException exception) {
-		return getDefaultErrorView(exception.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value());
 	}
 
 	@ExceptionHandler(EntityNichtGefundenException.class)
@@ -64,6 +54,13 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	public ModelAndView benutzernameNichtGefunden(final UsernameNotFoundException exception) {
 		int statusCode = HttpStatus.BAD_REQUEST.value();
 		return getDefaultErrorView(exception.getLocalizedMessage(), statusCode);
+	}
+
+	@ExceptionHandler(FalschServiceException.class)
+	public ModelAndView falschService(final FalschServiceException exception, final Locale locale) {
+		int statusCode = HttpStatus.BAD_REQUEST.value();
+		String errorMessage = messageSource.getMessage(exception.getMessage(), null, locale);
+		return getDefaultErrorView(errorMessage, statusCode);
 	}
 
 	private ModelAndView getDefaultErrorView(final String errorMessage, final int statusCode) {

@@ -7,6 +7,10 @@ public class EntityNichtGefundenException extends RuntimeException {
 	private String message;
 	private Object[] args;
 
+	public EntityNichtGefundenException() {
+		super();
+	}
+
 	public EntityNichtGefundenException(String message, Object[] args) {
 		this.message = message;
 		this.args = args;

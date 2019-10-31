@@ -160,15 +160,15 @@ public class NoteController extends AbstraktController {
 	}
 
 	private Schuler getSchuler(final String benutzerName) {
-		return (Schuler) PersonUtils.getPersonAusBenutzerName(benutzerName, schulerService);
+		return (Schuler) PersonUtils.getPersonDurchBenutzername(benutzerName, schulerService);
 	}
 
 	private Elternteil getElternteil(final String bennutzerName) {
-		return (Elternteil) PersonUtils.getPersonAusBenutzerName(bennutzerName, elternteilService);
+		return (Elternteil) PersonUtils.getPersonDurchBenutzername(bennutzerName, elternteilService);
 	}
 
 	private Lehrer getLehrer(final String benutzerName) {
-		return (Lehrer) PersonUtils.getPersonAusBenutzerName(benutzerName, lehrerService);
+		return (Lehrer) PersonUtils.getPersonDurchBenutzername(benutzerName, lehrerService);
 	}
 
 	private void noteModalAttributes(final String modalType, final Note note, RedirectAttributes attributes) {
