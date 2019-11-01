@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.exception.FalschServiceException;
+import com.proxiad.schultagebuch.service.RolleService;
 import com.proxiad.schultagebuch.service.SchulerService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -23,6 +24,9 @@ public class PersonUtilsIT {
 
 	@Mock
 	private SchulerService schulerService;
+
+	@Mock
+	private RolleService rolleService;
 
 	@Mock
 	private Schuler schuler;
@@ -56,9 +60,10 @@ public class PersonUtilsIT {
 //		schuler = new Schuler();
 //		Rolle rolle = new Rolle(1, RolleTyp.ROLLE_SCHULER);
 //		Benutzer benutzer = new Benutzer(123L, "SomeName123", "somePass", rolle);
-//		RolleService rolleService = new RolleService();
+//		schuler.setBenutzer(benutzer);
 //
 //		// When
+//		when(rolleService.finden(RolleTyp.ROLLE_SCHULER)).thenReturn(rolle);
 //		when(RolleUtils.erstellenValidRolleFuerPerson(schuler, rolleService)).thenReturn(rolle);
 //		when(BenutzerUtils.erstellenBenutzerMitRolle(rolle)).thenReturn(benutzer);
 //		doNothing().when(schuler).setBenutzer(benutzer);

@@ -16,4 +16,6 @@ public interface RolleRepository extends JpaRepository<Rolle, Integer> {
 
 	public Optional<Rolle> findByName(RolleTyp rolleTyp);
 
+	public boolean existsByName(RolleTyp rolleTyp);
+
 }
