@@ -3,9 +3,7 @@ package com.proxiad.schultagebuch.util;
 import java.lang.reflect.InvocationTargetException;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
-import com.proxiad.schultagebuch.entity.Rolle;
 import com.proxiad.schultagebuch.exception.FalschServiceException;
-import com.proxiad.schultagebuch.service.RolleService;
 
 public final class PersonUtils {
 
@@ -28,10 +26,7 @@ public final class PersonUtils {
 		return person;
 	}
 
-	public static Object erstellenPersonMitValidBenutzerAttribute(final Object person,
-			final RolleService rolleService) {
-		Rolle rolle = RolleUtils.erstellenValidRolleFuerPerson(person, rolleService);
-		Benutzer benutzer = BenutzerUtils.erstellenBenutzerMitRolle(rolle);
+	public static Object erstellenPersonMitValidBenutzerAttribute(final Object person, final Benutzer benutzer) {
 		try {
 			person.getClass().getMethod(SET_BENUTZER_METHOD, Benutzer.class).invoke(person, benutzer);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException

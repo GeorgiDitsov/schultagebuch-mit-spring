@@ -2,6 +2,8 @@ package com.proxiad.schultagebuch.controller;
 
 import java.util.Locale;
 
+import javax.validation.ValidationException;
+
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -32,6 +34,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(value = { PSQLException.class, DataAccessException.class })
 	public ModelAndView datenbankFehler(final RuntimeException exception) {
 		int statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
+		return getDefaultErrorView(exception.getLocalizedMessage(), statusCode);
+	}
+
+	@ExceptionHandler(ValidationException.class)
+	public ModelAndView validierungFehler(final ValidationException exception) {
+		int statusCode = HttpStatus.BAD_REQUEST.value();
 		return getDefaultErrorView(exception.getLocalizedMessage(), statusCode);
 	}
 

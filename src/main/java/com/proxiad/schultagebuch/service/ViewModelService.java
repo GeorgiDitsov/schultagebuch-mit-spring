@@ -77,10 +77,10 @@ public class ViewModelService {
 
 	private List<Long> getSchulerHalbjaehrigeNoten(final Schuler schuler) {
 		List<Long> halbjaehrigeNoten = new ArrayList<>();
-		schuler.getKlasse().getSchulstundeSet().stream()
+		Optional.ofNullable(schuler.getKlasse()).ifPresent(klasse -> klasse.getSchulstundeSet().stream()
 				.forEach(schulstunde -> halbjaehrigeNoten.add(
 						BerechnungUtils.durchschnittlichNoten(noteService.findeSchulerNotenDurchSchulstunde(schuler,
-								schulstunde, semesterService.findeAktuelleSemester()))));
+								schulstunde, semesterService.findeAktuelleSemester())))));
 		return halbjaehrigeNoten;
 	}
 

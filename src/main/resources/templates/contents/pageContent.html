@@ -15,7 +15,7 @@
 	<div th:fragment="searchForm (buttonLink)">
 		<div class="container text-center mb-5">
 			<form class="form-inline justify-content-center" method="get" th:action="@{'/'+${buttonLink}+'/search'}">
-				<input class="form-control w-25 shadow" type="text" name="string" th:placeholder="#{name}" autofocus>
+				<input class="form-control w-25 shadow" type="text" name="string" th:placeholder="#{name}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" required="required" autofocus>
 				<input class="btn btn-warning shadow" type="submit" th:value="#{button.search}">
 			</form>
 		</div>

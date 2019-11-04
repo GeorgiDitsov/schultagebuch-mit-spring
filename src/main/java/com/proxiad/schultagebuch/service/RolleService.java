@@ -27,11 +27,6 @@ public class RolleService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Rolle finden(final RolleTyp rolleTyp) {
-		return repo.findByName(rolleTyp)
-				.orElseThrow(() -> new EntityNichtGefundenException("role.not.found", new Object[] { rolleTyp }));
-	}
-
 	public Rolle findenDurchPerson(final Object person) {
 		return repo
 				.findByName(person instanceof Schuler ? RolleTyp.ROLLE_SCHULER

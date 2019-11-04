@@ -20,6 +20,7 @@ import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.RolleService;
 import com.proxiad.schultagebuch.service.SchulfachService;
+import com.proxiad.schultagebuch.util.BenutzerUtils;
 import com.proxiad.schultagebuch.util.PersonUtils;
 import com.proxiad.schultagebuch.util.ValidierungUtils;
 
@@ -51,8 +52,10 @@ public class LehrerController extends AbstraktController {
 	@RequestMapping(value = "/lehrer/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neuerLehrer(@RequestHeader final String referer, RedirectAttributes attributes) {
-		modalAttributes("add",
-				(Lehrer) PersonUtils.erstellenPersonMitValidBenutzerAttribute(new Lehrer(), rolleService), attributes);
+		Lehrer neuerLehrer = new Lehrer();
+		PersonUtils.erstellenPersonMitValidBenutzerAttribute(neuerLehrer,
+				BenutzerUtils.erstellenBenutzerMitRolle(rolleService.findenDurchPerson(neuerLehrer)));
+		modalAttributes("add", neuerLehrer, attributes);
 		return super.umleiten(referer);
 	}
 

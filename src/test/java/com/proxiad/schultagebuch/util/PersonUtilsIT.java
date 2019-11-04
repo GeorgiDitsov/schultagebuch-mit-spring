@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.exception.FalschServiceException;
 import com.proxiad.schultagebuch.service.RolleService;
@@ -54,23 +55,25 @@ public class PersonUtilsIT {
 
 	}
 
-//	@Test
-//	public void erstellenPersonMitValidBenutzerAttributeTest() {
-//		// Given
-//		schuler = new Schuler();
-//		Rolle rolle = new Rolle(1, RolleTyp.ROLLE_SCHULER);
-//		Benutzer benutzer = new Benutzer(123L, "SomeName123", "somePass", rolle);
-//		schuler.setBenutzer(benutzer);
-//
-//		// When
-//		when(rolleService.finden(RolleTyp.ROLLE_SCHULER)).thenReturn(rolle);
-//		when(RolleUtils.erstellenValidRolleFuerPerson(schuler, rolleService)).thenReturn(rolle);
-//		when(BenutzerUtils.erstellenBenutzerMitRolle(rolle)).thenReturn(benutzer);
-//		doNothing().when(schuler).setBenutzer(benutzer);
-//		Object person = PersonUtils.erstellenPersonMitValidBenutzerAttribute(schuler, rolleService);
-//
-//		// Then
-//		assertThat(person, hasProperty("benutzer", equalTo(benutzer)));
-//	}
+	@Test
+	public void erstellenValidInstanceOfPerson() {
+		// Given
+		schuler = new Schuler();
+
+		// When
+		Object schulerFound = PersonUtils.erstellenPersonMitValidBenutzerAttribute(schuler, new Benutzer());
+
+		// Then
+		assertThat(schulerFound, is(instanceOf(Schuler.class)));
+	}
+
+	@Test(expected = FalschServiceException.class)
+	public void eestellenInvalidInstanceOfPerson() {
+		// Given
+		Object object = new Object();
+
+		// When
+		PersonUtils.erstellenPersonMitValidBenutzerAttribute(object, new Benutzer());
+	}
 
 }

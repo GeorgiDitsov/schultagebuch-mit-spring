@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.entity.Rolle;
 import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
 import com.proxiad.schultagebuch.repository.RolleRepository;
@@ -62,7 +63,7 @@ public class RolleServiceIT {
 	}
 
 	@Test(expected = EntityNichtGefundenException.class)
-	public void keineRolleGefundenDurchId() {
+	public void keineRolleGefundenDurchPerson() {
 		// Given
 		RolleTyp invalidName = null;
 
@@ -70,20 +71,20 @@ public class RolleServiceIT {
 		when(repo.findByName(invalidName)).thenReturn(Optional.empty());
 
 		// Then
-		service.finden(invalidName);
+		service.findenDurchPerson(new Object());
 	}
 
 	@Test
-	public void findenDurchNameTest() {
+	public void findenDurchPerson() {
 		// Given
-		Rolle adminRolle = new Rolle(1, RolleTyp.ROLLE_ADMIN);
-		when(repo.findByName(RolleTyp.ROLLE_ADMIN)).thenReturn(Optional.of(adminRolle));
+		Rolle lehrerRolle = new Rolle(1, RolleTyp.ROLLE_LEHRER);
+		when(repo.findByName(RolleTyp.ROLLE_LEHRER)).thenReturn(Optional.of(lehrerRolle));
 
 		// When
-		Rolle rolle = service.finden(RolleTyp.ROLLE_ADMIN);
+		Rolle rolle = service.findenDurchPerson(new Lehrer());
 
 		// Then
-		assertThat(rolle, is(equalTo(adminRolle)));
+		assertThat(rolle, is(equalTo(lehrerRolle)));
 	}
 
 }
