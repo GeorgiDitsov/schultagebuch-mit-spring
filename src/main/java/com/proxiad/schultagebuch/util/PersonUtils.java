@@ -26,7 +26,7 @@ public final class PersonUtils {
 		return person;
 	}
 
-	public static Object erstellenPersonMitValidBenutzerAttribute(final Object person, final Benutzer benutzer) {
+	public static Object erstellenPersonMitValidBenutzer(final Object person, final Benutzer benutzer) {
 		try {
 			person.getClass().getMethod(SET_BENUTZER_METHOD, Benutzer.class).invoke(person, benutzer);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException

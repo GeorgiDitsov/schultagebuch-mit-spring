@@ -21,7 +21,6 @@ import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.SchulfachService;
 import com.proxiad.schultagebuch.service.SchulstundeService;
-import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -65,7 +64,6 @@ public class SchulstundeController extends AbstraktController {
 	public RedirectView schulstundeSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
-		ValidierungUtils.fehlerPruefen(bindingResult);
 		schulstundeService.speichern(schulstunde);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

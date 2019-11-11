@@ -18,7 +18,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.service.BenutzerService;
-import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -54,7 +53,6 @@ public class BenutzerController extends AbstraktController {
 	public RedirectView benutzerSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "benutzer") @Valid final Benutzer benutzer, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
-		ValidierungUtils.fehlerPruefen(bindingResult);
 		benutzerService.speichern(benutzer);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

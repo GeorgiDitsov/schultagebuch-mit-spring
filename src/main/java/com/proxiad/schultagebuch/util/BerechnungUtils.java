@@ -14,9 +14,9 @@ public final class BerechnungUtils {
 		return Math.round(noten.stream().mapToDouble(Note::getWert).average().orElse(Double.NaN));
 	}
 
-	public static double durchschnittlichHalbjaehrigeNoten(final Collection<Long> collectionOfLongs) {
-		return collectionOfLongs.stream().filter(l -> l >= 2 && l <= 6).mapToDouble(Long::doubleValue).average()
-				.orElse(Double.NaN);
+	public static double durchschnittlichHalbjaehrigeNoten(final Collection<Long> collectionOfHalbjaehrigeNoten) {
+		return collectionOfHalbjaehrigeNoten.stream().filter(noteWert -> noteWert >= 2 && noteWert <= 6)
+				.mapToDouble(Long::doubleValue).average().orElse(Double.NaN);
 	}
 
 }

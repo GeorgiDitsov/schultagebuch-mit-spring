@@ -48,10 +48,10 @@ public class PersonUtilsIT {
 	@Test(expected = FalschServiceException.class)
 	public void getPersonDurchBenutzerNameMitFalschObjekt() {
 		// Given
-		Object object = new Object();
+		Object objekt = new Object();
 
 		// When
-		PersonUtils.getPersonDurchBenutzername(BENUTZERNAME, object);
+		PersonUtils.getPersonDurchBenutzername(BENUTZERNAME, objekt);
 
 	}
 
@@ -61,19 +61,19 @@ public class PersonUtilsIT {
 		schuler = new Schuler();
 
 		// When
-		Object schulerFound = PersonUtils.erstellenPersonMitValidBenutzerAttribute(schuler, new Benutzer());
+		Object person = PersonUtils.erstellenPersonMitValidBenutzer(schuler, new Benutzer());
 
 		// Then
-		assertThat(schulerFound, is(instanceOf(Schuler.class)));
+		assertThat(person, is(instanceOf(Schuler.class)));
 	}
 
 	@Test(expected = FalschServiceException.class)
 	public void eestellenInvalidInstanceOfPerson() {
 		// Given
-		Object object = new Object();
+		Object objekt = new Object();
 
 		// When
-		PersonUtils.erstellenPersonMitValidBenutzerAttribute(object, new Benutzer());
+		PersonUtils.erstellenPersonMitValidBenutzer(objekt, new Benutzer());
 	}
 
 }

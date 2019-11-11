@@ -19,7 +19,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.service.ElternteilService;
 import com.proxiad.schultagebuch.service.SchulerService;
-import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -58,7 +57,6 @@ public class ElternteilController extends AbstraktController {
 	public RedirectView elternteilSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "elternteil") @Valid Elternteil elternteil, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
-		ValidierungUtils.fehlerPruefen(bindingResult);
 		elternteilService.speichern(elternteil);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

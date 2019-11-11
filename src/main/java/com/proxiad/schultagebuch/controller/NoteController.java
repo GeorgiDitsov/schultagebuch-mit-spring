@@ -34,7 +34,6 @@ import com.proxiad.schultagebuch.service.SchulstundeService;
 import com.proxiad.schultagebuch.service.ViewModelService;
 import com.proxiad.schultagebuch.util.NoteUtils;
 import com.proxiad.schultagebuch.util.PersonUtils;
-import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -144,7 +143,6 @@ public class NoteController extends AbstraktController {
 	public RedirectView noteSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "note") @Valid Note note, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
-		ValidierungUtils.fehlerPruefen(bindingResult);
 		noteService.speichern(note);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

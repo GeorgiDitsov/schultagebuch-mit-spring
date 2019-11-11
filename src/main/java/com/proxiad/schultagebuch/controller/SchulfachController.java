@@ -18,7 +18,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Schulfach;
 import com.proxiad.schultagebuch.service.SchulfachService;
-import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -53,7 +52,6 @@ public class SchulfachController extends AbstraktController {
 	public RedirectView schulfachSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "schulfach") @Valid Schulfach schulfach, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
-		ValidierungUtils.fehlerPruefen(bindingResult);
 		schulfachService.speichern(schulfach);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

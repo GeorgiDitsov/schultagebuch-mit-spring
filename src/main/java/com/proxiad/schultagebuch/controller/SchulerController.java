@@ -24,7 +24,6 @@ import com.proxiad.schultagebuch.service.RolleService;
 import com.proxiad.schultagebuch.service.SchulerService;
 import com.proxiad.schultagebuch.util.BenutzerUtils;
 import com.proxiad.schultagebuch.util.PersonUtils;
-import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -58,7 +57,7 @@ public class SchulerController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neuerSchuler(@RequestHeader final String referer, RedirectAttributes attributes) {
 		Schuler neuerSchuler = new Schuler();
-		PersonUtils.erstellenPersonMitValidBenutzerAttribute(neuerSchuler,
+		PersonUtils.erstellenPersonMitValidBenutzer(neuerSchuler,
 				BenutzerUtils.erstellenBenutzerMitRolle(rolleService.findenDurchPerson(neuerSchuler)));
 		modalAttributes("add", neuerSchuler, attributes);
 		return super.umleiten(referer);
@@ -77,7 +76,6 @@ public class SchulerController extends AbstraktController {
 	public RedirectView schulerSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "schuler") @Valid Schuler schuler, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
-		ValidierungUtils.fehlerPruefen(bindingResult);
 		schulerService.speichern(schuler);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
@@ -98,7 +96,7 @@ public class SchulerController extends AbstraktController {
 		attributes.addFlashAttribute("schuler", schuler);
 		attributes.addFlashAttribute("listKlasse", klasseService.findeAlle());
 		attributes.addFlashAttribute("listEltern", elternteilService.findeAlle());
-		attributes.addFlashAttribute("elternteil", PersonUtils.erstellenPersonMitValidBenutzerAttribute(neuesElternteil,
+		attributes.addFlashAttribute("elternteil", PersonUtils.erstellenPersonMitValidBenutzer(neuesElternteil,
 				BenutzerUtils.erstellenBenutzerMitRolle(rolleService.findenDurchPerson(neuesElternteil))));
 	}
 }

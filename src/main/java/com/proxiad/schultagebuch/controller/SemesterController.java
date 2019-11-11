@@ -21,7 +21,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.proxiad.schultagebuch.entity.Semester;
 import com.proxiad.schultagebuch.service.SemesterService;
 import com.proxiad.schultagebuch.service.ViewModelService;
-import com.proxiad.schultagebuch.util.ValidierungUtils;
 
 @Controller
 @Validated
@@ -59,7 +58,6 @@ public class SemesterController extends AbstraktController {
 	public RedirectView semesterSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "semester") @Valid Semester semester, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
-		ValidierungUtils.fehlerPruefen(bindingResult);
 		semesterService.speichern(semester);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

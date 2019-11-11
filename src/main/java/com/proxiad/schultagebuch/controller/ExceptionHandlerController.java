@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -37,12 +38,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 		return getDefaultErrorView(exception.getLocalizedMessage(), statusCode);
 	}
 
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(ValidationException.class)
-	public ModelAndView validierungFehler(final ValidationException exception) {
+	public ModelAndView validierungFehler(final ValidationException exception, WebRequest request) {
 		int statusCode = HttpStatus.BAD_REQUEST.value();
 		return getDefaultErrorView(exception.getLocalizedMessage(), statusCode);
 	}
 
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(EntityNichtGefundenException.class)
 	public ModelAndView schulerNichtGefunden(final EntityNichtGefundenException exception, final Locale locale) {
 		String errorMessage = messageSource.getMessage(exception.getMessage(), exception.getArgs(), locale);
@@ -50,6 +53,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 		return getDefaultErrorView(errorMessage, statusCode);
 	}
 
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(EntityUngueltigeRelationException.class)
 	public ModelAndView entityUngueltigeRelation(final EntityUngueltigeRelationException exception,
 			final Locale locale) {
@@ -58,12 +62,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 		return getDefaultErrorView(errorMessage, statusCode);
 	}
 
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(UsernameNotFoundException.class)
 	public ModelAndView benutzernameNichtGefunden(final UsernameNotFoundException exception) {
 		int statusCode = HttpStatus.BAD_REQUEST.value();
 		return getDefaultErrorView(exception.getLocalizedMessage(), statusCode);
 	}
 
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(FalschServiceException.class)
 	public ModelAndView falschService(final FalschServiceException exception, final Locale locale) {
 		int statusCode = HttpStatus.BAD_REQUEST.value();

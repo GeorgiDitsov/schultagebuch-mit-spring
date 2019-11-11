@@ -2,6 +2,8 @@ package com.proxiad.schultagebuch.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyCollectionOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +37,23 @@ public class SchulfachServiceIT {
 	private SchulfachService service;
 
 	@Test
-	public void leereListeDerSchulsfachGefunden() {
+	public void findeAlleTest() {
+		// Given
+		List<Schulfach> listOfSchulfach = new ArrayList<>();
+		listOfSchulfach.add(new Schulfach());
+		listOfSchulfach.add(new Schulfach());
+		listOfSchulfach.add(new Schulfach());
+
+		// When
+		when(repo.findAllByOrderByIdAsc()).thenReturn(listOfSchulfach);
+		List<Schulfach> gefundenListe = service.findeAlle();
+
+		// Then
+		assertThat(gefundenListe, hasSize(equalTo(listOfSchulfach.size())));
+	}
+
+	@Test
+	public void gefundenLeereListeDerSchulfaecher() {
 		// Given
 		when(repo.findAllByOrderByIdAsc()).thenReturn(new ArrayList<>());
 
@@ -44,6 +62,20 @@ public class SchulfachServiceIT {
 
 		// Then
 		assertThat(listOfSchulfaecher, is(emptyCollectionOf(Schulfach.class)));
+	}
+
+	@Test
+	public void findeSchulfachTest() {
+		// Given
+		Long id = Long.MAX_VALUE;
+		Schulfach schulfach = new Schulfach();
+
+		// When
+		when(repo.findById(id)).thenReturn(Optional.of(schulfach));
+		Schulfach gefundenSchulfach = service.finden(id);
+
+		// Then
+		assertThat(gefundenSchulfach, is(equalTo(schulfach)));
 	}
 
 	@Test(expected = EntityNichtGefundenException.class)
