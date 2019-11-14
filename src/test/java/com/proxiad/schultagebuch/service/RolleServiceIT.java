@@ -35,15 +35,16 @@ public class RolleServiceIT {
 	private RolleService service;
 
 	@Test
-	public void leereListeGefunden() {
+	public void gefundenLeereListeDerRollen() {
 		// Given
-		when(repo.findAllByOrderByIdAsc()).thenReturn(new ArrayList<>());
+		List<Rolle> leereListe = new ArrayList<>();
 
 		// When
-		List<Rolle> listOfRolle = service.findeAlle();
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
+		List<Rolle> gefundenListe = service.findeAlle();
 
 		// Then
-		assertThat(listOfRolle, is(emptyCollectionOf(Rolle.class)));
+		assertThat(gefundenListe, is(emptyCollectionOf(Rolle.class)));
 	}
 
 	@Test
@@ -65,17 +66,17 @@ public class RolleServiceIT {
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineRolleGefundenDurchPerson() {
 		// Given
-		RolleTyp invalidName = null;
+		RolleTyp falschName = null;
 
 		// When
-		when(repo.findByName(invalidName)).thenReturn(Optional.empty());
+		when(repo.findByName(falschName)).thenReturn(Optional.empty());
 
 		// Then
 		service.findenDurchPerson(new Object());
 	}
 
 	@Test
-	public void findenDurchPerson() {
+	public void findeDurchPerson() {
 		// Given
 		Rolle lehrerRolle = new Rolle(1, RolleTyp.ROLLE_LEHRER);
 		when(repo.findByName(RolleTyp.ROLLE_LEHRER)).thenReturn(Optional.of(lehrerRolle));

@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 
 import com.proxiad.schultagebuch.entity.Schulfach;
 import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
@@ -29,9 +28,6 @@ public class SchulfachServiceIT {
 
 	@Mock
 	private SchulfachRepository repo;
-
-	@Mock
-	private MessageSource messageSource;
 
 	@InjectMocks
 	private SchulfachService service;

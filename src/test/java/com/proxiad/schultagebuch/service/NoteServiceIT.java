@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 
 import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
@@ -31,14 +30,11 @@ public class NoteServiceIT {
 	@Mock
 	private NoteRepository repo;
 
-	@Mock
-	private MessageSource messageSource;
-
 	@InjectMocks
 	private NoteService service;
 
 	@Test(expected = EntityNichtGefundenException.class)
-	public void keineNoteMitDieseId() {
+	public void keineNoteMitDieserId() {
 		// Given
 		Long id = Long.MAX_VALUE;
 
@@ -54,30 +50,32 @@ public class NoteServiceIT {
 		// Given
 		Schuler schuler = new Schuler();
 		Semester semester = new Semester();
+		List<Note> leereListe = new ArrayList<>();
 
 		// When
 		when(repo.findBySchulerAndNoteUpdateDatumBetweenOrderByNoteUpdateDatumDesc(schuler,
-				semester.getSemesterbeginn(), semester.getSemesterende())).thenReturn(new ArrayList<>());
-		List<Note> list = service.findeSchulerNoten(schuler, semester);
+				semester.getSemesterbeginn(), semester.getSemesterende())).thenReturn(leereListe);
+		List<Note> gefundenListe = service.findeSchulerNoten(schuler, semester);
 
 		// Then
-		assertThat(list, is(emptyCollectionOf(Note.class)));
+		assertThat(gefundenListe, is(emptyCollectionOf(Note.class)));
 	}
 
 	@Test
-	public void gefundenLeereListeDerSchulerNotenDurch() {
+	public void gefundenLeereListeDerSchulerNotenDurchSchulerUndSchulstunde() {
 		// Given
 		Schuler schuler = new Schuler();
 		Schulstunde schulstunde = new Schulstunde();
 		Semester semester = new Semester();
+		List<Note> leereListe = new ArrayList<>();
 
 		// When
 		when(repo.findBySchulerAndSchulstundeAndNoteUpdateDatumBetween(schuler, schulstunde,
-				semester.getSemesterbeginn(), semester.getSemesterende())).thenReturn(new ArrayList<>());
-		List<Note> list = service.findeSchulerNotenDurchSchulstunde(schuler, schulstunde, semester);
+				semester.getSemesterbeginn(), semester.getSemesterende())).thenReturn(leereListe);
+		List<Note> gefundenListe = service.findeSchulerNotenDurchSchulstunde(schuler, schulstunde, semester);
 
 		// Then
-		assertThat(list, is(emptyCollectionOf(Note.class)));
+		assertThat(gefundenListe, is(emptyCollectionOf(Note.class)));
 	}
 
 }

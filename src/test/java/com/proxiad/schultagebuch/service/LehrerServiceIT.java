@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.proxiad.schultagebuch.entity.Lehrer;
@@ -29,22 +28,20 @@ public class LehrerServiceIT {
 	@Mock
 	private LehrerRepository repo;
 
-	@Mock
-	private MessageSource messageSource;
-
 	@InjectMocks
 	private LehrerService service;
 
 	@Test
 	public void gefundenLeereListeDerLehrer() {
 		// Given
-		when(repo.findAllByOrderByIdAsc()).thenReturn(new ArrayList<>());
+		List<Lehrer> leereListe = new ArrayList<>();
 
 		// When
-		List<Lehrer> listOfLehrer = service.findeAlle();
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
+		List<Lehrer> gefundenListe = service.findeAlle();
 
 		// Then
-		assertThat(listOfLehrer, is(emptyCollectionOf(Lehrer.class)));
+		assertThat(gefundenListe, is(emptyCollectionOf(Lehrer.class)));
 
 	}
 
@@ -61,7 +58,7 @@ public class LehrerServiceIT {
 	}
 
 	@Test(expected = UsernameNotFoundException.class)
-	public void keineLehrerGefundenMitDurchBenutzername() {
+	public void keineLehrerGefundenDurchBenutzername() {
 		// Given
 		String benutzername = "ABenutzername";
 

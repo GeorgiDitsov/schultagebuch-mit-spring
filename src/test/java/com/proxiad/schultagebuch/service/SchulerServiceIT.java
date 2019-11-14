@@ -73,16 +73,16 @@ public class SchulerServiceIT {
 		// Given
 		Klasse klasse = new Klasse();
 		List<Schuler> schulernImKlasseList = new ArrayList<>();
-		schulernImKlasseList.add(new Schuler(145L, "Stefan Popov", "1010101010", new Klasse(), new Benutzer()));
-		schulernImKlasseList.add(new Schuler(149L, "Nikola Peev", "1111111111", new Klasse(), new Benutzer()));
-		schulernImKlasseList.add(new Schuler(200L, "Alex Alexandrov", "1212121212", new Klasse(), new Benutzer()));
+		schulernImKlasseList.add(new Schuler());
+		schulernImKlasseList.add(new Schuler());
+		schulernImKlasseList.add(new Schuler());
 
 		// When
 		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(schulernImKlasseList);
 		List<Schuler> listOfSchuler = service.findeAlleSchulernImKlasse(klasse);
 
 		// Then
-		assertThat(listOfSchuler, hasSize(equalTo(3)));
+		assertThat(listOfSchuler, hasSize(equalTo(schulernImKlasseList.size())));
 	}
 
 	@Test(expected = EntityNichtGefundenException.class)

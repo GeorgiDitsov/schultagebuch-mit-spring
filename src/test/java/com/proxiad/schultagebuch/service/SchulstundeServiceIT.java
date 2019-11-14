@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Klasse;
@@ -34,9 +33,6 @@ public class SchulstundeServiceIT {
 
 	@Mock
 	private SchulstundeRepository repo;
-
-	@Mock
-	private MessageSource messageSource;
 
 	@InjectMocks
 	private SchulstundeService service;
@@ -67,13 +63,13 @@ public class SchulstundeServiceIT {
 	}
 
 	@Test
-	public void schulstundeFuerDiesenLehrerGefunden() {
+	public void schulstundeFuerDieseLehrerGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		Lehrer lehrer = new Lehrer(1L, "Stefan Stefanov", "1010101010", new Benutzer());
 		Schulstunde schulstunde = new Schulstunde(id, new Klasse(), new Schulfach(), lehrer);
+
+		// When
 		when(repo.findById(id)).thenReturn(Optional.of(schulstunde));
 		Schulstunde gefundenSchulstunde = service.findeLehrerSchulstunde(id, lehrer);
 
@@ -82,13 +78,13 @@ public class SchulstundeServiceIT {
 	}
 
 	@Test(expected = EntityUngueltigeRelationException.class)
-	public void keineSchulstundeFuerDiesenLehrerGefunden() {
+	public void keineSchulstundeFuerDieseLehrerGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		Schulstunde schulstunde = new Schulstunde(id, new Klasse(), new Schulfach(),
 				new Lehrer(1L, "Stefan Stefanov", "1010101010", new Benutzer()));
+
+		// When
 		when(repo.findById(id)).thenReturn(Optional.of(schulstunde));
 
 		// Then

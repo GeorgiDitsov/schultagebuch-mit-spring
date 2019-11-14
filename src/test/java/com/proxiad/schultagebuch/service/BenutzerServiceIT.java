@@ -62,9 +62,10 @@ public class BenutzerServiceIT {
 	@Test
 	public void keineBenutzerGefunden() {
 		// Given
-		when(repo.findAllByOrderByIdAsc()).thenReturn(new ArrayList<>());
+		List<Benutzer> leereListe = new ArrayList<>();
 
 		// When
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 		List<Benutzer> list = service.findeAlle();
 
 		// Then

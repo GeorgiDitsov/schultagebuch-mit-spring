@@ -27,7 +27,7 @@ public class ElternteilService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Elternteil elternteilFinde(final Long id) {
+	public Elternteil finden(final Long id) {
 		return repo.findById(id)
 				.orElseThrow(() -> new EntityNichtGefundenException("parent.not.found", new Object[] { id }));
 	}

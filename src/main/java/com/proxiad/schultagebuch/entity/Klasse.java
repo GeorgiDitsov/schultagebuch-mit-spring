@@ -103,6 +103,12 @@ public class Klasse {
 		return jahr + buchstabe;
 	}
 
+	public void erstellenAus(String klasseName) {
+		int buchstabeIndex = klasseName.length() - 1;
+		this.setJahr(Integer.parseInt(klasseName.substring(0, buchstabeIndex)));
+		this.setBuchstabe(klasseName.substring(buchstabeIndex));
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

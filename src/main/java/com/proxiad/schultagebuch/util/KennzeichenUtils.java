@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import com.proxiad.schultagebuch.entity.Benutzer;
+import com.proxiad.schultagebuch.exception.FalschServiceException;
 import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 
 @Component
@@ -20,20 +21,20 @@ public final class KennzeichenUtils {
 		// nothing
 	}
 
-	public static String personKennzeichen(Object person) {
-		String name = null;
-		String pin = null;
+	public static String personKennzeichen(final Object person) {
+		StringBuilder personKennzeichen = new StringBuilder();
 		try {
-			name = (String) person.getClass().getMethod(GET_NAME).invoke(person);
-			pin = (String) person.getClass().getMethod(GET_PIN).invoke(person);
+			String name = (String) person.getClass().getMethod(GET_NAME).invoke(person);
+			String pin = (String) person.getClass().getMethod(GET_PIN).invoke(person);
+			personKennzeichen.append(name).append(StringKonstanten.SEPARATOR).append(pinKennzeichen(pin));
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
-			e.printStackTrace();
+			throw new FalschServiceException();
 		}
-		return new StringBuilder(name).append(StringKonstanten.SEPARATOR).append(pinKennzeichen(pin)).toString();
+		return personKennzeichen.toString();
 	}
 
-	public static String pinKennzeichen(String pin) {
+	public static String pinKennzeichen(final String pin) {
 		return new StringBuilder(pin.substring(0, 6)).append(HIDDEN_NUMBERS).toString();
 	}
 
@@ -45,7 +46,7 @@ public final class KennzeichenUtils {
 		return menschen.isEmpty() ? StringKonstanten.OBJEKT_NICHT_VERFUEGBAR : kennzeichen.toString();
 	}
 
-	public static String benutzerNameKennzeichen(Benutzer benutzer) {
+	public static String benutzerNameKennzeichen(final Benutzer benutzer) {
 		return Optional.ofNullable(benutzer).isPresent() ? benutzer.getBenutzerName()
 				: StringKonstanten.OBJEKT_NICHT_VERFUEGBAR;
 	}

@@ -48,7 +48,7 @@ public class ElternteilController extends AbstraktController {
 			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("listSchuler", schulerService.findeAlle());
-		attributes.addFlashAttribute("elternteil", elternteilService.elternteilFinde(id));
+		attributes.addFlashAttribute("elternteil", elternteilService.finden(id));
 		return super.umleiten(referer);
 	}
 

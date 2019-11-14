@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 
 import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
@@ -28,18 +27,16 @@ public class KlasseServiceIT {
 	@Mock
 	private KlasseRepository repo;
 
-	@Mock
-	private MessageSource messageSource;
-
 	@InjectMocks
 	private KlasseService service;
 
 	@Test
 	public void gefundenLeereListeDerKlasse() {
 		// Given
-		when(repo.findAllByOrderByIdAsc()).thenReturn(new ArrayList<>());
+		List<Klasse> leereListe = new ArrayList<>();
 
 		// When
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 		List<Klasse> listOfKlassen = service.findeAlle();
 
 		// Then

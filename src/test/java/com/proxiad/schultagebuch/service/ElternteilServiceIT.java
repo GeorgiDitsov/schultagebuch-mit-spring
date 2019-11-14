@@ -2,6 +2,8 @@ package com.proxiad.schultagebuch.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyCollectionOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
@@ -27,7 +29,6 @@ import com.proxiad.schultagebuch.util.SuchenUtils;
 public class ElternteilServiceIT {
 
 	private static final String ELTERNTEIL_NAME = "Stefan Stefanov";
-	private static final String BENUTZERNAME = "ValidBenutzername11";
 
 	@Mock
 	private ElternteilRepository repo;
@@ -36,28 +37,45 @@ public class ElternteilServiceIT {
 	private ElternteilService service;
 
 	@Test
-	public void gefundenLeereListeDerEltern() {
+	public void gefundenListeDerEltern() {
 		// Given
-		when(repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(ELTERNTEIL_NAME)))
-				.thenReturn(new ArrayList<>());
+		List<Elternteil> listWithThreeEltern = new ArrayList<>();
+		listWithThreeEltern.add(new Elternteil());
+		listWithThreeEltern.add(new Elternteil());
+		listWithThreeEltern.add(new Elternteil());
 
 		// When
-		List<Elternteil> listOfEltern = service.suche(ELTERNTEIL_NAME);
+		when(repo.findAllByOrderByIdAsc()).thenReturn(listWithThreeEltern);
+		List<Elternteil> gefundenListe = service.findeAlle();
 
 		// Then
-		assertThat(listOfEltern, is(emptyCollectionOf(Elternteil.class)));
+		assertThat(gefundenListe, hasSize(equalTo(listWithThreeEltern.size())));
 	}
 
-	@Test(expected = UsernameNotFoundException.class)
-	public void keineElternteilMitDieseBenutzername() {
+	@Test
+	public void gefundenLeereListeDerEltern() {
 		// Given
-		String benutzername = BENUTZERNAME;
+		List<Elternteil> leereListe = new ArrayList<>();
 
 		// When
-		when(repo.findByBenutzerBenutzerName(benutzername)).thenReturn(Optional.empty());
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
+		List<Elternteil> gefundenListe = service.findeAlle();
 
 		// Then
-		service.findeDurchBenutzerName(benutzername);
+		assertThat(gefundenListe, is(emptyCollectionOf(Elternteil.class)));
+	}
+
+	@Test
+	public void gefundenLeereListeDerElternDurchName() {
+		// Given
+		List<Elternteil> leereListe = new ArrayList<>();
+
+		// When
+		when(repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(ELTERNTEIL_NAME))).thenReturn(leereListe);
+		List<Elternteil> gefundenListe = service.suche(ELTERNTEIL_NAME);
+
+		// Then
+		assertThat(gefundenListe, is(emptyCollectionOf(Elternteil.class)));
 	}
 
 	@Test(expected = EntityNichtGefundenException.class)
@@ -69,7 +87,19 @@ public class ElternteilServiceIT {
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
 		// Then
-		service.elternteilFinde(id);
+		service.finden(id);
+	}
+
+	@Test(expected = UsernameNotFoundException.class)
+	public void keineElternteilMitDieseBenutzername() {
+		// Given
+		String benutzername = "ValidBenutzername11";
+
+		// When
+		when(repo.findByBenutzerBenutzerName(benutzername)).thenReturn(Optional.empty());
+
+		// Then
+		service.findeDurchBenutzerName(benutzername);
 	}
 
 }

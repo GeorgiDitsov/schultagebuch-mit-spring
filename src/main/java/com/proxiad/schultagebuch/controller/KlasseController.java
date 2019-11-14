@@ -17,7 +17,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.service.KlasseService;
-import com.proxiad.schultagebuch.util.KlasseUtils;
 import com.proxiad.schultagebuch.validator.constraint.KlasseNameConstraint;
 
 @Controller
@@ -54,7 +53,8 @@ public class KlasseController extends AbstraktController {
 			@RequestParam(name = "klasseName") @KlasseNameConstraint final String klasseName,
 			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult,
 			RedirectAttributes attributes) {
-		klasseService.speichern(KlasseUtils.setKlasseAusString(klasse, klasseName));
+		klasse.erstellenAus(klasseName);
+		klasseService.speichern(klasse);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}
