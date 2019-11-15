@@ -34,9 +34,9 @@ public class BenutzerController extends AbstraktController {
 
 	@RequestMapping(value = "/benutzer/search")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView gefundenBenutzerAnzeigen(@ModelAttribute(name = "string") final String benutzerName,
+	public ModelAndView gefundenBenutzerAnzeigen(@ModelAttribute(name = "string") final String benutzername,
 			RedirectAttributes attributes) {
-		return super.ansicht("benutzerForm", "listBenutzer", benutzerService.suchen(benutzerName));
+		return super.ansicht("benutzerForm", "listBenutzer", benutzerService.suchen(benutzername));
 	}
 
 	@RequestMapping(value = "/benutzer/edit/{id}")

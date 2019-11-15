@@ -19,8 +19,8 @@ public class BenutzerService {
 	@Autowired
 	private BenutzerRepository repo;
 
-	public List<Benutzer> suchen(final String benutzerName) {
-		return repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(benutzerName));
+	public List<Benutzer> suchen(final String benutzername) {
+		return repo.findByBenutzernameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(benutzername));
 	}
 
 	public List<Benutzer> findeAlle() {
@@ -32,8 +32,8 @@ public class BenutzerService {
 				.orElseThrow(() -> new EntityNichtGefundenException("user.not.found", new Object[] { id }));
 	}
 
-	public Benutzer findeDurchBenutzerName(final String benutzername) {
-		return repo.findByBenutzerName(benutzername).orElseThrow(() -> new UsernameNotFoundException(benutzername));
+	public Benutzer findeDurchBenutzername(final String benutzername) {
+		return repo.findByBenutzername(benutzername).orElseThrow(() -> new UsernameNotFoundException(benutzername));
 	}
 
 	public void speichern(final Benutzer benutzer) {

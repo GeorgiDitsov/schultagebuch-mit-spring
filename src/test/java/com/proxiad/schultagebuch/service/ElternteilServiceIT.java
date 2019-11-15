@@ -96,10 +96,10 @@ public class ElternteilServiceIT {
 		String benutzername = "ValidBenutzername11";
 
 		// When
-		when(repo.findByBenutzerBenutzerName(benutzername)).thenReturn(Optional.empty());
+		when(repo.findByBenutzerBenutzername(benutzername)).thenReturn(Optional.empty());
 
 		// Then
-		service.findeDurchBenutzerName(benutzername);
+		service.findeDurchBenutzername(benutzername);
 	}
 
 }

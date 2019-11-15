@@ -62,7 +62,7 @@ public class SchulerServiceIT {
 
 		// When
 		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(new ArrayList<>());
-		List<Schuler> listOfSchuler = service.findeAlleSchulernImKlasse(klasse);
+		List<Schuler> listOfSchuler = service.findeAlleSchulerDurchKlasse(klasse);
 
 		// Then
 		assertThat(listOfSchuler, is(emptyCollectionOf(Schuler.class)));
@@ -79,7 +79,7 @@ public class SchulerServiceIT {
 
 		// When
 		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(schulernImKlasseList);
-		List<Schuler> listOfSchuler = service.findeAlleSchulernImKlasse(klasse);
+		List<Schuler> listOfSchuler = service.findeAlleSchulerDurchKlasse(klasse);
 
 		// Then
 		assertThat(listOfSchuler, hasSize(equalTo(schulernImKlasseList.size())));
@@ -162,10 +162,10 @@ public class SchulerServiceIT {
 		String benutzename = "ExampleBenutzename";
 
 		// When
-		when(repo.findByBenutzerBenutzerName(benutzename)).thenReturn(Optional.empty());
+		when(repo.findByBenutzerBenutzername(benutzename)).thenReturn(Optional.empty());
 
 		// Then
-		service.findeDurchBenutzerName(benutzename);
+		service.findeDurchBenutzername(benutzename);
 	}
 
 }

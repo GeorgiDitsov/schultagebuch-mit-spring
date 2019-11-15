@@ -31,13 +31,13 @@ public class SchulerService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public List<Schuler> findeAlleSchulernImKlasse(final Klasse klasse) {
-		return repo.findByKlasseOrderByIdAsc(klasse);
-	}
-
 	public Schuler finden(final Long id) {
 		return repo.findById(id)
 				.orElseThrow(() -> new EntityNichtGefundenException("student.not.found", new Object[] { id }));
+	}
+
+	public List<Schuler> findeAlleSchulerDurchKlasse(final Klasse klasse) {
+		return repo.findByKlasseOrderByIdAsc(klasse);
 	}
 
 	public Schuler findeElternteilKind(final Long schulerId, final Elternteil elternteil) {
@@ -50,9 +50,9 @@ public class SchulerService {
 				.orElseThrow(() -> new EntityUngueltigeRelationException("invalid.student.course.relation"));
 	}
 
-	public Schuler findeDurchBenutzerName(final String benutzerName) {
-		return repo.findByBenutzerBenutzerName(benutzerName)
-				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
+	public Schuler findeDurchBenutzername(final String benutzername) {
+		return repo.findByBenutzerBenutzername(benutzername)
+				.orElseThrow(() -> new UsernameNotFoundException(benutzername));
 	}
 
 	public void speichern(final Schuler schuler) {

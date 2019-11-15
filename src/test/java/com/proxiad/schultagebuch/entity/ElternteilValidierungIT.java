@@ -45,7 +45,7 @@ public class ElternteilValidierungIT extends AbstraktEntityValidierungIT {
 		rolle = new Rolle();
 		benutzer = new Benutzer();
 		benutzer.setId(Long.MAX_VALUE);
-		benutzer.setBenutzerName("ValidBenutzername");
+		benutzer.setBenutzername("ValidBenutzername");
 		benutzer.setPasswort("ValidPass");
 	}
 

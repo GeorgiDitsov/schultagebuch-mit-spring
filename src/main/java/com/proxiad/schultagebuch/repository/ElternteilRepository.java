@@ -13,7 +13,7 @@ public interface ElternteilRepository extends JpaRepository<Elternteil, Long> {
 
 	public List<Elternteil> findAllByOrderByIdAsc();
 
-	public Optional<Elternteil> findByBenutzerBenutzerName(String benutzerName);
+	public Optional<Elternteil> findByBenutzerBenutzername(String benutzername);
 
 	public List<Elternteil> findByNameIgnoreCaseLikeOrderByIdAsc(String name);
 

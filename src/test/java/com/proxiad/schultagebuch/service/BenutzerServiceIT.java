@@ -37,7 +37,7 @@ public class BenutzerServiceIT {
 	@Test
 	public void gefundenLeereListeDerBenutzer() {
 		// Given
-		when(repo.findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(BENUTZERNAME)))
+		when(repo.findByBenutzernameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(BENUTZERNAME)))
 				.thenReturn(new ArrayList<>());
 
 		// When
@@ -53,10 +53,10 @@ public class BenutzerServiceIT {
 		String benutzername = BENUTZERNAME;
 
 		// When
-		when(repo.findByBenutzerName(benutzername)).thenReturn(Optional.empty());
+		when(repo.findByBenutzername(benutzername)).thenReturn(Optional.empty());
 
 		// Then
-		service.findeDurchBenutzerName(benutzername);
+		service.findeDurchBenutzername(benutzername);
 	}
 
 	@Test

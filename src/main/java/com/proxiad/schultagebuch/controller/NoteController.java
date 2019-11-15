@@ -125,7 +125,7 @@ public class NoteController extends AbstraktController {
 	public RedirectView neueNote(@RequestHeader final String referer,
 			@PathVariable(value = "schulstundeId") final Long schulstundeId,
 			@PathVariable(value = "schulerId") final Long schulerId, RedirectAttributes attributes) {
-		noteModalAttributes("add", NoteUtils.getNeueNoteFuerSchulerUndSchulstunde(schulerService.finden(schulerId),
+		noteModalAttributes("add", NoteUtils.getNeueNoteMitSchulerUndSchulstunde(schulerService.finden(schulerId),
 				schulstundeService.finden(schulstundeId)), attributes);
 		return super.umleiten(referer);
 	}

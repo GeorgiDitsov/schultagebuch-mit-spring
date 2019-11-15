@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.proxiad.schultagebuch.entity.Elternteil;
-import com.proxiad.schultagebuch.entity.Note;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.konstanten.StringKonstanten;
@@ -70,9 +69,9 @@ public class ViewModelService {
 	}
 
 	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
-		Optional<Note> note = noteService.findeSchulerLetzteNote(schuler);
-		return note.isPresent() ? NoteUtils.noteZuNoteViewModel(note.get(), locale).getKennzeichen()
-				: StringKonstanten.OBJEKT_NICHT_VERFUEGBAR;
+		return noteService.findeSchulerLetzteNote(schuler)
+				.map(note -> NoteUtils.noteZuNoteViewModel(note, locale).getKennzeichen())
+				.orElse(StringKonstanten.OBJEKT_NICHT_VERFUEGBAR);
 	}
 
 	private List<Long> getSchulerHalbjaehrigeNoten(final Schuler schuler) {

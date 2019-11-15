@@ -7,18 +7,18 @@ import com.proxiad.schultagebuch.exception.FalschServiceException;
 
 public final class PersonUtils {
 
-	private static final String FIND_BY_BENUTZERNAME_METHOD = "findeDurchBenutzerName";
+	private static final String FIND_BY_BENUTZERNAME_METHOD = "findeDurchBenutzername";
 	private static final String SET_BENUTZER_METHOD = "setBenutzer";
 
 	private PersonUtils() {
 		// nothing
 	}
 
-	public static Object getPersonDurchBenutzername(final String benutzerName, final Object personService) {
+	public static Object getPersonDurchBenutzername(final String benutzername, final Object personService) {
 		Object person = new Object();
 		try {
 			person = personService.getClass().getMethod(FIND_BY_BENUTZERNAME_METHOD, String.class).invoke(personService,
-					benutzerName);
+					benutzername);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			throw new FalschServiceException();

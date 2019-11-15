@@ -32,9 +32,9 @@ public class LehrerService {
 				.orElseThrow(() -> new EntityNichtGefundenException("teacher.not.found", new Object[] { id }));
 	}
 
-	public Lehrer findeDurchBenutzerName(final String benutzerName) {
-		return repo.findByBenutzerBenutzerName(benutzerName)
-				.orElseThrow(() -> new UsernameNotFoundException(benutzerName));
+	public Lehrer findeDurchBenutzername(final String benutzername) {
+		return repo.findByBenutzerBenutzername(benutzername)
+				.orElseThrow(() -> new UsernameNotFoundException(benutzername));
 	}
 
 	public void speichern(final Lehrer lehrer) {

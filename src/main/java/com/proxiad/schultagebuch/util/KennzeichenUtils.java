@@ -46,9 +46,9 @@ public final class KennzeichenUtils {
 		return menschen.isEmpty() ? StringKonstanten.OBJEKT_NICHT_VERFUEGBAR : kennzeichen.toString();
 	}
 
-	public static String benutzerNameKennzeichen(final Benutzer benutzer) {
-		return Optional.ofNullable(benutzer).isPresent() ? benutzer.getBenutzerName()
-				: StringKonstanten.OBJEKT_NICHT_VERFUEGBAR;
+	public static String benutzernameKennzeichen(final Benutzer benutzer) {
+		return Optional.ofNullable(benutzer).map(Benutzer::getBenutzername)
+				.orElse(StringKonstanten.OBJEKT_NICHT_VERFUEGBAR);
 	}
 
 }

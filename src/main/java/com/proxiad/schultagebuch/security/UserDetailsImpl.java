@@ -22,8 +22,8 @@ public class UserDetailsImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Benutzer benutzer = benutzerService.findeDurchBenutzerName(username);
-		return new User(benutzer.getBenutzerName(), benutzer.getPasswort(), getAuthorities(benutzer));
+		Benutzer benutzer = benutzerService.findeDurchBenutzername(username);
+		return new User(benutzer.getBenutzername(), benutzer.getPasswort(), getAuthorities(benutzer));
 	}
 
 	private static Collection<? extends GrantedAuthority> getAuthorities(Benutzer benutzer) {

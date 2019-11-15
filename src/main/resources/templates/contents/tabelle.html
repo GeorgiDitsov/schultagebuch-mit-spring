@@ -14,7 +14,7 @@
 	        </thead>
 	        <tr th:each="benutzer: ${listBenutzer}">
 	            <th scope="row" th:text="${benutzer.id}">
-	            <td th:text="${benutzer.benutzerName}">
+	            <td th:text="${benutzer.benutzername}">
 	            <td th:text="${benutzer.passwort}">
 	            <td th:text="${benutzer.rolle.name.kennzeichen}">
 	            <td>
@@ -43,7 +43,7 @@
 	            <td th:text="${@kennzeichenUtils.pinKennzeichen(schuler.pin)}">
 	            <td th:text="${schuler.klasseKennzeichen}">
 	            <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(schuler.eltern)}">
-	            <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(schuler.benutzer)}">
+	            <td th:text="${@kennzeichenUtils.benutzernameKennzeichen(schuler.benutzer)}">
 	            <td>
 	            	<a th:href="@{'/schuler/edit/'+${schuler.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	<a th:href="@{'/schuler/delete/'+${schuler.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
@@ -68,7 +68,7 @@
 		        <td th:text="${elternteil.name}">
 		        <td th:text="${@kennzeichenUtils.pinKennzeichen(elternteil.pin)}">
 		        <td style="white-space: pre;" th:text="${@kennzeichenUtils.menschenKennzeichen(elternteil.kinder)}">
-		        <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(elternteil.benutzer)}">
+		        <td th:text="${@kennzeichenUtils.benutzernameKennzeichen(elternteil.benutzer)}">
 		        <td>
 			        <a th:href="@{'/elternteil/edit/'+${elternteil.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 			       	<a th:href="@{'/elternteil/delete/'+${elternteil.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
@@ -93,7 +93,7 @@
 	            <td th:text="${lehrer.name}">
 	            <td th:text="${@kennzeichenUtils.pinKennzeichen(lehrer.pin)}">
 	            <td style="white-space: pre;" th:text="${lehrer.schulfaecherKennzeichen}">
-	            <td th:text="${@kennzeichenUtils.benutzerNameKennzeichen(lehrer.benutzer)}">
+	            <td th:text="${@kennzeichenUtils.benutzernameKennzeichen(lehrer.benutzer)}">
 	            <td>
 	            	<a th:href="@{'/lehrer/edit/'+${lehrer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
 	            	<a th:href="@{'/lehrer/delete/'+${lehrer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>

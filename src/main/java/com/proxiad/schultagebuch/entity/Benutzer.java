@@ -32,7 +32,7 @@ public class Benutzer {
 	@NotBlank
 	@Pattern(regexp = "^([A-Za-z0-9]{5,20})$", message = "{invalid.user.name}")
 	@Column(name = "benutzer_name", unique = true)
-	private String benutzerName;
+	private String benutzername;
 
 	@NotBlank
 	@Pattern(regexp = "^(?=.*[a-zA-Z0-9])[a-zA-Z0-9]{5,10}$", message = "{invalid.user.password}")
@@ -50,9 +50,9 @@ public class Benutzer {
 		// nothing
 	}
 
-	public Benutzer(Long id, String benutzerName, String passwort, Rolle rolle) {
+	public Benutzer(Long id, String benutzername, String passwort, Rolle rolle) {
 		this.id = id;
-		this.benutzerName = benutzerName;
+		this.benutzername = benutzername;
 		this.passwort = passwort;
 		this.rolle = rolle;
 	}
@@ -65,12 +65,12 @@ public class Benutzer {
 		this.id = id;
 	}
 
-	public String getBenutzerName() {
-		return this.benutzerName;
+	public String getBenutzername() {
+		return this.benutzername;
 	}
 
-	public void setBenutzerName(String benutzerName) {
-		this.benutzerName = benutzerName;
+	public void setBenutzername(String benutzername) {
+		this.benutzername = benutzername;
 	}
 
 	public String getPasswort() {
@@ -93,7 +93,7 @@ public class Benutzer {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((Objects.isNull(benutzerName)) ? 0 : benutzerName.hashCode());
+		result = prime * result + ((Objects.isNull(benutzername)) ? 0 : benutzername.hashCode());
 		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
 		return result;
 	}
@@ -107,10 +107,10 @@ public class Benutzer {
 		if (getClass() != obj.getClass())
 			return false;
 		Benutzer other = (Benutzer) obj;
-		if (Objects.isNull(benutzerName)) {
-			if (Objects.nonNull(other.benutzerName))
+		if (Objects.isNull(benutzername)) {
+			if (Objects.nonNull(other.benutzername))
 				return false;
-		} else if (!benutzerName.equals(other.benutzerName))
+		} else if (!benutzername.equals(other.benutzername))
 			return false;
 		if (Objects.isNull(id)) {
 			if (Objects.nonNull(other.id))
@@ -122,7 +122,7 @@ public class Benutzer {
 
 	@Override
 	public String toString() {
-		return "Benutzer [id=" + id + ", benutzerName=" + benutzerName + ", passwort=" + passwort + ", rolle=" + rolle
+		return "Benutzer [id=" + id + ", benutzername=" + benutzername + ", passwort=" + passwort + ", rolle=" + rolle
 				+ "]";
 	}
 

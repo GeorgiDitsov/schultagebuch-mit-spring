@@ -35,7 +35,7 @@ public class BenutzerValidierungIT extends AbstraktEntityValidierungIT {
 	@Test
 	public void richtigBenutzernameUndPasswort() {
 		// Given
-		benutzer.setBenutzerName("ValidBenutzername123");
+		benutzer.setBenutzername("ValidBenutzername123");
 		benutzer.setPasswort("ValidPass1");
 		benutzer.setRolle(rolle);
 
@@ -50,7 +50,7 @@ public class BenutzerValidierungIT extends AbstraktEntityValidierungIT {
 	@Test
 	public void falschBenutzernameUndPasswort() {
 		// Given
-		benutzer.setBenutzerName("_InvalidBenutzername");
+		benutzer.setBenutzername("_InvalidBenutzername");
 		benutzer.setPasswort("invalidPasswort");
 
 		// When

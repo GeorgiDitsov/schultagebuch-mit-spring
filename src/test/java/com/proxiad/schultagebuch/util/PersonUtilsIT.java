@@ -38,7 +38,7 @@ public class PersonUtilsIT {
 		schuler = new Schuler();
 
 		// When
-		when(schulerService.findeDurchBenutzerName(BENUTZERNAME)).thenReturn(schuler);
+		when(schulerService.findeDurchBenutzername(BENUTZERNAME)).thenReturn(schuler);
 		Object person = PersonUtils.getPersonDurchBenutzername(BENUTZERNAME, schulerService);
 
 		// Then

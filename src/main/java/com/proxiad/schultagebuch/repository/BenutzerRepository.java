@@ -13,7 +13,7 @@ public interface BenutzerRepository extends JpaRepository<Benutzer, Long> {
 
 	public List<Benutzer> findAllByOrderByIdAsc();
 
-	public Optional<Benutzer> findByBenutzerName(String benutzerName);
+	public Optional<Benutzer> findByBenutzername(String benutzername);
 
-	public List<Benutzer> findByBenutzerNameIgnoreCaseLikeOrderByIdAsc(String benutzerName);
+	public List<Benutzer> findByBenutzernameIgnoreCaseLikeOrderByIdAsc(String benutzername);
 }

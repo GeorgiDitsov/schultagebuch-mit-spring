@@ -13,7 +13,7 @@ public interface LehrerRepository extends JpaRepository<Lehrer, Long> {
 
 	public List<Lehrer> findAllByOrderByIdAsc();
 
-	public Optional<Lehrer> findByBenutzerBenutzerName(String benutzerName);
+	public Optional<Lehrer> findByBenutzerBenutzername(String benutzername);
 
 	public List<Lehrer> findByNameIgnoreCaseLikeOrderByIdAsc(String name);
 }

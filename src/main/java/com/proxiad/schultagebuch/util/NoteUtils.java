@@ -13,7 +13,7 @@ public final class NoteUtils {
 		// nothing
 	}
 
-	public static Note getNeueNoteFuerSchulerUndSchulstunde(final Schuler schuler, final Schulstunde schulstunde) {
+	public static Note getNeueNoteMitSchulerUndSchulstunde(final Schuler schuler, final Schulstunde schulstunde) {
 		Note note = new Note();
 		note.setSchuler(schuler);
 		note.setSchulstunde(schulstunde);
