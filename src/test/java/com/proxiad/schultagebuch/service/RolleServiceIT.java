@@ -72,17 +72,17 @@ public class RolleServiceIT {
 		when(repo.findByName(falschName)).thenReturn(Optional.empty());
 
 		// Then
-		service.findenDurchPerson(new Object());
+		service.findenDurchMensch(Object.class);
 	}
 
 	@Test
-	public void findeDurchPerson() {
+	public void findeDurchPersonTest() {
 		// Given
 		Rolle lehrerRolle = new Rolle(1, RolleTyp.ROLLE_LEHRER);
 		when(repo.findByName(RolleTyp.ROLLE_LEHRER)).thenReturn(Optional.of(lehrerRolle));
 
 		// When
-		Rolle rolle = service.findenDurchPerson(new Lehrer());
+		Rolle rolle = service.findenDurchMensch(Lehrer.class);
 
 		// Then
 		assertThat(rolle, is(equalTo(lehrerRolle)));

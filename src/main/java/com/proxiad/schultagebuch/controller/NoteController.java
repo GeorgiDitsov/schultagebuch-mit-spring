@@ -33,7 +33,7 @@ import com.proxiad.schultagebuch.service.SchulerService;
 import com.proxiad.schultagebuch.service.SchulstundeService;
 import com.proxiad.schultagebuch.service.ViewModelService;
 import com.proxiad.schultagebuch.util.NoteUtils;
-import com.proxiad.schultagebuch.util.PersonUtils;
+import com.proxiad.schultagebuch.util.MenschUtils;
 
 @Controller
 @Validated
@@ -157,16 +157,16 @@ public class NoteController extends AbstraktController {
 		return super.umleiten(referer);
 	}
 
-	private Schuler getSchuler(final String benutzerName) {
-		return (Schuler) PersonUtils.getPersonDurchBenutzername(benutzerName, schulerService);
+	private Schuler getSchuler(final String benutzername) {
+		return (Schuler) MenschUtils.getMenschDurchBenutzername(benutzername, schulerService);
 	}
 
-	private Elternteil getElternteil(final String bennutzerName) {
-		return (Elternteil) PersonUtils.getPersonDurchBenutzername(bennutzerName, elternteilService);
+	private Elternteil getElternteil(final String benutzername) {
+		return (Elternteil) MenschUtils.getMenschDurchBenutzername(benutzername, elternteilService);
 	}
 
-	private Lehrer getLehrer(final String benutzerName) {
-		return (Lehrer) PersonUtils.getPersonDurchBenutzername(benutzerName, lehrerService);
+	private Lehrer getLehrer(final String benutzername) {
+		return (Lehrer) MenschUtils.getMenschDurchBenutzername(benutzername, lehrerService);
 	}
 
 	private void noteModalAttributes(final String modalType, final Note note, RedirectAttributes attributes) {

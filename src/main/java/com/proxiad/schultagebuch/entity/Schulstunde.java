@@ -92,7 +92,7 @@ public class Schulstunde {
 	}
 
 	public String getLehrerKennzeichen() {
-		return Optional.ofNullable(lehrer).isPresent() ? KennzeichenUtils.personKennzeichen(lehrer)
+		return Optional.ofNullable(lehrer).isPresent() ? KennzeichenUtils.menschKennzeichen(lehrer)
 				: StringKonstanten.OBJEKT_NICHT_VERFUEGBAR;
 	}
 

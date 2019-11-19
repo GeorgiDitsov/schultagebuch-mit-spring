@@ -39,7 +39,7 @@ public class PersonUtilsIT {
 
 		// When
 		when(schulerService.findeDurchBenutzername(BENUTZERNAME)).thenReturn(schuler);
-		Object person = PersonUtils.getPersonDurchBenutzername(BENUTZERNAME, schulerService);
+		Object person = MenschUtils.getMenschDurchBenutzername(BENUTZERNAME, schulerService);
 
 		// Then
 		assertThat(person, is(instanceOf(Schuler.class)));
@@ -51,7 +51,7 @@ public class PersonUtilsIT {
 		Object objekt = new Object();
 
 		// When
-		PersonUtils.getPersonDurchBenutzername(BENUTZERNAME, objekt);
+		MenschUtils.getMenschDurchBenutzername(BENUTZERNAME, objekt);
 
 	}
 
@@ -61,7 +61,7 @@ public class PersonUtilsIT {
 		schuler = new Schuler();
 
 		// When
-		Object person = PersonUtils.erstellenPersonMitValidBenutzer(schuler, new Benutzer());
+		Object person = MenschUtils.erstellenMenschMitRichtigeBenutzer(schuler, new Benutzer());
 
 		// Then
 		assertThat(person, is(instanceOf(Schuler.class)));
@@ -73,7 +73,7 @@ public class PersonUtilsIT {
 		Object objekt = new Object();
 
 		// When
-		PersonUtils.erstellenPersonMitValidBenutzer(objekt, new Benutzer());
+		MenschUtils.erstellenMenschMitRichtigeBenutzer(objekt, new Benutzer());
 	}
 
 }

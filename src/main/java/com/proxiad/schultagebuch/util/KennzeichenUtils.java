@@ -21,17 +21,16 @@ public final class KennzeichenUtils {
 		// nothing
 	}
 
-	public static String personKennzeichen(final Object person) {
-		StringBuilder personKennzeichen = new StringBuilder();
+	public static String menschKennzeichen(final Object mensch) {
 		try {
-			String name = (String) person.getClass().getMethod(GET_NAME).invoke(person);
-			String pin = (String) person.getClass().getMethod(GET_PIN).invoke(person);
-			personKennzeichen.append(name).append(StringKonstanten.SEPARATOR).append(pinKennzeichen(pin));
+			String name = (String) mensch.getClass().getMethod(GET_NAME).invoke(mensch);
+			String pin = (String) mensch.getClass().getMethod(GET_PIN).invoke(mensch);
+			return new StringBuilder().append(name).append(StringKonstanten.SEPARATOR).append(pinKennzeichen(pin))
+					.toString();
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
 			throw new FalschServiceException();
 		}
-		return personKennzeichen.toString();
 	}
 
 	public static String pinKennzeichen(final String pin) {
@@ -41,8 +40,8 @@ public final class KennzeichenUtils {
 	public static String menschenKennzeichen(Collection<Object> menschen) {
 		StringBuilder kennzeichen = new StringBuilder();
 		Optional.of(menschen).filter(collection -> !collection.isEmpty())
-				.ifPresent(collection -> collection.forEach(person -> kennzeichen
-						.append(KennzeichenUtils.personKennzeichen(person)).append(StringKonstanten.NEUE_ZEILE)));
+				.ifPresent(collection -> collection.forEach(mensch -> kennzeichen
+						.append(KennzeichenUtils.menschKennzeichen(mensch)).append(StringKonstanten.NEUE_ZEILE)));
 		return menschen.isEmpty() ? StringKonstanten.OBJEKT_NICHT_VERFUEGBAR : kennzeichen.toString();
 	}
 

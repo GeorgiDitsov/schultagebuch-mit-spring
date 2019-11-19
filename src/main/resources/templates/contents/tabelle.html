@@ -268,7 +268,7 @@
 				<td th:text="${schulstunde.klasse.kennzeichen}">
 				<td>
 					<th:block th:each="schuler: ${schulstunde.klasse.schulerSet}">
-						<a th:href="${'/meine-schulstunden/schulstunde/'+{schulstunde.id}+'/schuler/'+{schuler.id}}" th:text="${@kennzeichenUtils.personKennzeichen(schuler)}"></a><br/>
+						<a th:href="${'/meine-schulstunden/schulstunde/'+{schulstunde.id}+'/schuler/'+{schuler.id}}" th:text="${@kennzeichenUtils.menschKennzeichen(schuler)}"></a><br/>
 					</th:block>
 				</td>
 			</tr>

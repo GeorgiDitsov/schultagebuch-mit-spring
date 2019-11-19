@@ -27,12 +27,13 @@ public class RolleService {
 		return repo.findAllByOrderByIdAsc();
 	}
 
-	public Rolle findenDurchPerson(final Object person) {
+	public Rolle findenDurchMensch(final Class<?> mensch) {
 		return repo
-				.findByName(person instanceof Schuler ? RolleTyp.ROLLE_SCHULER
-						: person instanceof Lehrer ? RolleTyp.ROLLE_LEHRER
-								: person instanceof Elternteil ? RolleTyp.ROLLE_ELTERNTEIL : FALSCH_ROLLE)
-				.orElseThrow(() -> new EntityNichtGefundenException("role.not.found", new Object[] { null }));
+				.findByName(mensch.equals(Schuler.class) ? RolleTyp.ROLLE_SCHULER
+						: mensch.equals(Lehrer.class) ? RolleTyp.ROLLE_LEHRER
+								: mensch.equals(Elternteil.class) ? RolleTyp.ROLLE_ELTERNTEIL : FALSCH_ROLLE)
+				.orElseThrow(() -> new EntityNichtGefundenException("role.not.found",
+						new Object[] { mensch.getClass().getName() }));
 	}
 
 }

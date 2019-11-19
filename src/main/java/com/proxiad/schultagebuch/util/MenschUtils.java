@@ -5,35 +5,33 @@ import java.lang.reflect.InvocationTargetException;
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.exception.FalschServiceException;
 
-public final class PersonUtils {
+public final class MenschUtils {
 
 	private static final String FIND_BY_BENUTZERNAME_METHOD = "findeDurchBenutzername";
 	private static final String SET_BENUTZER_METHOD = "setBenutzer";
 
-	private PersonUtils() {
+	private MenschUtils() {
 		// nothing
 	}
 
-	public static Object getPersonDurchBenutzername(final String benutzername, final Object personService) {
-		Object person = new Object();
+	public static Object getMenschDurchBenutzername(final String benutzername, final Object menschService) {
 		try {
-			person = personService.getClass().getMethod(FIND_BY_BENUTZERNAME_METHOD, String.class).invoke(personService,
+			return menschService.getClass().getMethod(FIND_BY_BENUTZERNAME_METHOD, String.class).invoke(menschService,
 					benutzername);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			throw new FalschServiceException();
 		}
-		return person;
 	}
 
-	public static Object erstellenPersonMitValidBenutzer(final Object person, final Benutzer benutzer) {
+	public static <T> T erstellenMenschMitRichtigeBenutzer(final T mensch, final Benutzer benutzer) {
 		try {
-			person.getClass().getMethod(SET_BENUTZER_METHOD, Benutzer.class).invoke(person, benutzer);
+			mensch.getClass().getMethod(SET_BENUTZER_METHOD, Benutzer.class).invoke(mensch, benutzer);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			throw new FalschServiceException();
 		}
-		return person;
+		return mensch;
 	}
 
 }

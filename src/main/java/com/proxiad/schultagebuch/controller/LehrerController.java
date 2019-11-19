@@ -16,12 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Lehrer;
 import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.RolleService;
 import com.proxiad.schultagebuch.service.SchulfachService;
 import com.proxiad.schultagebuch.util.BenutzerUtils;
-import com.proxiad.schultagebuch.util.PersonUtils;
+import com.proxiad.schultagebuch.util.MenschUtils;
 
 @Controller
 @Validated
@@ -51,9 +52,8 @@ public class LehrerController extends AbstraktController {
 	@RequestMapping(value = "/lehrer/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView neuerLehrer(@RequestHeader final String referer, RedirectAttributes attributes) {
-		Lehrer neuerLehrer = new Lehrer();
-		PersonUtils.erstellenPersonMitValidBenutzer(neuerLehrer,
-				BenutzerUtils.erstellenBenutzerMitRolle(rolleService.findenDurchPerson(neuerLehrer)));
+		Benutzer benutzer = BenutzerUtils.erstellenBenutzerMitRolle(rolleService.findenDurchMensch(Lehrer.class));
+		Lehrer neuerLehrer = (Lehrer) MenschUtils.erstellenMenschMitRichtigeBenutzer(new Lehrer(), benutzer);
 		modalAttributes("add", neuerLehrer, attributes);
 		return super.umleiten(referer);
 	}

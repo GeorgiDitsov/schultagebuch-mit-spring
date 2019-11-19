@@ -28,7 +28,7 @@ public class KennzeichenUtilsIT {
 		when(lehrer.getPin()).thenReturn("1010101010");
 
 		// When
-		String personKennzeichen = KennzeichenUtils.personKennzeichen(lehrer);
+		String personKennzeichen = KennzeichenUtils.menschKennzeichen(lehrer);
 
 		// Then
 		assertThat(personKennzeichen, is(equalTo("Nikola Penev, 101010****")));
@@ -40,7 +40,7 @@ public class KennzeichenUtilsIT {
 		Object objekt = new Object();
 
 		// When
-		KennzeichenUtils.personKennzeichen(objekt);
+		KennzeichenUtils.menschKennzeichen(objekt);
 	}
 
 }

@@ -32,7 +32,7 @@
    			<label th:text="#{parents} + '*'"></label>
    			<button type="button" class="btn btn-warning btn-sm" th:text="#{new}" data-toggle="modal" data-target="#addElternteilModal"></button>
    			<select class="form-control w-50" th:field="*{eltern}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" multiple required>
-    			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.personKennzeichen(elternteil)}">
+    			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.menschKennzeichen(elternteil)}">
    			</select><br/>
    			<div th:replace="contents/modalContent.html :: newBenutzer"></div><br/>
   			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
@@ -53,7 +53,7 @@
    			<label th:text="#{parents}"></label>
    			<button type="button" class="btn btn-warning btn-sm" th:text="#{new}" data-toggle="modal" data-target="#addElternteilModal"></button>
    			<select class="form-control w-50" th:field="*{eltern}" th:oninvalid="this.setCustomValidity([[#{required.field}]])" oninput="this.setCustomValidity('')" multiple required>
-    			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.personKennzeichen(elternteil)}">
+    			<option th:each="elternteil :${listEltern}" th:value="${elternteil.id}" th:text="${@kennzeichenUtils.menschKennzeichen(elternteil)}">
    			</select><br/>
    			<input type="hidden" th:field="*{benutzer}">
    			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
@@ -136,7 +136,7 @@
 			<label th:text="#{teacher}"></label>
 			<select class="form-control w-75" th:field="*{lehrer}">
 				<option th:text="#{no.teacher}" value=>
-				<option th:each="lehrer :${listLehrer}" th:value="${lehrer.id}" th:text="${@kennzeichenUtils.personKennzeichen(lehrer)}">
+				<option th:each="lehrer :${listLehrer}" th:value="${lehrer.id}" th:text="${@kennzeichenUtils.menschKennzeichen(lehrer)}">
 			</select><br/>
  			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		</form>
@@ -155,7 +155,7 @@
 			<label th:text="#{teacher}"></label>
 			<select class="form-control w-75" th:field="*{lehrer}">
 				<option th:text="#{no.teacher}" value=>
-				<option th:each="lehrer :${listLehrer}" th:value="${lehrer.id}" th:text="${@kennzeichenUtils.personKennzeichen(lehrer)}">
+				<option th:each="lehrer :${listLehrer}" th:value="${lehrer.id}" th:text="${@kennzeichenUtils.menschKennzeichen(lehrer)}">
 			</select><br/>
 			<input type="submit" class="btn btn-success btn-sm" th:value="#{button.submit}">
 		</form>

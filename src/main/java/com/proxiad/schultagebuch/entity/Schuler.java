@@ -27,7 +27,7 @@ import com.proxiad.schultagebuch.validator.constraint.BenutzerSchulerRolleConstr
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
 
-@Entity
+@Entity()
 @Table(name = "schuler", uniqueConstraints = { @UniqueConstraint(columnNames = "schuler_pin"),
 		@UniqueConstraint(columnNames = "benutzer_id") })
 public class Schuler {
@@ -66,6 +66,7 @@ public class Schuler {
 	}
 
 	public Schuler(Long id, String name, String pin, Klasse klasse, Benutzer benutzer) {
+		this.klasse = klasse;
 		this.id = id;
 		this.name = name;
 		this.pin = pin;
