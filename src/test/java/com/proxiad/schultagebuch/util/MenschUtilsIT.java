@@ -19,7 +19,7 @@ import com.proxiad.schultagebuch.service.SchulerService;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class PersonUtilsIT {
+public class MenschUtilsIT {
 
 	private static final String BENUTZERNAME = "SomeBenutzername";
 
@@ -33,20 +33,20 @@ public class PersonUtilsIT {
 	private Schuler schuler;
 
 	@Test
-	public void getPersonDurchBenutzerNameTest() {
+	public void getMenschDurchBenutzerNameTest() {
 		// Given
 		schuler = new Schuler();
 
 		// When
 		when(schulerService.findeDurchBenutzername(BENUTZERNAME)).thenReturn(schuler);
-		Object person = MenschUtils.getMenschDurchBenutzername(BENUTZERNAME, schulerService);
+		Object mensch = MenschUtils.getMenschDurchBenutzername(BENUTZERNAME, schulerService);
 
 		// Then
-		assertThat(person, is(instanceOf(Schuler.class)));
+		assertThat(mensch, is(instanceOf(Schuler.class)));
 	}
 
 	@Test(expected = FalschServiceException.class)
-	public void getPersonDurchBenutzerNameMitFalschObjekt() {
+	public void getMenschDurchBenutzerNameMitFalschObjekt() {
 		// Given
 		Object objekt = new Object();
 
@@ -56,19 +56,19 @@ public class PersonUtilsIT {
 	}
 
 	@Test
-	public void erstellenValidInstanceOfPerson() {
+	public void erstellenRichtigeMensch() {
 		// Given
 		schuler = new Schuler();
 
 		// When
-		Object person = MenschUtils.erstellenMenschMitRichtigeBenutzer(schuler, new Benutzer());
+		Object mensch = MenschUtils.erstellenMenschMitRichtigeBenutzer(schuler, new Benutzer());
 
 		// Then
-		assertThat(person, is(instanceOf(Schuler.class)));
+		assertThat(mensch, is(instanceOf(Schuler.class)));
 	}
 
 	@Test(expected = FalschServiceException.class)
-	public void eestellenInvalidInstanceOfPerson() {
+	public void erstellenFalschMensch() {
 		// Given
 		Object objekt = new Object();
 

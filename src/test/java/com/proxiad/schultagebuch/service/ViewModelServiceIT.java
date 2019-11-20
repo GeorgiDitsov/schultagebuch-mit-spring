@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.entity.Lehrer;
@@ -52,20 +51,19 @@ public class ViewModelServiceIT {
 		Schuler schuler = new Schuler();
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
 		List<Note> listOfNoten = new ArrayList<>();
-		Schulstunde schulstunde = new Schulstunde(23L, new Klasse(), new Schulfach(1111L, "Sport"),
-				new Lehrer(198L, "Zdravko Petkov", "1010101010", new Benutzer()));
+		Schulstunde schulstunde = new Schulstunde(23L, new Klasse(), new Schulfach(), new Lehrer());
 		listOfNoten.add(new Note(32L, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(33L, (byte) 2, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(34L, (byte) 3, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
-		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
-		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(listOfNoten);
 
 		// When
-		List<NoteViewModel> listOfNoteViewModels = viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler,
+		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
+		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(listOfNoten);
+		List<NoteViewModel> listOfNoteViewModelle = viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler,
 				Locale.getDefault());
 
 		// Then
-		assertThat(listOfNoteViewModels, hasSize(equalTo(3)));
+		assertThat(listOfNoteViewModelle, hasSize(equalTo(listOfNoten.size())));
 	}
 
 	@Test
@@ -73,15 +71,15 @@ public class ViewModelServiceIT {
 		// Given
 		Schuler schuler = new Schuler();
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
-		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
-		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
 
 		// When
-		List<NoteViewModel> list = viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler,
+		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
+		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
+		List<NoteViewModel> listOfNoteViewModelle = viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler,
 				Locale.getDefault());
 
 		// Then
-		assertThat(list, is(emptyCollectionOf(NoteViewModel.class)));
+		assertThat(listOfNoteViewModelle, is(emptyCollectionOf(NoteViewModel.class)));
 	}
 
 	@Test
@@ -90,8 +88,7 @@ public class ViewModelServiceIT {
 		Schuler schuler = new Schuler();
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
 		List<Note> listOfNoten = new ArrayList<>();
-		Schulstunde schulstunde = new Schulstunde(23L, new Klasse(), new Schulfach(1111L, "Sport"),
-				new Lehrer(198L, "Zdravko Petkov", "1010101010", new Benutzer()));
+		Schulstunde schulstunde = new Schulstunde(23L, new Klasse(), new Schulfach(), new Lehrer());
 		listOfNoten.add(new Note(32L, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(33L, (byte) 2, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(34L, (byte) 3, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
@@ -103,8 +100,7 @@ public class ViewModelServiceIT {
 				.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler, schulstunde, Locale.getDefault());
 
 		// Then
-		assertThat(listOfNoteViewModels, hasSize(equalTo(3)));
-
+		assertThat(listOfNoteViewModels, hasSize(equalTo(listOfNoten.size())));
 	}
 
 	@Test
@@ -113,10 +109,10 @@ public class ViewModelServiceIT {
 		Schuler schuler = new Schuler();
 		Schulstunde schulstunde = new Schulstunde();
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
-		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
-		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
 
 		// When
+		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
+		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(new ArrayList<>());
 		List<NoteViewModel> list = viewModelService.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler,
 				schulstunde, Locale.getDefault());
 
@@ -135,10 +131,10 @@ public class ViewModelServiceIT {
 		Semester semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
 		List<Note> notenList = new ArrayList<>();
 		notenList.add(new Note(1L, (byte) 5, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
-		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
-		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(notenList);
 
 		// When
+		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
+		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(notenList);
 		List<NoteViewModel> list = viewModelService.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler,
 				andereSchulstunde, Locale.getDefault());
 

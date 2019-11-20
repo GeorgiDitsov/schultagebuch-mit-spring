@@ -8,7 +8,7 @@ public final class SuchenUtils {
 		// nothing
 	}
 
-	public static String suchenNach(String word) {
+	public static String suchenNach(final String word) {
 		return new StringBuilder(PERCENTS).insert(1, word).toString();
 	}
 

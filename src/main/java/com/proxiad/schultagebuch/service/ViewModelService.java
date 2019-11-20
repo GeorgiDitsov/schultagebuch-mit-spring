@@ -31,19 +31,19 @@ public class ViewModelService {
 	private SemesterService semesterService;
 
 	public List<NoteViewModel> getListeDerNoteViewModelleDurchSchuler(final Schuler schuler, final Locale locale) {
-		List<NoteViewModel> listOfNoteViewModels = new ArrayList<>();
+		List<NoteViewModel> listOfNoteViewModelle = new ArrayList<>();
 		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester()).stream()
-				.forEach(note -> listOfNoteViewModels.add(NoteUtils.noteZuNoteViewModel(note, locale)));
-		return listOfNoteViewModels;
+				.forEach(note -> listOfNoteViewModelle.add(NoteUtils.noteZuNoteViewModel(note, locale)));
+		return listOfNoteViewModelle;
 	}
 
 	public List<NoteViewModel> getListeDerNoteViewModelleDurchSchulerUndSchulstunde(final Schuler schuler,
 			final Schulstunde schulstunde, final Locale locale) {
-		List<NoteViewModel> listOfNoteViewModels = new ArrayList<>();
+		List<NoteViewModel> listOfNoteViewModelle = new ArrayList<>();
 		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester()).stream()
 				.filter(note -> note.getSchulstunde().equals(schulstunde))
-				.forEach(note -> listOfNoteViewModels.add(NoteUtils.noteZuNoteViewModel(note, locale)));
-		return listOfNoteViewModels;
+				.forEach(note -> listOfNoteViewModelle.add(NoteUtils.noteZuNoteViewModel(note, locale)));
+		return listOfNoteViewModelle;
 	}
 
 	public List<KindViewModel> getListeDerKinderViewModelleDurchElternteil(final Elternteil elternteil,

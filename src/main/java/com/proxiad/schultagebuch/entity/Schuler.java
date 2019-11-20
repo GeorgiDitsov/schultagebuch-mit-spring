@@ -66,7 +66,6 @@ public class Schuler {
 	}
 
 	public Schuler(Long id, String name, String pin, Klasse klasse, Benutzer benutzer) {
-		this.klasse = klasse;
 		this.id = id;
 		this.name = name;
 		this.pin = pin;
