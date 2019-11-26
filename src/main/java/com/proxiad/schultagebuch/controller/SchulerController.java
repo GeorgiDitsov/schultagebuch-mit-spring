@@ -55,7 +55,7 @@ public class SchulerController extends AbstraktController {
 
 	@RequestMapping(value = "/schuler/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neuerSchuler(@RequestHeader final String referer, RedirectAttributes attributes) {
+	public RedirectView neuerSchuler(@RequestHeader final String referer, final RedirectAttributes attributes) {
 		Schuler neuerSchuler = MenschUtils.erstellenMenschMitRichtigeBenutzer(new Schuler(),
 				BenutzerUtils.erstellenBenutzerMitRolle(rolleService.findenDurchMensch(Schuler.class)));
 		modalAttributes("add", neuerSchuler, attributes);
@@ -65,7 +65,7 @@ public class SchulerController extends AbstraktController {
 	@RequestMapping(value = "/schuler/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehenderSchuler(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, final RedirectAttributes attributes) {
 		modalAttributes("edit", schulerService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
@@ -74,7 +74,7 @@ public class SchulerController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulerSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "schuler") @Valid Schuler schuler, final BindingResult bindingResult,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		schulerService.speichern(schuler);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
@@ -83,13 +83,13 @@ public class SchulerController extends AbstraktController {
 	@RequestMapping(value = "/schuler/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulerLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		schulerService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}
 
-	private void modalAttributes(final String modalType, final Schuler schuler, RedirectAttributes attributes) {
+	private void modalAttributes(final String modalType, final Schuler schuler, final RedirectAttributes attributes) {
 		attributes.addFlashAttribute(modalType, true);
 		attributes.addFlashAttribute("schuler", schuler);
 		attributes.addFlashAttribute("listKlasse", klasseService.findeAlle());

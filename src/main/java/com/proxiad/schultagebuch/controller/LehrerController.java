@@ -51,9 +51,9 @@ public class LehrerController extends AbstraktController {
 
 	@RequestMapping(value = "/lehrer/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neuerLehrer(@RequestHeader final String referer, RedirectAttributes attributes) {
+	public RedirectView neuerLehrer(@RequestHeader final String referer, final RedirectAttributes attributes) {
 		Benutzer benutzer = BenutzerUtils.erstellenBenutzerMitRolle(rolleService.findenDurchMensch(Lehrer.class));
-		Lehrer neuerLehrer = (Lehrer) MenschUtils.erstellenMenschMitRichtigeBenutzer(new Lehrer(), benutzer);
+		Lehrer neuerLehrer = MenschUtils.erstellenMenschMitRichtigeBenutzer(new Lehrer(), benutzer);
 		modalAttributes("add", neuerLehrer, attributes);
 		return super.umleiten(referer);
 	}
@@ -61,7 +61,7 @@ public class LehrerController extends AbstraktController {
 	@RequestMapping(value = "/lehrer/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehenderLehrer(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, final RedirectAttributes attributes) {
 		modalAttributes("edit", lehrerService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
@@ -70,7 +70,7 @@ public class LehrerController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView lehrerSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "lehrer") @Valid Lehrer lehrer, final BindingResult bindingResult,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		lehrerService.speichern(lehrer);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
@@ -79,13 +79,13 @@ public class LehrerController extends AbstraktController {
 	@RequestMapping(value = "/lehrer/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView lehrerLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		lehrerService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}
 
-	private void modalAttributes(final String modalType, final Lehrer lehrer, RedirectAttributes attributes) {
+	private void modalAttributes(final String modalType, final Lehrer lehrer, final RedirectAttributes attributes) {
 		attributes.addFlashAttribute(modalType, true);
 		attributes.addFlashAttribute("listSchulfach", schulfachService.findeAlle());
 		attributes.addFlashAttribute("lehrer", lehrer);

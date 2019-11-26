@@ -34,7 +34,7 @@ public class SchulfachController extends AbstraktController {
 
 	@RequestMapping(value = "/schulfach/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neuesSchulfach(@RequestHeader final String referer, RedirectAttributes attributes) {
+	public RedirectView neuesSchulfach(@RequestHeader final String referer, final RedirectAttributes attributes) {
 		modalAttributes("add", new Schulfach(), attributes);
 		return super.umleiten(referer);
 	}
@@ -42,7 +42,7 @@ public class SchulfachController extends AbstraktController {
 	@RequestMapping(value = "/schulfach/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendesSchulfach(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, final RedirectAttributes attributes) {
 		modalAttributes("edit", schulfachService.finden(id), attributes);
 		return super.umleiten(referer);
 	}

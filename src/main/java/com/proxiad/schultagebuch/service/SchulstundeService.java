@@ -29,7 +29,7 @@ public class SchulstundeService {
 				.orElseThrow(() -> new EntityNichtGefundenException("course.not.found", new Object[] { id }));
 	}
 
-	public Schulstunde findeLehrerSchulstunde(final Long id, final Lehrer lehrer) {
+	public Schulstunde findeLehrerSchulstunden(final Long id, final Lehrer lehrer) {
 		return repo.findById(id).filter(schulstunde -> schulstunde.getLehrer().equals(lehrer))
 				.orElseThrow(() -> new EntityUngueltigeRelationException("invalid.teacher.subject.relation"));
 	}

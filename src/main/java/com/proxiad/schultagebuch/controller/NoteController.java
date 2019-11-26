@@ -33,7 +33,6 @@ import com.proxiad.schultagebuch.service.SchulerService;
 import com.proxiad.schultagebuch.service.SchulstundeService;
 import com.proxiad.schultagebuch.service.ViewModelService;
 import com.proxiad.schultagebuch.util.NoteUtils;
-import com.proxiad.schultagebuch.util.MenschUtils;
 
 @Controller
 @Validated
@@ -66,7 +65,7 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/meine-noten")
 	@PreAuthorize("hasRole('SCHULER')")
 	public ModelAndView schulerViewAnzeigen(final Principal principal, final Locale locale) {
-		Schuler schuler = getSchuler(principal.getName());
+		Schuler schuler = schulerService.findeDurchBenutzername(principal.getName());
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("schulerViewModel", viewModelService.schulerZuKinderViewModel(schuler, locale));
 		attributes.put("listNoten", viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler, locale));
@@ -76,7 +75,7 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/meine-kinder")
 	@PreAuthorize("hasRole('ELTERNTEIL')")
 	public ModelAndView elternteilKinderAnzeigen(final Principal principal, final Locale locale) {
-		Elternteil elternteil = getElternteil(principal.getName());
+		Elternteil elternteil = elternteilService.findeDurchBenutzername(principal.getName());
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("elternteil", elternteil);
 		attributes.put("listKinder", viewModelService.getListeDerKinderViewModelleDurchElternteil(elternteil, locale));
@@ -86,8 +85,9 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/meine-kinder/noten/{id}")
 	@PreAuthorize("hasRole('ELTERNTEIL')")
 	public RedirectView elternteilKindNotenAnzeigen(@PathVariable(value = "id") final Long id,
-			final Principal principal, final Locale locale, RedirectAttributes attributes) {
-		Schuler kind = schulerService.findeElternteilKind(id, getElternteil(principal.getName()));
+			final Principal principal, final Locale locale, final RedirectAttributes attributes) {
+		Schuler kind = schulerService.findeElternteilKind(id,
+				elternteilService.findeDurchBenutzername(principal.getName()));
 		attributes.addFlashAttribute("showSchulerfolg", true);
 		attributes.addFlashAttribute("kind", kind);
 		attributes.addFlashAttribute("listNoten",
@@ -98,7 +98,7 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/meine-schulstunden")
 	@PreAuthorize("hasRole('LEHRER')")
 	public ModelAndView lehrerSchulstundenAnzeigen(final Principal principal) {
-		Lehrer lehrer = getLehrer(principal.getName());
+		Lehrer lehrer = lehrerService.findeDurchBenutzername(principal.getName());
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("lehrer", lehrer);
 		attributes.put("listSchulstunden", schulstundeService.findeDurchLehrer(lehrer));
@@ -109,8 +109,8 @@ public class NoteController extends AbstraktController {
 	@PreAuthorize("hasRole('LEHRER')")
 	public ModelAndView schulerNotenAnzeigen(@PathVariable(value = "schulstundeId") final Long schulstundeId,
 			@PathVariable(value = "schulerId") final Long schulerId, final Principal principal, final Locale locale) {
-		Schulstunde schulstunde = schulstundeService.findeLehrerSchulstunde(schulstundeId,
-				getLehrer(principal.getName()));
+		Schulstunde schulstunde = schulstundeService.findeLehrerSchulstunden(schulstundeId,
+				lehrerService.findeDurchBenutzername(principal.getName()));
 		Schuler schuler = schulerService.findeDurchSchulstunde(schulerId, schulstunde);
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("schuler", schuler);
@@ -124,7 +124,7 @@ public class NoteController extends AbstraktController {
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView neueNote(@RequestHeader final String referer,
 			@PathVariable(value = "schulstundeId") final Long schulstundeId,
-			@PathVariable(value = "schulerId") final Long schulerId, RedirectAttributes attributes) {
+			@PathVariable(value = "schulerId") final Long schulerId, final RedirectAttributes attributes) {
 		noteModalAttributes("add", NoteUtils.getNeueNoteMitSchulerUndSchulstunde(schulerService.finden(schulerId),
 				schulstundeService.finden(schulstundeId)), attributes);
 		return super.umleiten(referer);
@@ -133,7 +133,7 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/note/edit/{noteId}")
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView bestehendeNote(@RequestHeader final String referer,
-			@PathVariable(value = "noteId") final Long id, RedirectAttributes attributes) {
+			@PathVariable(value = "noteId") final Long id, final RedirectAttributes attributes) {
 		noteModalAttributes("edit", noteService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
@@ -151,25 +151,13 @@ public class NoteController extends AbstraktController {
 	@RequestMapping(value = "/note/delete/{noteId}")
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView noteLoeschen(@RequestHeader final String referer, @PathVariable(value = "noteId") final Long id,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		noteService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}
 
-	private Schuler getSchuler(final String benutzername) {
-		return (Schuler) MenschUtils.getMenschDurchBenutzername(benutzername, schulerService);
-	}
-
-	private Elternteil getElternteil(final String benutzername) {
-		return (Elternteil) MenschUtils.getMenschDurchBenutzername(benutzername, elternteilService);
-	}
-
-	private Lehrer getLehrer(final String benutzername) {
-		return (Lehrer) MenschUtils.getMenschDurchBenutzername(benutzername, lehrerService);
-	}
-
-	private void noteModalAttributes(final String modalType, final Note note, RedirectAttributes attributes) {
+	private void noteModalAttributes(final String modalType, final Note note, final RedirectAttributes attributes) {
 		attributes.addFlashAttribute(modalType, true);
 		attributes.addFlashAttribute("note", note);
 	}

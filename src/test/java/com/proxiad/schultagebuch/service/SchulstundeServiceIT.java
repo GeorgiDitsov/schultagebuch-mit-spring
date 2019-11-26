@@ -71,7 +71,7 @@ public class SchulstundeServiceIT {
 
 		// When
 		when(repo.findById(id)).thenReturn(Optional.of(schulstunde));
-		Schulstunde gefundenSchulstunde = service.findeLehrerSchulstunde(id, lehrer);
+		Schulstunde gefundenSchulstunde = service.findeLehrerSchulstunden(id, lehrer);
 
 		// Then
 		assertThat(gefundenSchulstunde, is(equalTo(schulstunde)));
@@ -88,7 +88,7 @@ public class SchulstundeServiceIT {
 		when(repo.findById(id)).thenReturn(Optional.of(schulstunde));
 
 		// Then
-		service.findeLehrerSchulstunde(id, new Lehrer());
+		service.findeLehrerSchulstunden(id, new Lehrer());
 	}
 
 	@Test

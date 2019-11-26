@@ -34,15 +34,14 @@ public class BenutzerController extends AbstraktController {
 
 	@RequestMapping(value = "/benutzer/search")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ModelAndView gefundenBenutzerAnzeigen(@ModelAttribute(name = "string") final String benutzername,
-			RedirectAttributes attributes) {
+	public ModelAndView gefundenBenutzerAnzeigen(@ModelAttribute(name = "string") final String benutzername) {
 		return super.ansicht("benutzerForm", "listBenutzer", benutzerService.suchen(benutzername));
 	}
 
 	@RequestMapping(value = "/benutzer/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendBenutzer(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, final RedirectAttributes attributes) {
 		attributes.addFlashAttribute("edit", true);
 		attributes.addFlashAttribute("benutzer", benutzerService.finden(id));
 		return super.umleiten(referer);
@@ -52,7 +51,7 @@ public class BenutzerController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView benutzerSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "benutzer") @Valid final Benutzer benutzer, final BindingResult bindingResult,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		benutzerService.speichern(benutzer);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
@@ -61,7 +60,7 @@ public class BenutzerController extends AbstraktController {
 	@RequestMapping(value = "/benutzer/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView benutzerLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		benutzerService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

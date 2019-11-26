@@ -3,7 +3,6 @@ package com.proxiad.schultagebuch.util;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,8 +20,6 @@ import com.proxiad.schultagebuch.service.SchulerService;
 @SpringBootTest
 public class MenschUtilsIT {
 
-	private static final String BENUTZERNAME = "SomeBenutzername";
-
 	@Mock
 	private SchulerService schulerService;
 
@@ -31,29 +28,6 @@ public class MenschUtilsIT {
 
 	@Mock
 	private Schuler schuler;
-
-	@Test
-	public void getMenschDurchBenutzerNameTest() {
-		// Given
-		schuler = new Schuler();
-
-		// When
-		when(schulerService.findeDurchBenutzername(BENUTZERNAME)).thenReturn(schuler);
-		Object mensch = MenschUtils.getMenschDurchBenutzername(BENUTZERNAME, schulerService);
-
-		// Then
-		assertThat(mensch, is(instanceOf(Schuler.class)));
-	}
-
-	@Test(expected = FalschServiceException.class)
-	public void getMenschDurchBenutzerNameMitFalschObjekt() {
-		// Given
-		Object objekt = new Object();
-
-		// When
-		MenschUtils.getMenschDurchBenutzername(BENUTZERNAME, objekt);
-
-	}
 
 	@Test
 	public void erstellenRichtigeMensch() {

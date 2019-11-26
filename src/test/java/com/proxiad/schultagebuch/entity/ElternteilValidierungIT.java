@@ -24,9 +24,6 @@ public class ElternteilValidierungIT extends AbstraktEntityValidierungIT {
 	private Elternteil elternteil;
 
 	@Autowired
-	private Schuler schuler;
-
-	@Autowired
 	private Benutzer benutzer;
 
 	@Autowired
@@ -34,14 +31,7 @@ public class ElternteilValidierungIT extends AbstraktEntityValidierungIT {
 
 	@Before
 	public void initTestContext() {
-		schuler = new Schuler(Long.MAX_VALUE, "Rosen Bachev", "0707070808", new Klasse(Long.MAX_VALUE, 6, "a"),
-				new Benutzer(Long.MAX_VALUE, "benutzername", "passwort",
-						new Rolle(Integer.MAX_VALUE, RolleTyp.ROLLE_SCHULER)));
 		elternteil = new Elternteil();
-		elternteil.setId(123L);
-		Set<Schuler> kinder = new HashSet<>();
-		kinder.add(schuler);
-		elternteil.setKinder(kinder);
 		rolle = new Rolle();
 		benutzer = new Benutzer();
 		benutzer.setId(Long.MAX_VALUE);
@@ -50,7 +40,34 @@ public class ElternteilValidierungIT extends AbstraktEntityValidierungIT {
 	}
 
 	@Test
-	public void richtigElternteilBenutzerRolle() {
+	public void elternteilKinderValidatorTest() {
+		// Given
+		Set<Schuler> kinder = new HashSet<>();
+		kinder.add(new Schuler());
+		elternteil.setKinder(kinder);
+
+		// When
+		Set<ConstraintViolation<Elternteil>> violations = getValidator().validateProperty(elternteil, "kinder");
+
+		// Then
+		assertThat(violations, is(empty()));
+	}
+
+	@Test
+	public void elternteilMitOhneKinder() {
+		// Given
+		Set<Schuler> leereSetDerKinder = new HashSet<>();
+		elternteil.setKinder(leereSetDerKinder);
+
+		// When
+		Set<ConstraintViolation<Elternteil>> violations = getValidator().validateProperty(elternteil, "kinder");
+
+		// Then
+		assertThat(violations, is(not(empty())));
+	}
+
+	@Test
+	public void richtigeElternteilBenutzerRolle() {
 		// Given
 		rolle.setName(RolleTyp.ROLLE_ELTERNTEIL);
 		benutzer.setRolle(rolle);

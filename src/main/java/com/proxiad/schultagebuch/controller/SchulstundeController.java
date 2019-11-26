@@ -46,7 +46,7 @@ public class SchulstundeController extends AbstraktController {
 
 	@RequestMapping(value = "/schulstunde/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neueSchulstunde(@RequestHeader final String referer, RedirectAttributes attributes) {
+	public RedirectView neueSchulstunde(@RequestHeader final String referer, final RedirectAttributes attributes) {
 		modalAttributes("add", new Schulstunde(), attributes);
 		return super.umleiten(referer);
 	}
@@ -54,7 +54,7 @@ public class SchulstundeController extends AbstraktController {
 	@RequestMapping(value = "/schulstunde/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendeSchulstunde(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, final RedirectAttributes attributes) {
 		modalAttributes("edit", schulstundeService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
@@ -63,7 +63,7 @@ public class SchulstundeController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulstundeSpeichern(@RequestHeader final String referer,
 			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde, final BindingResult bindingResult,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		schulstundeService.speichern(schulstunde);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
@@ -72,13 +72,14 @@ public class SchulstundeController extends AbstraktController {
 	@RequestMapping(value = "/schulstunde/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulstundeLoeschen(@RequestHeader final String referer,
-			@PathVariable(value = "id") final Long id, RedirectAttributes attributes) {
+			@PathVariable(value = "id") final Long id, final RedirectAttributes attributes) {
 		schulstundeService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}
 
-	private void modalAttributes(final String modalType, final Schulstunde schulstunde, RedirectAttributes attributes) {
+	private void modalAttributes(final String modalType, final Schulstunde schulstunde,
+			final RedirectAttributes attributes) {
 		attributes.addFlashAttribute(modalType, true);
 		attributes.addFlashAttribute("schulstunde", schulstunde);
 		attributes.addFlashAttribute("listKlasse", klasseService.findeAlle());

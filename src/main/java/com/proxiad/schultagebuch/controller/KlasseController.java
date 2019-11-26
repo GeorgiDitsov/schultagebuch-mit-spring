@@ -34,7 +34,7 @@ public class KlasseController extends AbstraktController {
 
 	@RequestMapping(value = "/klasse/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public RedirectView neueKlasse(@RequestHeader final String referer, RedirectAttributes attributes) {
+	public RedirectView neueKlasse(@RequestHeader final String referer, final RedirectAttributes attributes) {
 		modalAttributes("add", new Klasse(), attributes);
 		return super.umleiten(referer);
 	}
@@ -42,7 +42,7 @@ public class KlasseController extends AbstraktController {
 	@RequestMapping(value = "/klasse/edit/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView bestehendeKlasse(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		modalAttributes("edit", klasseService.finden(id), attributes);
 		return super.umleiten(referer);
 	}
@@ -52,7 +52,7 @@ public class KlasseController extends AbstraktController {
 	public RedirectView klasseSpeichern(@RequestHeader final String referer,
 			@RequestParam(name = "klasseName") @KlasseNameConstraint final String klasseName,
 			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		klasse.erstellenAus(klasseName);
 		klasseService.speichern(klasse);
 		attributes.addFlashAttribute("successful", true);
@@ -62,13 +62,13 @@ public class KlasseController extends AbstraktController {
 	@RequestMapping(value = "/klasse/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView klasseLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
-			RedirectAttributes attributes) {
+			final RedirectAttributes attributes) {
 		klasseService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
 	}
 
-	private void modalAttributes(final String modalType, final Klasse klasse, RedirectAttributes attributes) {
+	private void modalAttributes(final String modalType, final Klasse klasse, final RedirectAttributes attributes) {
 		attributes.addFlashAttribute(modalType, true);
 		attributes.addFlashAttribute("klasse", klasse);
 	}
