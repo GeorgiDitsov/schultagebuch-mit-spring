@@ -109,7 +109,7 @@ public class NoteController extends AbstraktController {
 	@PreAuthorize("hasRole('LEHRER')")
 	public ModelAndView schulerNotenAnzeigen(@PathVariable(value = "schulstundeId") final Long schulstundeId,
 			@PathVariable(value = "schulerId") final Long schulerId, final Principal principal, final Locale locale) {
-		Schulstunde schulstunde = schulstundeService.findeLehrerSchulstunden(schulstundeId,
+		Schulstunde schulstunde = schulstundeService.findeLehrerSchulstunde(schulstundeId,
 				lehrerService.findeDurchBenutzername(principal.getName()));
 		Schuler schuler = schulerService.findeDurchSchulstunde(schulerId, schulstunde);
 		Map<String, Object> attributes = new HashMap<>();
