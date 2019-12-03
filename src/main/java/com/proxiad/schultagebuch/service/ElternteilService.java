@@ -19,7 +19,7 @@ public class ElternteilService {
 	@Autowired
 	private ElternteilRepository repo;
 
-	public List<Elternteil> suche(final String elternteilName) {
+	public List<Elternteil> suchen(final String elternteilName) {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(elternteilName));
 	}
 

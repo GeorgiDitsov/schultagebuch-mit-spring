@@ -13,18 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.exception.FalschServiceException;
-import com.proxiad.schultagebuch.service.RolleService;
-import com.proxiad.schultagebuch.service.SchulerService;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class MenschUtilsIT {
-
-	@Mock
-	private SchulerService schulerService;
-
-	@Mock
-	private RolleService rolleService;
 
 	@Mock
 	private Schuler schuler;

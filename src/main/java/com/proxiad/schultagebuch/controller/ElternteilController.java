@@ -39,7 +39,7 @@ public class ElternteilController extends AbstraktController {
 	@RequestMapping(value = "/elternteil/search")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ModelAndView gefundenElternAnzeigen(@ModelAttribute(name = "string") final String elternteilName) {
-		return super.ansicht("elternteilForm", "listElternteil", elternteilService.suche(elternteilName));
+		return super.ansicht("elternteilForm", "listElternteil", elternteilService.suchen(elternteilName));
 	}
 
 	@RequestMapping(value = "/elternteil/edit/{id}")

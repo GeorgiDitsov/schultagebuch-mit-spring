@@ -72,7 +72,7 @@ public class ElternteilServiceIT {
 
 		// When
 		when(repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(ELTERNTEIL_NAME))).thenReturn(leereListe);
-		List<Elternteil> gefundenListe = service.suche(ELTERNTEIL_NAME);
+		List<Elternteil> gefundenListe = service.suchen(ELTERNTEIL_NAME);
 
 		// Then
 		assertThat(gefundenListe, is(emptyCollectionOf(Elternteil.class)));

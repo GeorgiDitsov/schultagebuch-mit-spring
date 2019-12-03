@@ -46,7 +46,7 @@ public class LehrerController extends AbstraktController {
 	@RequestMapping(value = "/lehrer/search")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ModelAndView gefundenLehrernAnzeigen(@ModelAttribute(name = "string") final String lehrerName) {
-		return super.ansicht("lehrerForm", "listLehrer", lehrerService.suche(lehrerName));
+		return super.ansicht("lehrerForm", "listLehrer", lehrerService.suchen(lehrerName));
 	}
 
 	@RequestMapping(value = "/lehrer/add")

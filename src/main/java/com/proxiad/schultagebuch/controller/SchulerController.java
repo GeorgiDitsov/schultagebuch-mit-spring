@@ -50,7 +50,7 @@ public class SchulerController extends AbstraktController {
 	@RequestMapping(value = "/schuler/search")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ModelAndView gefundenSchulernAnzeigen(@ModelAttribute(name = "string") final String schulerName) {
-		return super.ansicht("schulerForm", "listSchuler", schulerService.suche(schulerName));
+		return super.ansicht("schulerForm", "listSchuler", schulerService.suchen(schulerName));
 	}
 
 	@RequestMapping(value = "/schuler/add")

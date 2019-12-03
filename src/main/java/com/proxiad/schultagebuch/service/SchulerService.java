@@ -23,7 +23,7 @@ public class SchulerService {
 	@Autowired
 	private SchulerRepository repo;
 
-	public List<Schuler> suche(final String schulerName) {
+	public List<Schuler> suchen(final String schulerName) {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(schulerName));
 	}
 

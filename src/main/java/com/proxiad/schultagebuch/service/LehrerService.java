@@ -19,7 +19,7 @@ public class LehrerService {
 	@Autowired
 	private LehrerRepository repo;
 
-	public List<Lehrer> suche(final String lehrerName) {
+	public List<Lehrer> suchen(final String lehrerName) {
 		return repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(lehrerName));
 	}
 
