@@ -2,7 +2,7 @@ package com.proxiad.schultagebuch.view;
 
 import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 
-public class NoteViewModel {
+public class NoteViewModell {
 
 	private Long noteId;
 	private String schulfachName;
@@ -11,11 +11,11 @@ public class NoteViewModel {
 	private String noteInsertDatum;
 	private String noteUpdateDatum;
 
-	public NoteViewModel() {
+	public NoteViewModell() {
 		// nothing
 	}
 
-	public NoteViewModel(Long noteId, String schulfachName, String lehrerName, String note, String noteInsertDatum,
+	public NoteViewModell(Long noteId, String schulfachName, String lehrerName, String note, String noteInsertDatum,
 			String noteUpdateDatum) {
 		this.noteId = noteId;
 		this.schulfachName = schulfachName;

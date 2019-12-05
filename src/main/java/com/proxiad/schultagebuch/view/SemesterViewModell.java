@@ -1,16 +1,16 @@
 package com.proxiad.schultagebuch.view;
 
-public class SemesterViewModel {
+public class SemesterViewModell {
 
 	private int semesterId;
 	private String semesterbeginn;
 	private String semesterende;
 
-	public SemesterViewModel() {
+	public SemesterViewModell() {
 		// nothing
 	}
 
-	public SemesterViewModel(int semesterId, String semesterbeginn, String semesterende) {
+	public SemesterViewModell(int semesterId, String semesterbeginn, String semesterende) {
 		this.semesterId = semesterId;
 		this.semesterbeginn = semesterbeginn;
 		this.semesterende = semesterende;

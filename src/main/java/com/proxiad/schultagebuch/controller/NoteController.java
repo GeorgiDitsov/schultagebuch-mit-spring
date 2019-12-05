@@ -31,7 +31,7 @@ import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.NoteService;
 import com.proxiad.schultagebuch.service.SchulerService;
 import com.proxiad.schultagebuch.service.SchulstundeService;
-import com.proxiad.schultagebuch.service.ViewModelService;
+import com.proxiad.schultagebuch.service.ViewModellService;
 import com.proxiad.schultagebuch.util.NoteUtils;
 
 @Controller
@@ -54,7 +54,7 @@ public class NoteController extends AbstraktController {
 	private SchulstundeService schulstundeService;
 
 	@Autowired
-	private ViewModelService viewModelService;
+	private ViewModellService viewModellService;
 
 	@RequestMapping(value = "/note")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -67,8 +67,8 @@ public class NoteController extends AbstraktController {
 	public ModelAndView schulerViewAnzeigen(final Principal principal, final Locale locale) {
 		Schuler schuler = schulerService.findeDurchBenutzername(principal.getName());
 		Map<String, Object> attributes = new HashMap<>();
-		attributes.put("schulerViewModel", viewModelService.schulerZuKinderViewModel(schuler, locale));
-		attributes.put("listNoten", viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler, locale));
+		attributes.put("schulerViewModel", viewModellService.schulerZuKinderViewModel(schuler, locale));
+		attributes.put("listNoten", viewModellService.getListeDerNoteViewModelleDurchSchuler(schuler, locale));
 		return super.ansicht("notenForm", attributes);
 	}
 
@@ -78,20 +78,20 @@ public class NoteController extends AbstraktController {
 		Elternteil elternteil = elternteilService.findeDurchBenutzername(principal.getName());
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("elternteil", elternteil);
-		attributes.put("listKinder", viewModelService.getListeDerKinderViewModelleDurchElternteil(elternteil, locale));
+		attributes.put("listKinder", viewModellService.getListeDerKinderViewModelleDurchElternteil(elternteil, locale));
 		return super.ansicht("notenForm", attributes);
 	}
 
-	@RequestMapping(value = "/meine-kinder/noten/{id}")
+	@RequestMapping(value = "/meine-kinder/{kindId}/noten")
 	@PreAuthorize("hasRole('ELTERNTEIL')")
-	public RedirectView elternteilKindNotenAnzeigen(@PathVariable(value = "id") final Long id,
+	public RedirectView elternteilKindNotenAnzeigen(@PathVariable(value = "kindId") final Long kindId,
 			final Principal principal, final Locale locale, final RedirectAttributes attributes) {
-		Schuler kind = schulerService.findeElternteilKind(id,
-				elternteilService.findeDurchBenutzername(principal.getName()));
+		Elternteil elternteil = elternteilService.findeDurchBenutzername(principal.getName());
+		Schuler kind = schulerService.findeElternteilKind(kindId, elternteil);
 		attributes.addFlashAttribute("showSchulerfolg", true);
 		attributes.addFlashAttribute("kind", kind);
 		attributes.addFlashAttribute("listNoten",
-				viewModelService.getListeDerNoteViewModelleDurchSchuler(kind, locale));
+				viewModellService.getListeDerNoteViewModelleDurchSchuler(kind, locale));
 		return super.umleiten("/meine-kinder");
 	}
 
@@ -109,14 +109,14 @@ public class NoteController extends AbstraktController {
 	@PreAuthorize("hasRole('LEHRER')")
 	public ModelAndView schulerNotenAnzeigen(@PathVariable(value = "schulstundeId") final Long schulstundeId,
 			@PathVariable(value = "schulerId") final Long schulerId, final Principal principal, final Locale locale) {
-		Schulstunde schulstunde = schulstundeService.findeLehrerSchulstunde(schulstundeId,
-				lehrerService.findeDurchBenutzername(principal.getName()));
+		Lehrer lehrer = lehrerService.findeDurchBenutzername(principal.getName());
+		Schulstunde schulstunde = schulstundeService.findeLehrerSchulstunde(schulstundeId, lehrer);
 		Schuler schuler = schulerService.findeDurchSchulstunde(schulerId, schulstunde);
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("schuler", schuler);
 		attributes.put("schulstunde", schulstunde);
 		attributes.put("listNoten",
-				viewModelService.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler, schulstunde, locale));
+				viewModellService.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler, schulstunde, locale));
 		return super.ansicht("notenForm", attributes);
 	}
 
@@ -125,7 +125,7 @@ public class NoteController extends AbstraktController {
 	public RedirectView neueNote(@RequestHeader final String referer,
 			@PathVariable(value = "schulstundeId") final Long schulstundeId,
 			@PathVariable(value = "schulerId") final Long schulerId, final RedirectAttributes attributes) {
-		noteModalAttributes("add", NoteUtils.getNeueNoteMitSchulerUndSchulstunde(schulerService.finden(schulerId),
+		noteModalAttributes("add", NoteUtils.erstellenNeueNoteMitSchulerUndSchulstunde(schulerService.finden(schulerId),
 				schulstundeService.finden(schulstundeId)), attributes);
 		return super.umleiten(referer);
 	}

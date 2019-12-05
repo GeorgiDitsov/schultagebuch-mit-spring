@@ -1,6 +1,7 @@
 package com.proxiad.schultagebuch.entity;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -20,7 +21,9 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.proxiad.schultagebuch.util.DatumUtils;
 import com.proxiad.schultagebuch.validator.constraint.NoteConstraint;
+import com.proxiad.schultagebuch.view.NoteViewModell;
 
 @Entity
 @Table(name = "note")
@@ -117,6 +120,13 @@ public class Note {
 
 	public void setSchulstunde(Schulstunde schulstunde) {
 		this.schulstunde = schulstunde;
+	}
+
+	public NoteViewModell toNoteViewModell(Locale locale) {
+		return new NoteViewModell(this.getId(), this.getSchulstunde().getSchulfach().getName(),
+				this.getSchulstunde().getLehrer().getName(), String.valueOf(this.getWert()),
+				DatumUtils.localDateTimeZuString(this.getNoteInsertDatum(), locale),
+				DatumUtils.localDateTimeZuString(this.getNoteUpdateDatum(), locale));
 	}
 
 	@Override

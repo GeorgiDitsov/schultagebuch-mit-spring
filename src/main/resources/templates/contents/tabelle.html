@@ -249,7 +249,7 @@
 				<td th:text="${kindViewModel.letzteNoteKennzeichen}">
 				<td th:text="${kindViewModel.halbjaehrigeErfolg}">
 				<td>
-					<a th:href="@{'/meine-kinder/noten/'+${kindViewModel.kindId}}" class="btn btn-primary" role="button" th:text="#{grades}"></a>
+					<a th:href="@{'/meine-kinder/'+${kindViewModel.kindId}+'/noten'}" class="btn btn-primary" role="button" th:text="#{grades}"></a>
 				</td>
 			</tr>
 		</table>

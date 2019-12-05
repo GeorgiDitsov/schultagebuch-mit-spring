@@ -2,18 +2,18 @@ package com.proxiad.schultagebuch.view;
 
 import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 
-public class KindViewModel {
+public class KindViewModell {
 
 	private Long kindId;
 	private String kindKennzeichen;
 	private String letzteNoteKennzeichen;
 	private String halbjaehrigeErfolg;
 
-	public KindViewModel() {
+	public KindViewModell() {
 		// nothing
 	}
 
-	public KindViewModel(Long kindId, String kindKennzeichen, String letzteNoteKennzeichen, String halbjaehrigeErfolg) {
+	public KindViewModell(Long kindId, String kindKennzeichen, String letzteNoteKennzeichen, String halbjaehrigeErfolg) {
 		this.kindId = kindId;
 		this.kindKennzeichen = kindKennzeichen;
 		this.letzteNoteKennzeichen = letzteNoteKennzeichen;

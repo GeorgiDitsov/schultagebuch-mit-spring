@@ -15,14 +15,13 @@ import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.util.BerechnungUtils;
 import com.proxiad.schultagebuch.util.DatumUtils;
-import com.proxiad.schultagebuch.util.NoteUtils;
-import com.proxiad.schultagebuch.view.KindViewModel;
-import com.proxiad.schultagebuch.view.NoteViewModel;
-import com.proxiad.schultagebuch.view.SemesterViewModel;
+import com.proxiad.schultagebuch.view.KindViewModell;
+import com.proxiad.schultagebuch.view.NoteViewModell;
+import com.proxiad.schultagebuch.view.SemesterViewModell;
 
 @Service
 @Transactional
-public class ViewModelService {
+public class ViewModellService {
 
 	@Autowired
 	private NoteService noteService;
@@ -30,47 +29,46 @@ public class ViewModelService {
 	@Autowired
 	private SemesterService semesterService;
 
-	public List<NoteViewModel> getListeDerNoteViewModelleDurchSchuler(final Schuler schuler, final Locale locale) {
-		List<NoteViewModel> listOfNoteViewModelle = new ArrayList<>();
+	public List<NoteViewModell> getListeDerNoteViewModelleDurchSchuler(final Schuler schuler, final Locale locale) {
+		List<NoteViewModell> listOfNoteViewModelle = new ArrayList<>();
 		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester()).stream()
-				.forEach(note -> listOfNoteViewModelle.add(NoteUtils.noteZuNoteViewModel(note, locale)));
+				.forEach(note -> listOfNoteViewModelle.add(note.toNoteViewModell(locale)));
 		return listOfNoteViewModelle;
 	}
 
-	public List<NoteViewModel> getListeDerNoteViewModelleDurchSchulerUndSchulstunde(final Schuler schuler,
+	public List<NoteViewModell> getListeDerNoteViewModelleDurchSchulerUndSchulstunde(final Schuler schuler,
 			final Schulstunde schulstunde, final Locale locale) {
-		List<NoteViewModel> listOfNoteViewModelle = new ArrayList<>();
+		List<NoteViewModell> listOfNoteViewModelle = new ArrayList<>();
 		noteService.findeSchulerNoten(schuler, semesterService.findeAktuelleSemester()).stream()
 				.filter(note -> note.getSchulstunde().equals(schulstunde))
-				.forEach(note -> listOfNoteViewModelle.add(NoteUtils.noteZuNoteViewModel(note, locale)));
+				.forEach(note -> listOfNoteViewModelle.add(note.toNoteViewModell(locale)));
 		return listOfNoteViewModelle;
 	}
 
-	public List<KindViewModel> getListeDerKinderViewModelleDurchElternteil(final Elternteil elternteil,
+	public List<KindViewModell> getListeDerKinderViewModelleDurchElternteil(final Elternteil elternteil,
 			final Locale locale) {
-		List<KindViewModel> listOfKinder = new ArrayList<>();
+		List<KindViewModell> listOfKinder = new ArrayList<>();
 		elternteil.getKinder().stream().forEach(kind -> listOfKinder.add(schulerZuKinderViewModel(kind, locale)));
 		return listOfKinder;
 	}
 
-	public List<SemesterViewModel> getListerDerSemesterViewModelle(final Locale locale) {
-		List<SemesterViewModel> listOfSemesterViewModelle = new ArrayList<>();
+	public List<SemesterViewModell> getListerDerSemesterViewModelle(final Locale locale) {
+		List<SemesterViewModell> listOfSemesterViewModelle = new ArrayList<>();
 		semesterService.findeAlle().stream()
-				.forEach(semester -> listOfSemesterViewModelle.add(new SemesterViewModel(semester.getId(),
+				.forEach(semester -> listOfSemesterViewModelle.add(new SemesterViewModell(semester.getId(),
 						DatumUtils.localDateTimeZuString(semester.getSemesterbeginn(), locale),
 						DatumUtils.localDateTimeZuString(semester.getSemesterende(), locale))));
 		return listOfSemesterViewModelle;
 	}
 
-	public KindViewModel schulerZuKinderViewModel(final Schuler schuler, final Locale locale) {
-		return new KindViewModel(schuler.getId(), schuler.getKennzeichen(), getSchulerLetzteNote(schuler, locale),
+	public KindViewModell schulerZuKinderViewModel(final Schuler schuler, final Locale locale) {
+		return new KindViewModell(schuler.getId(), schuler.getKennzeichen(), getSchulerLetzteNote(schuler, locale),
 				String.valueOf(
 						BerechnungUtils.durchschnittlichHalbjaehrigeNoten(getSchulerHalbjaehrigeNoten(schuler))));
 	}
 
 	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
-		return noteService.findeSchulerLetzteNote(schuler)
-				.map(note -> NoteUtils.noteZuNoteViewModel(note, locale).getKennzeichen())
+		return noteService.findeSchulerLetzteNote(schuler).map(note -> note.toNoteViewModell(locale).getKennzeichen())
 				.orElse(StringKonstanten.OBJEKT_NICHT_VERFUEGBAR);
 	}
 
