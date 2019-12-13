@@ -67,7 +67,7 @@ public class NoteController extends AbstraktController {
 	public ModelAndView schulerViewAnzeigen(final Principal principal, final Locale locale) {
 		Schuler schuler = schulerService.findeDurchBenutzername(principal.getName());
 		Map<String, Object> attributes = new HashMap<>();
-		attributes.put("schulerViewModel", viewModellService.schulerZuKinderViewModel(schuler, locale));
+		attributes.put("schulerViewModel", viewModellService.schulerZuKinderViewModell(schuler, locale));
 		attributes.put("listNoten", viewModellService.getListeDerNoteViewModelleDurchSchuler(schuler, locale));
 		return super.ansicht("notenForm", attributes);
 	}

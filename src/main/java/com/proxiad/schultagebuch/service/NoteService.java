@@ -1,7 +1,7 @@
 package com.proxiad.schultagebuch.service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
 import com.proxiad.schultagebuch.entity.Semester;
 import com.proxiad.schultagebuch.exception.EntityNichtGefundenException;
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.repository.NoteRepository;
 
 @Service
@@ -30,10 +31,6 @@ public class NoteService {
 				.orElseThrow(() -> new EntityNichtGefundenException("grade.not.found", new Object[] { id }));
 	}
 
-	public Optional<Note> findeSchulerLetzteNote(final Schuler schuler) {
-		return repo.findFirstBySchulerOrderByNoteUpdateDatumDesc(schuler);
-	}
-
 	public List<Note> findeSchulerNoten(final Schuler schuler, final Semester semester) {
 		return repo.findBySchulerAndNoteUpdateDatumBetweenOrderByNoteUpdateDatumDesc(schuler,
 				semester.getSemesterbeginn(), semester.getSemesterende());
@@ -43,6 +40,12 @@ public class NoteService {
 			final Semester semester) {
 		return repo.findBySchulerAndSchulstundeAndNoteUpdateDatumBetween(schuler, schulstunde,
 				semester.getSemesterbeginn(), semester.getSemesterende());
+	}
+
+	public String findeSchulerLetzteNote(final Schuler schuler, final Locale locale) {
+		return repo.findFirstBySchulerOrderByNoteUpdateDatumDesc(schuler)
+				.map(note -> note.toNoteViewModell(locale).getKennzeichen())
+				.orElse(StringKonstanten.OBJEKT_NICHT_VERFUEGBAR);
 	}
 
 	public void speichern(final Note note) {

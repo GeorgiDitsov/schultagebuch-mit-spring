@@ -30,23 +30,28 @@ public class NoteValidierungIT extends AbstraktEntityValidierungIT {
 	@Autowired
 	private Schulstunde schulstunde;
 
+	@Autowired
+	private Klasse klasse;
+
 	@Before
 	public void initTestContext() {
-		Klasse klasse = new Klasse(Long.MAX_VALUE, 1, "z");
-		schuler = new Schuler(1L, "Vasil Vasilev", "0001010000", klasse,
-				new Benutzer(149L, "ValidBenutzerName", "validPass", new Rolle(1, RolleTyp.ROLLE_SCHULER)));
-		Schulfach schulfach = new Schulfach(55L, "Math");
+		klasse = new Klasse(1L, 1, "a");
+		Benutzer benutzer = new Benutzer(123L, "VasilVasilev", "password", new Rolle(1, RolleTyp.ROLLE_SCHULER));
+		klasse.setSchulerSet(new HashSet<>());
+		schuler = new Schuler(1L, "Vasil Vasilev", "0001010000", klasse, benutzer);
 		Lehrer lehrer = new Lehrer(Long.MAX_VALUE, "Ivan Ivanov", "8008088888",
 				new Benutzer(150L, "OtherBenutzerName", "validPass", new Rolle(2, RolleTyp.ROLLE_LEHRER)));
 		lehrer.setSchulfachSet(new HashSet<>());
+		Schulfach schulfach = new Schulfach(55L, "Math");
 		lehrer.getSchulfachSet().add(schulfach);
 		schulstunde = new Schulstunde(123L, klasse, schulfach, lehrer);
+		note = new Note(14L, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde);
 	}
 
 	@Test
 	public void validRelationZwischenSchulerUndSchulstunde() {
 		// Given
-		note = new Note(14L, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde);
+		klasse.getSchulerSet().add(schuler);
 
 		// When
 		Set<ConstraintViolation<Note>> violations = getValidator().validate(note);
@@ -58,8 +63,7 @@ public class NoteValidierungIT extends AbstraktEntityValidierungIT {
 	@Test
 	public void keineRelationZwischenSchulerUndSchulstunde() {
 		// Given
-		schuler.setKlasse(new Klasse(321L, 1, "a"));
-		note = new Note(154L, (byte) 2, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde);
+		klasse.getSchulerSet().clear();
 
 		// When
 		Set<ConstraintViolation<Note>> violations = getValidator().validate(note);

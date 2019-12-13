@@ -12,7 +12,7 @@ public class NoteValidator implements ConstraintValidator<NoteConstraint, Note> 
 
 	@Override
 	public boolean isValid(Note note, ConstraintValidatorContext context) {
-		return Objects.nonNull(note) && note.getSchuler().getKlasse().equals(note.getSchulstunde().getKlasse());
+		return Objects.nonNull(note) && note.getSchulstunde().getKlasse().getSchulerSet().contains(note.getSchuler());
 	}
 
 }

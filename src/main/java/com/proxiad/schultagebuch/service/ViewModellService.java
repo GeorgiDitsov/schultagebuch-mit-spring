@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Schuler;
 import com.proxiad.schultagebuch.entity.Schulstunde;
-import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.util.BerechnungUtils;
 import com.proxiad.schultagebuch.util.DatumUtils;
 import com.proxiad.schultagebuch.view.KindViewModell;
@@ -47,9 +46,10 @@ public class ViewModellService {
 
 	public List<KindViewModell> getListeDerKinderViewModelleDurchElternteil(final Elternteil elternteil,
 			final Locale locale) {
-		List<KindViewModell> listOfKinder = new ArrayList<>();
-		elternteil.getKinder().stream().forEach(kind -> listOfKinder.add(schulerZuKinderViewModel(kind, locale)));
-		return listOfKinder;
+		List<KindViewModell> listOfKinderViewModelle = new ArrayList<>();
+		elternteil.getKinder().stream()
+				.forEach(kind -> listOfKinderViewModelle.add(schulerZuKinderViewModell(kind, locale)));
+		return listOfKinderViewModelle;
 	}
 
 	public List<SemesterViewModell> getListerDerSemesterViewModelle(final Locale locale) {
@@ -61,15 +61,10 @@ public class ViewModellService {
 		return listOfSemesterViewModelle;
 	}
 
-	public KindViewModell schulerZuKinderViewModel(final Schuler schuler, final Locale locale) {
-		return new KindViewModell(schuler.getId(), schuler.getKennzeichen(), getSchulerLetzteNote(schuler, locale),
-				String.valueOf(
+	public KindViewModell schulerZuKinderViewModell(final Schuler schuler, final Locale locale) {
+		return new KindViewModell(schuler.getId(), schuler.getKennzeichen(),
+				noteService.findeSchulerLetzteNote(schuler, locale), String.valueOf(
 						BerechnungUtils.durchschnittlichHalbjaehrigeNoten(getSchulerHalbjaehrigeNoten(schuler))));
-	}
-
-	private String getSchulerLetzteNote(final Schuler schuler, final Locale locale) {
-		return noteService.findeSchulerLetzteNote(schuler).map(note -> note.toNoteViewModell(locale).getKennzeichen())
-				.orElse(StringKonstanten.OBJEKT_NICHT_VERFUEGBAR);
 	}
 
 	private List<Long> getSchulerHalbjaehrigeNoten(final Schuler schuler) {
