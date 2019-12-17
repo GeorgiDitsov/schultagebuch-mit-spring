@@ -124,7 +124,7 @@ public class Note {
 
 	public NoteViewModell toNoteViewModell(Locale locale) {
 		return new NoteViewModell(this.getId(), this.getSchulstunde().getSchulfach().getName(),
-				this.getSchulstunde().getLehrer().getName(), String.valueOf(this.getWert()),
+				this.getSchulstunde().getLehrerKennzeichen(), String.valueOf(this.getWert()),
 				DatumUtils.localDateTimeZuString(this.getNoteInsertDatum(), locale),
 				DatumUtils.localDateTimeZuString(this.getNoteUpdateDatum(), locale));
 	}

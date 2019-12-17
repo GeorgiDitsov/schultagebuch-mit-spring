@@ -3,7 +3,6 @@ package com.proxiad.schultagebuch.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,8 +50,7 @@ public class KlasseController extends AbstraktController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView klasseSpeichern(@RequestHeader final String referer,
 			@RequestParam(name = "klasseName") @KlasseNameConstraint final String klasseName,
-			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult,
-			final RedirectAttributes attributes) {
+			@ModelAttribute(name = "klasse") Klasse klasse, final RedirectAttributes attributes) {
 		klasse.erstellenAus(klasseName);
 		klasseService.speichern(klasse);
 		attributes.addFlashAttribute("successful", true);

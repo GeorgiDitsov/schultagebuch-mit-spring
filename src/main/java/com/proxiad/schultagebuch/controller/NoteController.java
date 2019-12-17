@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -141,8 +140,7 @@ public class NoteController extends AbstraktController {
 	@PostMapping(value = "/note/save")
 	@PreAuthorize("hasRole('LEHRER')")
 	public RedirectView noteSpeichern(@RequestHeader final String referer,
-			@ModelAttribute(name = "note") @Valid Note note, final BindingResult bindingResult,
-			RedirectAttributes attributes) {
+			@ModelAttribute(name = "note") @Valid Note note, RedirectAttributes attributes) {
 		noteService.speichern(note);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);

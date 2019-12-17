@@ -32,7 +32,7 @@ public class BaseController extends AbstraktController {
 	@RequestMapping(value = { "/*/{locale:en|de}", "/*/*/{locale:en|de}", "/*/*/*/{locale:en|de}",
 			"/*/*/*/*/*/{locale:en|de}" })
 	@PreAuthorize("!isAnonymous()")
-	public RedirectView lokalisieren(@RequestHeader String referer) {
+	public RedirectView lokalisieren(@RequestHeader final String referer) {
 		return super.umleiten(referer);
 	}
 

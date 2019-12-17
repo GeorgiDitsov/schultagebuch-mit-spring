@@ -132,7 +132,7 @@
 		            <th scope="col" th:text="#{teacher}">
 		            <th scope="col" th:text="#{options}">
 		        </tr>
-		    </thead> 
+		    </thead>
 	        <tr th:each="schulstunde: ${listSchulstunde}">
 	            <th scope="row" th:text="${schulstunde.id}">
 	            <td th:text="${schulstunde.klasse.kennzeichen}">
@@ -202,7 +202,7 @@
 				<th scope="row" th:text="${note.id}">
 				<td th:text="${note.schuler.name}">
 				<td th:text="${note.schulstunde.schulfach.name}">
-				<td th:text="${note.schulstunde.lehrer.name}">
+				<td th:text="${note.schulstunde.lehrerKennzeichen}">
 				<th scope="row" th:text="${note.wert}">
 				<td th:text="${#temporals.format(note.noteInsertDatum, 'dd-MMM-yyyy HH:mm:ss')}">
 				<td th:text="${#temporals.format(note.noteUpdateDatum, 'dd-MMM-yyyy HH:mm:ss')}">

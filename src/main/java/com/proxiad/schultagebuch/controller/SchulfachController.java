@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,8 +49,7 @@ public class SchulfachController extends AbstraktController {
 	@PostMapping(value = "/schulfach/save")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView schulfachSpeichern(@RequestHeader final String referer,
-			@ModelAttribute(name = "schulfach") @Valid Schulfach schulfach, final BindingResult bindingResult,
-			RedirectAttributes attributes) {
+			@ModelAttribute(name = "schulfach") @Valid Schulfach schulfach, RedirectAttributes attributes) {
 		schulfachService.speichern(schulfach);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
