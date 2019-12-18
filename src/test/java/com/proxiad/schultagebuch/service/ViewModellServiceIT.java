@@ -23,6 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.proxiad.schultagebuch.entity.Benutzer;
 import com.proxiad.schultagebuch.entity.Elternteil;
 import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.entity.Lehrer;
@@ -60,8 +61,7 @@ public class ViewModellServiceIT {
 	public void initTestContext() {
 		schuler = new Schuler();
 		semester = new Semester(1, LocalDateTime.MIN, LocalDateTime.MAX);
-		schulstunde = new Schulstunde(23L, new Klasse(), new Schulfach(), new Lehrer());
-
+		schulstunde = new Schulstunde(23L, new Klasse(), new Schulfach(), new Lehrer(1L, "Stanimir Pelov", "0000010000", new Benutzer()));
 	}
 
 	@Test
@@ -71,10 +71,10 @@ public class ViewModellServiceIT {
 		listOfNoten.add(new Note(32L, (byte) 6, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(33L, (byte) 2, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
 		listOfNoten.add(new Note(34L, (byte) 3, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
-
-		// When
 		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(listOfNoten);
+
+		// When
 		List<NoteViewModell> listOfNoteViewModelle = viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler,
 				Locale.getDefault());
 
@@ -86,10 +86,10 @@ public class ViewModellServiceIT {
 	public void getLeereListeDerNoteViewModelleDurchSchuler() {
 		// Given
 		List<Note> leereListe = new ArrayList<>();
-
-		// When
 		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(leereListe);
+
+		// When
 		List<NoteViewModell> listOfNoteViewModelle = viewModelService.getListeDerNoteViewModelleDurchSchuler(schuler,
 				Locale.getDefault());
 
@@ -119,10 +119,10 @@ public class ViewModellServiceIT {
 	public void getLeereListeDerNoteViewModelleDurchSchulerUndSchulstunde() {
 		// Given
 		List<Note> leereListe = new ArrayList<>();
-
-		// When
 		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(leereListe);
+
+		// When
 		List<NoteViewModell> list = viewModelService.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler,
 				schulstunde, Locale.getDefault());
 
@@ -137,10 +137,10 @@ public class ViewModellServiceIT {
 		andereSchulstunde.setId(111L);
 		List<Note> notenList = new ArrayList<>();
 		notenList.add(new Note(1L, (byte) 5, LocalDateTime.now(), LocalDateTime.now(), schuler, schulstunde));
-
-		// When
 		when(semesterService.findeAktuelleSemester()).thenReturn(semester);
 		when(noteService.findeSchulerNoten(schuler, semester)).thenReturn(notenList);
+
+		// When
 		List<NoteViewModell> list = viewModelService.getListeDerNoteViewModelleDurchSchulerUndSchulstunde(schuler,
 				andereSchulstunde, Locale.getDefault());
 
