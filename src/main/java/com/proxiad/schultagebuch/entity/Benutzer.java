@@ -1,5 +1,7 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,12 +27,12 @@ public class Benutzer {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_benutzer_generator")
 	@SequenceGenerator(name = "PK_benutzer_generator", sequenceName = "benutzer_id_seq", allocationSize = 1)
 	@Column(name = "benutzer_id", updatable = false)
-	private int id;
+	private Long id;
 
 	@NotBlank
 	@Pattern(regexp = "^([A-Za-z0-9]{5,20})$", message = "{invalid.user.name}")
 	@Column(name = "benutzer_name", unique = true)
-	private String benutzerName;
+	private String benutzername;
 
 	@NotBlank
 	@Pattern(regexp = "^(?=.*[a-zA-Z0-9])[a-zA-Z0-9]{5,10}$", message = "{invalid.user.password}")
@@ -48,20 +50,27 @@ public class Benutzer {
 		// nothing
 	}
 
-	public int getId() {
+	public Benutzer(Long id, String benutzername, String passwort, Rolle rolle) {
+		this.id = id;
+		this.benutzername = benutzername;
+		this.passwort = passwort;
+		this.rolle = rolle;
+	}
+
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getBenutzerName() {
-		return this.benutzerName;
+	public String getBenutzername() {
+		return this.benutzername;
 	}
 
-	public void setBenutzerName(String benutzerName) {
-		this.benutzerName = benutzerName;
+	public void setBenutzername(String benutzername) {
+		this.benutzername = benutzername;
 	}
 
 	public String getPasswort() {
@@ -84,7 +93,8 @@ public class Benutzer {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((Objects.isNull(benutzername)) ? 0 : benutzername.hashCode());
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -92,19 +102,27 @@ public class Benutzer {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Benutzer other = (Benutzer) obj;
-		if (id != other.id)
+		if (Objects.isNull(benutzername)) {
+			if (Objects.nonNull(other.benutzername))
+				return false;
+		} else if (!benutzername.equals(other.benutzername))
+			return false;
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Benutzer [id=" + id + ", benutzerName=" + benutzerName + ", passwort=" + passwort + ", rolle=" + rolle
+		return "Benutzer [id=" + id + ", benutzername=" + benutzername + ", passwort=" + passwort + ", rolle=" + rolle
 				+ "]";
 	}
 

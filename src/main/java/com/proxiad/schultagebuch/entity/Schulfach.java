@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -24,10 +25,10 @@ public class Schulfach {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_schulfach_generator")
 	@SequenceGenerator(name = "PK_schulfach_generator", sequenceName = "schulfach_id_seq", allocationSize = 1)
 	@Column(name = "schulfach_id", updatable = false)
-	private int id;
+	private Long id;
 
-	@NotBlank(message = "Der name ist obligatorisch.")
-	@Pattern(regexp = "^([A-Z][a-z]+)$")
+	@NotBlank
+	@Pattern(regexp = "^([A-Z][a-z]+)$", message = "{invalid.subject.name}")
 	@Column(name = "schulfach_name")
 	private String name;
 
@@ -39,11 +40,16 @@ public class Schulfach {
 		// nothing
 	}
 
-	public int getId() {
+	public Schulfach(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -67,7 +73,8 @@ public class Schulfach {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
+		result = prime * result + ((Objects.isNull(name)) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -75,12 +82,20 @@ public class Schulfach {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Schulfach other = (Schulfach) obj;
-		if (id != other.id)
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (Objects.isNull(name)) {
+			if (Objects.nonNull(other.name))
+				return false;
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}

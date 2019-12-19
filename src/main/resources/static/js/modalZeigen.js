@@ -5,4 +5,7 @@ $(document).ready(function modalZeigen(){
 	if('${edit}'){
 		$('#editModal').modal('show');
 	}
+	if('${showSchulerfolg}'){
+		$('#kindSchulerfolgModal').modal('show');
+	}
 });

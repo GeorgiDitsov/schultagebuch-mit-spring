@@ -17,18 +17,23 @@
 			      		<a class="nav-item nav-link" th:href="@{/schulfach}" th:text="#{subject}"></a>
 			      		<a class="nav-item nav-link" th:href="@{/schulstunde}" th:text="#{course}"></a>
 			      		<a class="nav-item nav-link" th:href="@{/klasse}" th:text="#{class}"></a>
+			      		<a class="nav-item nav-link" th:href="@{/semester}" th:text="#{semester}"></a>
+			      		<a class="nav-item nav-link" th:href="@{/note}" th:text="#{grade}"></a>
 				  	</div>
 				</div>
 				<div sec:authorize="hasRole('SCHULER')">
 					<div class="navbar-nav mr-auto">
-					</div>	
+						<a class="nav-item nav-link" th:href="@{/meine-noten}" th:text="#{grades}"></a>
+					</div>
 				</div>
 				<div sec:authorize="hasRole('LEHRER')">
 					<div class="navbar-nav mr-auto">
+						<a class="nav-item nav-link" th:href="@{/meine-schulstunden}" th:text="#{courses}"></a>
 					</div>
 				</div>
 				<div sec:authorize="hasRole('ELTERNTEIL')">
 					<div class="navbar-nav mr-auto">
+						<a class="nav-item nav-link" th:href="@{/meine-kinder}" th:text="#{children}"></a>
 					</div>
 				</div>
 	 		</div>

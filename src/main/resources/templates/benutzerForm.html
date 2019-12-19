@@ -7,37 +7,16 @@
 </head>
 <body>
 	<div th:replace="contents/navbar.html :: navbar"></div>
-	<div th:replace="contents/heading.html :: formHeading(title=#{users}, buttonLink=${null})"></div>
+	<div th:replace="contents/pageContent.html :: pageHead(title=#{users}, buttonLink=${null})"></div>
+	<div th:replace="contents/pageContent.html :: searchForm(buttonLink='benutzer')"></div>
 	<div th:if="${edit}">
 		<div th:replace="contents/modal.html :: modal(id='editModal', title=#{modal.edit.title.user(${benutzer.id}, ${benutzer.rolle.name.kennzeichen})}, content='editBenutzer')"></div>
 	</div>
-	<div class="table-responsive">
-		<table class="table table-bordered table-striped mx-auto mb-5 w-50 shadow">
-	        <thead class="thead-dark">
-		        <tr>
-		        	<th scope="col" th:text="#{id}">
-		           	<th scope="col" th:text="#{user.name}">
-		            <th scope="col" th:text="#{user.password}">
-		            <th scope="col" th:text="#{user.role}">
-	            	<th scope="col" th:text="#{options}">
-		        </tr>
-	        </thead>
-	        <tr th:each="benutzer: ${listBenutzer}">
-	            <th scope="row" th:text="${benutzer.id}" />
-	            <td th:text="${benutzer.benutzerName}" />
-	            <td th:text="${benutzer.passwort}" />
-	            <td th:text="${benutzer.rolle.name.kennzeichen}" />
-	            <td>
-	            	<a th:href="@{'benutzer/edit/'+${benutzer.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-	            	<!-- <a th:href="@{'benutzer/delete/'+${benutzer.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a> -->
-	            </td>
-	        </tr>
-	    </table>
-	   </div>
-	<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
-	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
-	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
-	<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
-	<script th:src="@{/js/localization.js}" type="text/javascript"></script>
+	<div th:replace="contents/tabelle.html :: alleBenutzerTabelle"></div>
+<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/modalZeigen.js}" type="text/javascript"></script>
+<script th:src="@{/js/lokalisierung.js}" type="text/javascript"></script>
 </body>
 </html>

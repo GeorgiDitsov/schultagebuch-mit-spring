@@ -7,36 +7,18 @@
 </head>
 <body>
 	<div th:replace="contents/navbar.html :: navbar"></div>
-	<div th:replace="contents/heading.html :: formHeading(title=#{classes}, buttonLink='klasse')"></div>
+	<div th:replace="contents/pageContent.html :: pageHead(title=#{classes}, buttonLink='klasse')"></div>
 	<div th:if="${add}">
 		<div th:replace="contents/modal.html :: modal(id='addModal', title=#{modal.add.title.class}, content='addKlasse')"></div>
 	</div>
 	<div th:if="${edit}">
 		<div th:replace="contents/modal.html :: modal(id='editModal', title=#{modal.edit.title.class(${klasse.id})}, content='editKlasse')"></div>
 	</div>
-    <div class="table-responsive">
-		<table class="table table-bordered table-striped mx-auto mb-5 w-25 shadow">
-		    <thead class="thead-dark">
-		    	<tr>
-		            <th scope="col" th:text="#{id}">
-		            <th scope="col" th:text="#{class}">
-		            <th scope="col" th:text="#{options}">
-		        </tr>
-		    </thead>
-		    <tr th:each="klasse: ${listKlasse}">
-		    	<th scope="row" th:text="${klasse.id}" />
-		        <td th:text="${klasse.kennzeichen}" />
-		        <td>
-		        	<a th:href="@{'klasse/edit/'+${klasse.id}}" class="btn btn-primary" role="button" th:text="#{button.edit}"></a>
-		           	<a th:href="@{'klasse/delete/'+${klasse.id}}" class="btn btn-danger" role="button" th:text="#{button.delete}" th:onclick="return confirm([[#{confirmation}]])"></a>
-		       	</td>
-		    </tr>
-	    </table>
-	</div>
-	<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
-	<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
-	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
-	<script th:src="@{/js/adminContent.js}" type="text/javascript"></script>
-	<script th:src="@{/js/localization.js}" type="text/javascript"></script>
+    <div th:replace="contents/tabelle.html :: alleKlassenTabelle"></div>
+<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/modalZeigen.js}" type="text/javascript"></script>
+<script th:src="@{/js/lokalisierung.js}" type="text/javascript"></script>
 </body>
 </html>

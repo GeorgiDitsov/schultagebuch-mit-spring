@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,6 +19,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.validator.constraint.BenutzerElternteilRolleContraint;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
@@ -31,7 +33,7 @@ public class Elternteil {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_elternteil_generator")
 	@SequenceGenerator(name = "PK_elternteil_generator", sequenceName = "elternteil_id_seq", allocationSize = 1)
 	@Column(name = "elternteil_id", updatable = false)
-	private int id;
+	private Long id;
 
 	@PersonNameConstraint
 	@Column(name = "elternteil_name")
@@ -43,7 +45,7 @@ public class Elternteil {
 
 	@Valid
 	@Size(min = 1)
-	@ManyToMany(mappedBy = "eltern", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "eltern", fetch = FetchType.EAGER)
 	private Set<Schuler> kinder;
 
 	@BenutzerElternteilRolleContraint
@@ -55,11 +57,18 @@ public class Elternteil {
 		// nothing
 	}
 
-	public int getId() {
+	public Elternteil(Long id, String name, String pin, Benutzer benutzer) {
+		this.id = id;
+		this.name = name;
+		this.pin = pin;
+		this.benutzer = benutzer;
+	}
+
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -95,12 +104,16 @@ public class Elternteil {
 		this.benutzer = benutzer;
 	}
 
+	public String getKennzeichen() {
+		return String.join(StringKonstanten.SEPARATOR, name, pin);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((pin == null) ? 0 : pin.hashCode());
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
+		result = prime * result + ((Objects.isNull(pin)) ? 0 : pin.hashCode());
 		return result;
 	}
 
@@ -108,15 +121,18 @@ public class Elternteil {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Elternteil other = (Elternteil) obj;
-		if (id != other.id)
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		if (pin == null) {
-			if (other.pin != null)
+		if (Objects.isNull(pin)) {
+			if (Objects.nonNull(other.pin))
 				return false;
 		} else if (!pin.equals(other.pin))
 			return false;

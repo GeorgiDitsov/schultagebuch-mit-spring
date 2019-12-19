@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -39,6 +40,11 @@ public class Rolle {
 		// nothing
 	}
 
+	public Rolle(int id, RolleTyp name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -75,7 +81,7 @@ public class Rolle {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;

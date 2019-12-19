@@ -14,6 +14,8 @@ public interface RolleRepository extends JpaRepository<Rolle, Integer> {
 
 	public List<Rolle> findAllByOrderByIdAsc();
 
-	public Optional<Rolle> findByName(RolleTyp rolleName);
+	public Optional<Rolle> findByName(RolleTyp rolleTyp);
+
+	public boolean existsByName(RolleTyp rolleTyp);
 
 }

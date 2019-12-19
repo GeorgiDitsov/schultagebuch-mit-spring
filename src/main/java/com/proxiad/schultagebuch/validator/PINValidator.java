@@ -1,5 +1,7 @@
 package com.proxiad.schultagebuch.validator;
 
+import java.util.Objects;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -11,7 +13,7 @@ public class PINValidator implements ConstraintValidator<PINConstraint, String> 
 
 	@Override
 	public boolean isValid(String pin, ConstraintValidatorContext context) {
-		return pin != null && pin.matches(PIN_REGEX) && pin.length() == 10;
+		return Objects.nonNull(pin) && pin.matches(PIN_REGEX) && pin.length() == 10;
 	}
 
 }

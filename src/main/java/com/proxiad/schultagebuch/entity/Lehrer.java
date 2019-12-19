@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,7 +18,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
 
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.validator.constraint.BenutzerLehrerRolleContraint;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
@@ -31,7 +34,7 @@ public class Lehrer {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_lehrer_generator")
 	@SequenceGenerator(name = "PK_lehrer_generator", sequenceName = "lehrer_id_seq", allocationSize = 1)
 	@Column(name = "lehrer_id", updatable = false)
-	private int id;
+	private Long id;
 
 	@PersonNameConstraint
 	@Column(name = "lehrer_name")
@@ -41,6 +44,7 @@ public class Lehrer {
 	@Column(name = "lehrer_pin", unique = true)
 	private String pin;
 
+	@Valid
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "lehrer_schulfach", joinColumns = { @JoinColumn(name = "lehrer_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "schulfach_id") })
@@ -55,11 +59,18 @@ public class Lehrer {
 		// nothing
 	}
 
-	public int getId() {
+	public Lehrer(Long id, String name, String pin, Benutzer benutzer) {
+		this.id = id;
+		this.name = name;
+		this.pin = pin;
+		this.benutzer = benutzer;
+	}
+
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -95,19 +106,23 @@ public class Lehrer {
 		this.benutzer = benutzer;
 	}
 
+	public String getKennzeichen() {
+		return String.join(StringKonstanten.SEPARATOR, name, pin);
+	}
+
 	public String getSchulfaecherKennzeichen() {
 		StringBuilder kennzeichen = new StringBuilder();
-		Optional.of(schulfachSet).filter(set -> !set.isEmpty())
-				.ifPresent(set -> set.forEach(schulfach -> kennzeichen.append(schulfach.getName()).append("\n")));
-		return schulfachSet.isEmpty() ? "n/a" : kennzeichen.toString();
+		Optional.of(schulfachSet).filter(set -> !set.isEmpty()).ifPresent(set -> set
+				.forEach(schulfach -> kennzeichen.append(schulfach.getName()).append(StringKonstanten.NEUE_ZEILE)));
+		return schulfachSet.isEmpty() ? StringKonstanten.OBJEKT_NICHT_VERFUEGBAR : kennzeichen.toString();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((pin == null) ? 0 : pin.hashCode());
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
+		result = prime * result + ((Objects.isNull(pin)) ? 0 : pin.hashCode());
 		return result;
 	}
 
@@ -115,15 +130,18 @@ public class Lehrer {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Lehrer other = (Lehrer) obj;
-		if (id != other.id)
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		if (pin == null) {
-			if (other.pin != null)
+		if (Objects.isNull(pin)) {
+			if (Objects.nonNull(other.pin))
 				return false;
 		} else if (!pin.equals(other.pin))
 			return false;

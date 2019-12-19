@@ -1,16 +1,15 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,11 +20,10 @@ import com.proxiad.schultagebuch.service.KlasseService;
 import com.proxiad.schultagebuch.service.LehrerService;
 import com.proxiad.schultagebuch.service.SchulfachService;
 import com.proxiad.schultagebuch.service.SchulstundeService;
-import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 
 @Controller
 @Validated
-public class SchulstundeController {
+public class SchulstundeController extends AbstraktController {
 
 	@Autowired
 	private SchulstundeService schulstundeService;
@@ -40,49 +38,51 @@ public class SchulstundeController {
 	private LehrerService lehrerService;
 
 	@RequestMapping(value = "/schulstunde")
-	public ModelAndView home() {
-		return schulstundeMav(new ModelAndView("schulstundeForm"));
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView alleSchulstundenAnzeigen() {
+		return super.ansicht("schulstundeForm", "listSchulstunde", schulstundeService.findeAlle());
 	}
 
 	@RequestMapping(value = "/schulstunde/add")
-	public RedirectView emptyEntity(RedirectAttributes attributes) {
-		attributes.addFlashAttribute("add", true);
-		attributes.addFlashAttribute("edit", false);
-		attributes.addFlashAttribute("schulstunde", new Schulstunde());
-		return new RedirectView("/schulstunde");
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView neueSchulstunde(@RequestHeader final String referer, final RedirectAttributes attributes) {
+		modalAttributes("add", new Schulstunde(), attributes);
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/schulstunde/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
-		attributes.addFlashAttribute("add", false);
-		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("schulstunde", schulstundeService.find(id, locale));
-		return new RedirectView("/schulstunde");
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView bestehendeSchulstunde(@RequestHeader final String referer,
+			@PathVariable(value = "id") final Long id, final RedirectAttributes attributes) {
+		modalAttributes("edit", schulstundeService.finden(id), attributes);
+		return super.umleiten(referer);
 	}
 
 	@PostMapping(value = "/schulstunde/save")
-	public RedirectView save(RedirectAttributes attributes,
-			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde, final BindingResult bindingResult) {
-		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		schulstundeService.save(schulstunde);
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView schulstundeSpeichern(@RequestHeader final String referer,
+			@ModelAttribute(name = "schulstunde") @Valid Schulstunde schulstunde, final RedirectAttributes attributes) {
+		schulstundeService.speichern(schulstunde);
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/schulstunde");
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/schulstunde/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
-		schulstundeService.delete(schulstundeService.find(id, locale));
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView schulstundeLoeschen(@RequestHeader final String referer,
+			@PathVariable(value = "id") final Long id, final RedirectAttributes attributes) {
+		schulstundeService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/schulstunde");
+		return super.umleiten(referer);
 	}
 
-	private ModelAndView schulstundeMav(ModelAndView mav) {
-		mav.addObject("listSchulstunde", schulstundeService.findAll());
-		mav.addObject("listKlasse", klasseService.findAll());
-		mav.addObject("listSchulfach", schulfachService.findAll());
-		mav.addObject("listLehrer", lehrerService.findAll());
-		return mav;
+	private void modalAttributes(final String modalType, final Schulstunde schulstunde,
+			final RedirectAttributes attributes) {
+		attributes.addFlashAttribute(modalType, true);
+		attributes.addFlashAttribute("schulstunde", schulstunde);
+		attributes.addFlashAttribute("listKlasse", klasseService.findeAlle());
+		attributes.addFlashAttribute("listSchulfach", schulfachService.findeAlle());
+		attributes.addFlashAttribute("listLehrer", lehrerService.findeAlle());
 	}
+
 }

@@ -9,7 +9,7 @@
 	<div class="alert alert-danger alert-danger-centered">
 		<h1 class="alert-heading" th:text="#{application.error(${statusCode})}"></h1>
 		<hr>
-		<p th:text="${exception.localizedMessage}"></p>
+		<p th:text="${errorMessage}"></p>
 	</div>
 	<a class="mx-3" href="javascript:history.back()" th:text="#{action.back}"></a>
 </body>

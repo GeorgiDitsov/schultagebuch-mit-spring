@@ -1,14 +1,13 @@
 package com.proxiad.schultagebuch.controller;
 
-import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,55 +16,59 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.proxiad.schultagebuch.entity.Klasse;
 import com.proxiad.schultagebuch.service.KlasseService;
-import com.proxiad.schultagebuch.util.KlasseUtils;
-import com.proxiad.schultagebuch.util.ValidierungsfehlerUtils;
 import com.proxiad.schultagebuch.validator.constraint.KlasseNameConstraint;
 
 @Controller
 @Validated
-public class KlasseController {
+public class KlasseController extends AbstraktController {
 
 	@Autowired
 	private KlasseService klasseService;
 
 	@RequestMapping(value = "/klasse")
-	public ModelAndView home() {
-		return new ModelAndView("klasseForm", "listKlasse", klasseService.findAll());
+	@PreAuthorize("hasRole('ADMIN')")
+	public ModelAndView alleKlassenAnzeigen() {
+		return super.ansicht("klasseForm", "listKlasse", klasseService.findeAlle());
 	}
 
 	@RequestMapping(value = "/klasse/add")
-	public RedirectView emptyEntity(RedirectAttributes attributes) {
-		attributes.addFlashAttribute("add", true);
-		attributes.addFlashAttribute("edit", false);
-		attributes.addFlashAttribute("klasse", new Klasse());
-		return new RedirectView("/klasse");
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView neueKlasse(@RequestHeader final String referer, final RedirectAttributes attributes) {
+		modalAttributes("add", new Klasse(), attributes);
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/klasse/edit/{id}")
-	public RedirectView findEntity(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
-		attributes.addFlashAttribute("add", false);
-		attributes.addFlashAttribute("edit", true);
-		attributes.addFlashAttribute("klasse", klasseService.find(id, locale));
-		return new RedirectView("/klasse");
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView bestehendeKlasse(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
+			final RedirectAttributes attributes) {
+		modalAttributes("edit", klasseService.finden(id), attributes);
+		return super.umleiten(referer);
 	}
 
 	@PostMapping(value = "/klasse/save")
-	public RedirectView save(RedirectAttributes attributes,
-			@RequestParam(name = "klasseName") @KlasseNameConstraint String klasseName,
-			@ModelAttribute(name = "klasse") Klasse klasse, final BindingResult bindingResult) {
-		ValidierungsfehlerUtils.fehlerPruefen(bindingResult);
-		klasseService.save(KlasseUtils.erstellenAusString(klasse, klasseName));
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView klasseSpeichern(@RequestHeader final String referer,
+			@RequestParam(name = "klasseName") @KlasseNameConstraint final String klasseName,
+			@ModelAttribute(name = "klasse") Klasse klasse, final RedirectAttributes attributes) {
+		klasse.erstellenAus(klasseName);
+		klasseService.speichern(klasse);
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/klasse");
+		return super.umleiten(referer);
 	}
 
 	@RequestMapping(value = "/klasse/delete/{id}")
-	public RedirectView delete(RedirectAttributes attributes, @PathVariable(value = "id") final int id,
-			final Locale locale) {
-		klasseService.delete(klasseService.find(id, locale));
+	@PreAuthorize("hasRole('ADMIN')")
+	public RedirectView klasseLoeschen(@RequestHeader final String referer, @PathVariable(value = "id") final Long id,
+			final RedirectAttributes attributes) {
+		klasseService.loeschen(id);
 		attributes.addFlashAttribute("successful", true);
-		return new RedirectView("/klasse");
+		return super.umleiten(referer);
+	}
+
+	private void modalAttributes(final String modalType, final Klasse klasse, final RedirectAttributes attributes) {
+		attributes.addFlashAttribute(modalType, true);
+		attributes.addFlashAttribute("klasse", klasse);
 	}
 
 }

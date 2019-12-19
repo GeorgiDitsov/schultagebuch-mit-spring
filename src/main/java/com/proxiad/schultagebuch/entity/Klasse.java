@@ -1,9 +1,11 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +28,7 @@ public class Klasse {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_klasse_generator")
 	@SequenceGenerator(name = "PK_klasse_generator", sequenceName = "klasse_id_seq", allocationSize = 1)
 	@Column(name = "klasse_id", updatable = false)
-	private int id;
+	private Long id;
 
 	@NotNull
 	@Min(1)
@@ -39,19 +41,29 @@ public class Klasse {
 	@Column(name = "klasse_buchstabe")
 	private String buchstabe;
 
+	@Size(max = 12)
+	@OneToMany(mappedBy = "klasse", fetch = FetchType.EAGER)
+	private Set<Schulstunde> schulstundeSet;
+
 	@Size(max = 30)
-	@OneToMany(mappedBy = "klasse")
+	@OneToMany(mappedBy = "klasse", fetch = FetchType.EAGER)
 	private Set<Schuler> schulerSet;
 
 	public Klasse() {
 		// nothing
 	}
 
-	public int getId() {
+	public Klasse(Long id, int jahr, String buchstabe) {
+		this.id = id;
+		this.jahr = jahr;
+		this.buchstabe = buchstabe;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -71,6 +83,14 @@ public class Klasse {
 		this.buchstabe = buchstabe;
 	}
 
+	public Set<Schulstunde> getSchulstundeSet() {
+		return schulstundeSet;
+	}
+
+	public void setSchulstundeSet(Set<Schulstunde> schulstundeSet) {
+		this.schulstundeSet = schulstundeSet;
+	}
+
 	public Set<Schuler> getSchulerSet() {
 		return schulerSet;
 	}
@@ -83,11 +103,17 @@ public class Klasse {
 		return jahr + buchstabe;
 	}
 
+	public void erstellenAus(String klasseName) {
+		int buchstabeIndex = klasseName.length() - 1;
+		this.setJahr(Integer.parseInt(klasseName.substring(0, buchstabeIndex)));
+		this.setBuchstabe(klasseName.substring(buchstabeIndex));
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -95,12 +121,15 @@ public class Klasse {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Klasse other = (Klasse) obj;
-		if (id != other.id)
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

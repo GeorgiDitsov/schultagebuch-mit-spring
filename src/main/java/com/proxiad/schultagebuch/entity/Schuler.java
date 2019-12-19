@@ -1,5 +1,6 @@
 package com.proxiad.schultagebuch.entity;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import com.proxiad.schultagebuch.konstanten.StringKonstanten;
 import com.proxiad.schultagebuch.validator.constraint.BenutzerSchulerRolleConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PINConstraint;
 import com.proxiad.schultagebuch.validator.constraint.PersonNameConstraint;
@@ -34,7 +36,7 @@ public class Schuler {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PK_schuler_generator")
 	@SequenceGenerator(name = "PK_schuler_generator", sequenceName = "schuler_id_seq", allocationSize = 1)
 	@Column(name = "schuler_id", updatable = false)
-	private int id;
+	private Long id;
 
 	@PersonNameConstraint
 	@Column(name = "schuler_name")
@@ -50,7 +52,7 @@ public class Schuler {
 	private Klasse klasse;
 
 	@Size(min = 1, max = 2)
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JoinTable(name = "elternteil_schuler", joinColumns = @JoinColumn(name = "schuler_id"), inverseJoinColumns = @JoinColumn(name = "elternteil_id"))
 	private Set<Elternteil> eltern;
 
@@ -63,11 +65,19 @@ public class Schuler {
 		// nothing
 	}
 
-	public int getId() {
+	public Schuler(Long id, String name, String pin, Klasse klasse, Benutzer benutzer) {
+		this.id = id;
+		this.name = name;
+		this.pin = pin;
+		this.klasse = klasse;
+		this.benutzer = benutzer;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -95,14 +105,6 @@ public class Schuler {
 		this.klasse = klasse;
 	}
 
-	public Benutzer getBenutzer() {
-		return benutzer;
-	}
-
-	public void setBenutzer(Benutzer benutzer) {
-		this.benutzer = benutzer;
-	}
-
 	public Set<Elternteil> getEltern() {
 		return eltern;
 	}
@@ -111,26 +113,29 @@ public class Schuler {
 		this.eltern = eltern;
 	}
 
-	public void addElternteil(Elternteil elternteil) {
-		getEltern().add(elternteil);
-		elternteil.getKinder().add(this);
+	public Benutzer getBenutzer() {
+		return benutzer;
 	}
 
-	public void removeElternteil(Elternteil elternteil) {
-		getEltern().remove(elternteil);
-		elternteil.getKinder().remove(this);
+	public void setBenutzer(Benutzer benutzer) {
+		this.benutzer = benutzer;
+	}
+
+	public String getKennzeichen() {
+		return String.join(StringKonstanten.SEPARATOR, name, pin, getKlasseKennzeichen());
 	}
 
 	public String getKlasseKennzeichen() {
-		return Optional.ofNullable(klasse).isPresent() ? klasse.getKennzeichen() : "n/a";
+		return Optional.ofNullable(klasse).isPresent() ? klasse.getKennzeichen()
+				: StringKonstanten.OBJEKT_NICHT_VERFUEGBAR;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((pin == null) ? 0 : pin.hashCode());
+		result = prime * result + ((Objects.isNull(id)) ? 0 : id.hashCode());
+		result = prime * result + ((Objects.isNull(pin)) ? 0 : pin.hashCode());
 		return result;
 	}
 
@@ -138,15 +143,18 @@ public class Schuler {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Schuler other = (Schuler) obj;
-		if (id != other.id)
+		if (Objects.isNull(id)) {
+			if (Objects.nonNull(other.id))
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		if (pin == null) {
-			if (other.pin != null)
+		if (Objects.isNull(pin)) {
+			if (Objects.nonNull(other.pin))
 				return false;
 		} else if (!pin.equals(other.pin))
 			return false;

@@ -9,10 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class LocalizationConfig implements WebMvcConfigurer {
 
+	private static final String GERMAN_PATTERN = "/de";
+	private static final String ENGLISH_PATTERN = "/en";
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		UrlLocaleInterceptor localeInterceptor = new UrlLocaleInterceptor();
-		registry.addInterceptor(localeInterceptor).addPathPatterns("/de", "/en");
+		registry.addInterceptor(localeInterceptor).addPathPatterns(GERMAN_PATTERN, ENGLISH_PATTERN);
 	}
 
 	@Bean
