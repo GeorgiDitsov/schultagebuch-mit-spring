@@ -34,25 +34,25 @@ public class KlasseServiceIT {
 	public void gefundenLeereListeDerKlasse() {
 		// Given
 		List<Klasse> leereListe = new ArrayList<>();
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 
 		// When
-		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 		List<Klasse> listOfKlassen = service.findeAlle();
 
 		// Then
 		assertThat(listOfKlassen, is(emptyCollectionOf(Klasse.class)));
 	}
 
+	// Then
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineKlasseGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.finden(id);
+
 	}
 
 }

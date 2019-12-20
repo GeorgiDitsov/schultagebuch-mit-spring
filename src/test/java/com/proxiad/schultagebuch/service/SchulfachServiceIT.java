@@ -39,9 +39,9 @@ public class SchulfachServiceIT {
 		listOfSchulfach.add(new Schulfach());
 		listOfSchulfach.add(new Schulfach());
 		listOfSchulfach.add(new Schulfach());
+		when(repo.findAllByOrderByIdAsc()).thenReturn(listOfSchulfach);
 
 		// When
-		when(repo.findAllByOrderByIdAsc()).thenReturn(listOfSchulfach);
 		List<Schulfach> gefundenListe = service.findeAlle();
 
 		// Then
@@ -65,24 +65,23 @@ public class SchulfachServiceIT {
 		// Given
 		Long id = Long.MAX_VALUE;
 		Schulfach schulfach = new Schulfach();
+		when(repo.findById(id)).thenReturn(Optional.of(schulfach));
 
 		// When
-		when(repo.findById(id)).thenReturn(Optional.of(schulfach));
 		Schulfach gefundenSchulfach = service.finden(id);
 
 		// Then
 		assertThat(gefundenSchulfach, is(equalTo(schulfach)));
 	}
 
+	// Then
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineSchulfachGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.finden(id);
 	}
 
