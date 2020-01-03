@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +50,8 @@ public class BenutzerController extends AbstraktController {
 	@PostMapping(value = "/benutzer/save")
 	@PreAuthorize("hasRole('ADMIN')")
 	public RedirectView benutzerSpeichern(@RequestHeader final String referer,
-			@ModelAttribute(name = "benutzer") @Valid final Benutzer benutzer, final RedirectAttributes attributes) {
+			@ModelAttribute(name = "benutzer") @Valid final Benutzer benutzer, final BindingResult bindingResult,
+			final RedirectAttributes attributes) {
 		benutzerService.speichern(benutzer);
 		attributes.addFlashAttribute("successful", true);
 		return super.umleiten(referer);
