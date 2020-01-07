@@ -25,6 +25,8 @@ import com.proxiad.schultagebuch.repository.LehrerRepository;
 @SpringBootTest
 public class LehrerServiceIT {
 
+	private static final String BENUTZERNAME = "ABenutzername";
+	
 	@Mock
 	private LehrerRepository repo;
 
@@ -35,9 +37,9 @@ public class LehrerServiceIT {
 	public void gefundenLeereListeDerLehrer() {
 		// Given
 		List<Lehrer> leereListe = new ArrayList<>();
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 
 		// When
-		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 		List<Lehrer> gefundenListe = service.findeAlle();
 
 		// Then
@@ -45,28 +47,27 @@ public class LehrerServiceIT {
 
 	}
 
+	// Then
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineLehrerGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.finden(id);
+
 	}
 
+	// Then
 	@Test(expected = UsernameNotFoundException.class)
 	public void keineLehrerGefundenDurchBenutzername() {
 		// Given
-		String benutzername = "ABenutzername";
+		when(repo.findByBenutzerBenutzername(BENUTZERNAME)).thenReturn(Optional.empty());
 
 		// When
-		when(repo.findByBenutzerBenutzername(benutzername)).thenReturn(Optional.empty());
+		service.findeDurchBenutzername(BENUTZERNAME);
 
-		// Then
-		service.findeDurchBenutzername(benutzername);
 	}
 
 }

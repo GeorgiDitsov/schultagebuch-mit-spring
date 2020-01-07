@@ -41,47 +41,45 @@ public class BenutzerServiceIT {
 				.thenReturn(new ArrayList<>());
 
 		// When
-		List<Benutzer> list = service.suchen(BENUTZERNAME);
+		List<Benutzer> gefundenListe = service.suchen(BENUTZERNAME);
 
 		// Then
-		assertThat(list, is(emptyCollectionOf(Benutzer.class)));
+		assertThat(gefundenListe, is(emptyCollectionOf(Benutzer.class)));
 	}
 
+	// Then
 	@Test(expected = UsernameNotFoundException.class)
 	public void keineBenutzerGefundenDurchBenutzername() {
 		// Given
-		String benutzername = BENUTZERNAME;
+		when(repo.findByBenutzername(BENUTZERNAME)).thenReturn(Optional.empty());
 
 		// When
-		when(repo.findByBenutzername(benutzername)).thenReturn(Optional.empty());
-
-		// Then
-		service.findeDurchBenutzername(benutzername);
+		service.findeDurchBenutzername(BENUTZERNAME);
 	}
 
 	@Test
 	public void keineBenutzerGefunden() {
 		// Given
 		List<Benutzer> leereListe = new ArrayList<>();
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 
 		// When
-		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
-		List<Benutzer> list = service.findeAlle();
+		List<Benutzer> gefundenListe = service.findeAlle();
 
 		// Then
-		assertThat(list, is(emptyCollectionOf(Benutzer.class)));
+		assertThat(gefundenListe, is(emptyCollectionOf(Benutzer.class)));
 	}
 
+	// Then
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineBenutzerMitDieseId() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.finden(id);
+
 	}
 
 }

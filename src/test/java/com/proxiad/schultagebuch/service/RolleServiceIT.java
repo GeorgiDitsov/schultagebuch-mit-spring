@@ -38,9 +38,9 @@ public class RolleServiceIT {
 	public void gefundenLeereListeDerRollen() {
 		// Given
 		List<Rolle> leereListe = new ArrayList<>();
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 
 		// When
-		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 		List<Rolle> gefundenListe = service.findeAlle();
 
 		// Then
@@ -63,16 +63,16 @@ public class RolleServiceIT {
 		assertThat(foundList, hasSize(equalTo(listWithThreeRoles.size())));
 	}
 
+	// Then
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineRolleGefundenDurchPerson() {
 		// Given
 		RolleTyp falschName = null;
-
-		// When
 		when(repo.findByName(falschName)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.findenDurchMensch(Object.class);
+
 	}
 
 	@Test

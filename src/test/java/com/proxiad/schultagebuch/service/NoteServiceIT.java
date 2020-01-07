@@ -33,15 +33,14 @@ public class NoteServiceIT {
 	@InjectMocks
 	private NoteService service;
 
+	// Then
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineNoteMitDieserId() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.finden(id);
 	}
 
@@ -51,10 +50,10 @@ public class NoteServiceIT {
 		Schuler schuler = new Schuler();
 		Semester semester = new Semester();
 		List<Note> leereListe = new ArrayList<>();
-
-		// When
 		when(repo.findBySchulerAndNoteUpdateDatumBetweenOrderByNoteUpdateDatumDesc(schuler,
 				semester.getSemesterbeginn(), semester.getSemesterende())).thenReturn(leereListe);
+
+		// When
 		List<Note> gefundenListe = service.findeSchulerNoten(schuler, semester);
 
 		// Then

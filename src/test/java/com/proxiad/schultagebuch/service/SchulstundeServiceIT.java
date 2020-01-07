@@ -41,24 +41,23 @@ public class SchulstundeServiceIT {
 	public void gefundenLeereListeDerSchulstunde() {
 		// Given
 		List<Schulstunde> leereListe = new ArrayList<>();
+		when(repo.findAllByOrderByKlasseIdAscIdAsc()).thenReturn(leereListe);
 
 		// When
-		when(repo.findAllByOrderByKlasseIdAscIdAsc()).thenReturn(leereListe);
 		List<Schulstunde> gefundenListe = service.findeAlle();
 
 		// Then
 		assertThat(gefundenListe, is(emptyCollectionOf(Schulstunde.class)));
 	}
 
+	// Then
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineSchulstundeGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.finden(id);
 	}
 
@@ -68,26 +67,25 @@ public class SchulstundeServiceIT {
 		Long id = Long.MAX_VALUE;
 		Lehrer lehrer = new Lehrer(1L, "Stefan Stefanov", "1010101010", new Benutzer());
 		Schulstunde schulstunde = new Schulstunde(id, new Klasse(), new Schulfach(), lehrer);
+		when(repo.findById(id)).thenReturn(Optional.of(schulstunde));
 
 		// When
-		when(repo.findById(id)).thenReturn(Optional.of(schulstunde));
 		Schulstunde gefundenSchulstunde = service.findeLehrerSchulstunde(id, lehrer);
 
 		// Then
 		assertThat(gefundenSchulstunde, is(equalTo(schulstunde)));
 	}
 
+	// Then
 	@Test(expected = EntityUngueltigeRelationException.class)
 	public void keineSchulstundeFuerDieseLehrerGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
 		Schulstunde schulstunde = new Schulstunde(id, new Klasse(), new Schulfach(),
 				new Lehrer(1L, "Stefan Stefanov", "1010101010", new Benutzer()));
-
-		// When
 		when(repo.findById(id)).thenReturn(Optional.of(schulstunde));
 
-		// Then
+		// When
 		service.findeLehrerSchulstunde(id, new Lehrer());
 	}
 
@@ -99,9 +97,9 @@ public class SchulstundeServiceIT {
 		listOfSchulstunden.add(new Schulstunde());
 		listOfSchulstunden.add(new Schulstunde());
 		listOfSchulstunden.add(new Schulstunde());
+		when(repo.findByLehrerOrderByKlasseIdAscIdAsc(lehrer)).thenReturn(listOfSchulstunden);
 
 		// When
-		when(repo.findByLehrerOrderByKlasseIdAscIdAsc(lehrer)).thenReturn(listOfSchulstunden);
 		List<Schulstunde> gefundenListe = service.findeDurchLehrer(lehrer);
 
 		// Then
@@ -113,9 +111,9 @@ public class SchulstundeServiceIT {
 		// Given
 		Lehrer lehrer = new Lehrer();
 		List<Schulstunde> leereListe = new ArrayList<>();
+		when(repo.findByLehrerOrderByKlasseIdAscIdAsc(lehrer)).thenReturn(leereListe);
 
 		// When
-		when(repo.findByLehrerOrderByKlasseIdAscIdAsc(lehrer)).thenReturn(leereListe);
 		List<Schulstunde> gefundenListe = service.findeDurchLehrer(lehrer);
 
 		// Then
@@ -130,9 +128,9 @@ public class SchulstundeServiceIT {
 		listOfSchulstunden.add(new Schulstunde());
 		listOfSchulstunden.add(new Schulstunde());
 		listOfSchulstunden.add(new Schulstunde());
+		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(listOfSchulstunden);
 
 		// When
-		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(listOfSchulstunden);
 		List<Schulstunde> gefundenListe = service.findeDurchKlasse(klasse);
 
 		// Then
@@ -144,9 +142,9 @@ public class SchulstundeServiceIT {
 		// Given
 		Klasse klasse = new Klasse();
 		List<Schulstunde> leereListe = new ArrayList<>();
+		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(leereListe);
 
 		// When
-		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(leereListe);
 		List<Schulstunde> gefundenListe = service.findeDurchKlasse(klasse);
 
 		// Then

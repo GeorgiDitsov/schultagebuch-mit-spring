@@ -34,6 +34,7 @@ public class KennzeichenUtilsIT {
 		assertThat(personKennzeichen, is(equalTo("Nikola Penev, 101010****")));
 	}
 
+	// Then
 	@Test(expected = FalschServiceException.class)
 	public void personKennzeichenMitFalschObjekt() {
 		// Given

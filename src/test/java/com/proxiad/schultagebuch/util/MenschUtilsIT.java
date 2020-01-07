@@ -33,6 +33,7 @@ public class MenschUtilsIT {
 		assertThat(mensch, is(instanceOf(Schuler.class)));
 	}
 
+	// Then
 	@Test(expected = FalschServiceException.class)
 	public void erstellenFalschMensch() {
 		// Given

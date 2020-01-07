@@ -59,9 +59,9 @@ public class SchulerServiceIT {
 	public void ohneSchulernImKlasse() {
 		// Given
 		Klasse klasse = new Klasse();
+		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(new ArrayList<>());
 
 		// When
-		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(new ArrayList<>());
 		List<Schuler> listOfSchuler = service.findeAlleSchulerDurchKlasse(klasse);
 
 		// Then
@@ -76,25 +76,25 @@ public class SchulerServiceIT {
 		schulernImKlasseList.add(new Schuler());
 		schulernImKlasseList.add(new Schuler());
 		schulernImKlasseList.add(new Schuler());
+		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(schulernImKlasseList);
 
 		// When
-		when(repo.findByKlasseOrderByIdAsc(klasse)).thenReturn(schulernImKlasseList);
 		List<Schuler> listOfSchuler = service.findeAlleSchulerDurchKlasse(klasse);
 
 		// Then
 		assertThat(listOfSchuler, hasSize(equalTo(schulernImKlasseList.size())));
 	}
 
+	// Then
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineSchulerGefunden() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.finden(id);
+
 	}
 
 	@Test
@@ -105,24 +105,23 @@ public class SchulerServiceIT {
 		kinder.add(kind);
 		Elternteil elternteil = new Elternteil();
 		elternteil.setKinder(kinder);
+		when(repo.findById(1L)).thenReturn(Optional.of(kind));
 
 		// When
-		when(repo.findById(1L)).thenReturn(Optional.of(kind));
 		Schuler schuler = service.findeElternteilKind(kind.getId(), elternteil);
 
 		// Then
 		assertThat(schuler, samePropertyValuesAs(kind));
 	}
 
+	// Then
 	@Test(expected = EntityUngueltigeRelationException.class)
 	public void eltenteilMitOhneKind() {
 		// Given
 		Long schulerId = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(schulerId)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.findeElternteilKind(schulerId, new Elternteil());
 	}
 
@@ -135,36 +134,35 @@ public class SchulerServiceIT {
 		schulerSet.add(schuler);
 		klasse.setSchulerSet(schulerSet);
 		Schulstunde schulstunde = new Schulstunde(132L, klasse, new Schulfach(), new Lehrer());
+		when(repo.findById(schuler.getId())).thenReturn(Optional.of(schuler));
 
 		// When
-		when(repo.findById(schuler.getId())).thenReturn(Optional.of(schuler));
 		Schuler gefundenSchuler = service.findeDurchSchulstunde(schuler.getId(), schulstunde);
 
 		// Then
 		assertThat(gefundenSchuler, samePropertyValuesAs(schuler));
 	}
 
+	// Then
 	@Test(expected = EntityUngueltigeRelationException.class)
 	public void keineSchulerGefundenDurchSchulstunde() {
 		// Given
 		Long schulerId = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(schulerId)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.findeDurchSchulstunde(schulerId, new Schulstunde());
+
 	}
 
+	// Then
 	@Test(expected = UsernameNotFoundException.class)
 	public void keineSchulerGefundenDurchBenutzername() {
 		// Given
 		String benutzename = "ExampleBenutzename";
-
-		// When
 		when(repo.findByBenutzerBenutzername(benutzename)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.findeDurchBenutzername(benutzename);
 	}
 

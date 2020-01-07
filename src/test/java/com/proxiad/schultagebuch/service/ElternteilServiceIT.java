@@ -43,9 +43,9 @@ public class ElternteilServiceIT {
 		listWithThreeEltern.add(new Elternteil());
 		listWithThreeEltern.add(new Elternteil());
 		listWithThreeEltern.add(new Elternteil());
+		when(repo.findAllByOrderByIdAsc()).thenReturn(listWithThreeEltern);
 
 		// When
-		when(repo.findAllByOrderByIdAsc()).thenReturn(listWithThreeEltern);
 		List<Elternteil> gefundenListe = service.findeAlle();
 
 		// Then
@@ -56,9 +56,9 @@ public class ElternteilServiceIT {
 	public void gefundenLeereListeDerEltern() {
 		// Given
 		List<Elternteil> leereListe = new ArrayList<>();
+		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 
 		// When
-		when(repo.findAllByOrderByIdAsc()).thenReturn(leereListe);
 		List<Elternteil> gefundenListe = service.findeAlle();
 
 		// Then
@@ -69,37 +69,37 @@ public class ElternteilServiceIT {
 	public void gefundenLeereListeDerElternDurchName() {
 		// Given
 		List<Elternteil> leereListe = new ArrayList<>();
+		when(repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(ELTERNTEIL_NAME))).thenReturn(leereListe);
 
 		// When
-		when(repo.findByNameIgnoreCaseLikeOrderByIdAsc(SuchenUtils.suchenNach(ELTERNTEIL_NAME))).thenReturn(leereListe);
 		List<Elternteil> gefundenListe = service.suchen(ELTERNTEIL_NAME);
 
 		// Then
 		assertThat(gefundenListe, is(emptyCollectionOf(Elternteil.class)));
 	}
 
+	// Then
 	@Test(expected = EntityNichtGefundenException.class)
 	public void keineElternteilGefundenMitDieseId() {
 		// Given
 		Long id = Long.MAX_VALUE;
-
-		// When
 		when(repo.findById(id)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.finden(id);
+
 	}
 
+	// Then
 	@Test(expected = UsernameNotFoundException.class)
 	public void keineElternteilMitDieseBenutzername() {
 		// Given
 		String benutzername = "ValidBenutzername11";
-
-		// When
 		when(repo.findByBenutzerBenutzername(benutzername)).thenReturn(Optional.empty());
 
-		// Then
+		// When
 		service.findeDurchBenutzername(benutzername);
+
 	}
 
 }
